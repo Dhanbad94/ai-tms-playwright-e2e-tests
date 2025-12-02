@@ -1,0 +1,98 @@
+#!/bin/bash
+
+set -e
+
+ENV="staging"
+FILE_FILTER=""
+BROWSERS=()
+RUN_ALL=false
+
+show_help() {
+  echo "Usage: $0 -e <env> -f <file-filter> [--bc] [--bf] [--bs] [-u]"
+  echo "  -e, --env           Environment: staging, preproduction, prod, production"
+  echo "  -f, --file          Feature/file filter (e.g., login, dashboard)"
+  echo "  --bc                Include Chromium"
+  echo "  --bf                Include Firefox"
+  echo "  --bs                Include Webkit"
+  echo "  -u, --update-all    Execute all test cases (equivalent to: all -e dev --bc)"
+  echo "  -h, --help          Show this help message"
+}
+
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    -e|--env)
+      ENV="$2"
+      shift; shift
+      ;;
+    -f|--file)
+      FILE_FILTER="$2"
+      shift; shift
+      ;;
+    --bc)
+      BROWSERS+=("chromium")
+      shift
+      ;;
+    --bf)
+      BROWSERS+=("firefox")
+      shift
+      ;;
+    --bs)
+      BROWSERS+=("webkit")
+      shift
+      ;;
+    -u|--update-all)
+      RUN_ALL=true
+      ENV="dev"
+      BROWSERS=("chromium")
+      FILE_FILTER=""
+      shift
+      ;;
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      show_help
+      exit 1
+      ;;
+  esac
+done
+
+# Handle environment mapping
+if [[ "$ENV" == "staging" ]]; then
+  BASE_URL="https://staging.trackmyshuttle.com/"
+elif [[ "$ENV" == "preproduction" ]]; then
+  BASE_URL="https://preproduction.trackmyshuttle.com/"
+elif [[ "$ENV" == "prod" || "$ENV" == "production" ]]; then
+  BASE_URL="https://trackmyshuttle.com/"
+elif [[ "$ENV" == "dev" ]]; then
+  # Add dev environment URL - adjust as needed
+  BASE_URL="https://dev.trackmyshuttle.com/"
+else
+  echo "Unknown environment: $ENV"
+  exit 1
+fi
+
+# If no browser flags are provided and not using -u, default to all
+if [[ ${#BROWSERS[@]} -eq 0 && "$RUN_ALL" == false ]]; then
+  BROWSERS=("chromium" "firefox" "webkit")
+fi
+
+CMD="BASE_URL=\"$BASE_URL\" ENV=\"$ENV\" npx playwright test"
+
+for b in "${BROWSERS[@]}"; do
+  CMD+=" --project=$b"
+done
+
+if [[ -n "$FILE_FILTER" ]]; then
+  CMD+=" tests/**/*$FILE_FILTER*.spec.ts"
+fi
+
+if [[ "$RUN_ALL" == true ]]; then
+  echo "Running all test cases with: -u all -e dev --bc"
+fi
+
+echo "Running: $CMD"
+eval $CMD

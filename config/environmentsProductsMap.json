@@ -1,0 +1,7 @@
+{
+  "trackmyshuttle": [
+    "staging",
+    "preproduction",
+    "production"
+  ]
+}
