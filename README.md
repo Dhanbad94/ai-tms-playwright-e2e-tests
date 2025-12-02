@@ -1,1 +1,1 @@
-# ai-tms-playwright-e2e-tests
+# ai-tms-playwright-ts-e2e-tests
