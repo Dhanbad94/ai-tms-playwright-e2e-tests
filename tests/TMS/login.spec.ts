@@ -388,7 +388,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         throw new Error("Operator login failed - still on login page");
       }
 
-      console.log("✓ Operator login successful");
+      // operator login successful (silent)
       await page.screenshot({
         path: `test-results/operator-login-success-${currentEnv}.png`,
       });
@@ -450,7 +450,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         throw new Error("Manager login failed - still on login page");
       }
 
-      console.log("✓ Manager login successful");
+      // manager login successful (silent)
       await page.screenshot({
         path: `test-results/manager-login-success-${currentEnv}.png`,
       });

@@ -422,11 +422,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
           operatorMenuData = await countAccessibleMenus(page);
         }
 
-        console.log(
-          `Operator menus detected: ${operatorMenuData.menus.join(", ")} (${
-            operatorMenuData.count
-          } total)`
-        );
+        // Operator menus detected: suppressed informational output
 
         // Simple logout without complex cleanup
         try {
@@ -471,11 +467,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
           managerMenuData = await countAccessibleMenus(page);
         }
 
-        console.log(
-          `Manager menus detected: ${managerMenuData.menus.join(", ")} (${
-            managerMenuData.count
-          } total)`
-        );
+        // Manager menus detected: suppressed informational output
 
         // Simple logout without complex cleanup
         try {

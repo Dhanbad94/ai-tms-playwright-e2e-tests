@@ -64,12 +64,7 @@ export class LoginPage {
     );
 
     // Check if we got redirected
-    const currentUrl = this.page.url();
-    console.log(`Navigated to: ${currentUrl}`);
-
-    if (response) {
-      console.log(`Response status: ${response.status()}`);
-    }
+    // navigation details intentionally suppressed to reduce noise
 
     // Wait for critical elements instead of network idle
     await this.waitForPageLoad();
@@ -86,10 +81,6 @@ export class LoginPage {
       // Debug: Check what's on the page
       const pageContent = await this.page.content();
       const hasLoginForm = pageContent.includes("frm_login");
-      const currentUrl = this.page.url();
-
-      console.log(`Current URL: ${currentUrl}`);
-      console.log(`Has login form: ${hasLoginForm}`);
 
       // Try multiple selectors for the form
       const formSelectors = [
@@ -105,11 +96,10 @@ export class LoginPage {
         try {
           const form = this.page.locator(selector).first();
           await form.waitFor({ state: "attached", timeout: 2000 });
-          console.log(`Form found with selector: ${selector}`);
           formFound = true;
           break;
-        } catch (e) {
-          console.log(`Form not found with selector: ${selector}`);
+          } catch (e) {
+          // form selector not found — suppressed informational output
         }
       }
 
@@ -131,7 +121,7 @@ export class LoginPage {
       try {
         await this.loginHeading.waitFor({ state: "visible", timeout: 2000 });
       } catch (e) {
-        console.log("Login heading not immediately visible, continuing...");
+        // Login heading not immediately visible — continue silently
       }
     } catch (error) {
       console.error("Error waiting for page load:", error);

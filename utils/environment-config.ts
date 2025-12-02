@@ -207,11 +207,5 @@ export function logEnvironmentConfig(environment: string): void {
       break;
   }
 
-  console.log(`Environment Configuration for ${environment.toUpperCase()}:`);
-  console.log(`- Organization: ${config.orgName}`);
-  console.log(`- Tracking ID: ${config.trackingId}`);
-  console.log(`- Org Selectors: ${config.orgSelectors.length} defined`);
-  console.log(
-    `- Tracking Selectors: ${config.trackingSelectors.length} defined`
-  );
+  // Environment configuration logging suppressed to reduce verbosity
 }

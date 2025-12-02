@@ -94,7 +94,7 @@ export class ProfilePage {
   async clickViewProfile() {
     try {
       // First, let's debug what's actually on the page
-      console.log("DEBUG: Searching for profile navigation elements...");
+      // DEBUG: Searching for profile navigation elements (suppressed)
 
       // Strategy 1: Try to find and click dropdown first
       const dropdownSelectors = [
@@ -112,7 +112,7 @@ export class ProfilePage {
         try {
           const dropdown = this.page.locator(selector).first();
           if (await dropdown.isVisible({ timeout: 1000 })) {
-            console.log(`DEBUG: Found dropdown with selector: ${selector}`);
+            // DEBUG: Found dropdown with selector (suppressed)
             await dropdown.click();
             dropdownClicked = true;
             await this.page.waitForTimeout(1000); // Wait for dropdown to expand
@@ -124,11 +124,9 @@ export class ProfilePage {
       }
 
       if (dropdownClicked) {
-        console.log("DEBUG: Dropdown clicked, searching for profile links...");
+        // DEBUG: Dropdown clicked, searching for profile links (suppressed)
       } else {
-        console.log(
-          "DEBUG: No dropdown found, searching for direct profile links..."
-        );
+        // DEBUG: No dropdown found, searching for direct profile links (suppressed)
       }
 
       // Strategy 2: Try multiple selectors for the View Profile link
@@ -152,9 +150,9 @@ export class ProfilePage {
           for (const link of profileLinks) {
             if (await link.isVisible({ timeout: 500 })) {
               const text = await link.textContent();
-              console.log(
-                `DEBUG: Found potential profile link: "${text}" with selector: ${selector}`
-              );
+              // suppressed debug log for potential profile link
+                // ${text} [selector suppressed]
+              
 
               // Click if it looks like a profile link
               if (
@@ -164,7 +162,7 @@ export class ProfilePage {
               ) {
                 await link.click();
                 profileClicked = true;
-                console.log(`DEBUG: Clicked profile link: "${text}"`);
+                // DEBUG: Clicked profile link (suppressed)
                 break;
               }
             }
@@ -176,15 +174,13 @@ export class ProfilePage {
       }
 
       if (!profileClicked) {
-        console.log(
-          "DEBUG: No profile links found, trying direct navigation..."
-        );
+        // DEBUG: No profile links found, trying direct navigation (suppressed)
         throw new Error(
           "Could not find or click View Profile link after trying all strategies"
         );
       }
     } catch (error) {
-      console.log(`DEBUG: Profile link navigation failed: ${error}`);
+      // DEBUG: Profile link navigation failed (suppressed)
 
       // Enhanced fallback: Try direct navigation with multiple URLs
       try {
@@ -204,18 +200,15 @@ export class ProfilePage {
           "/dashboard/profile",
         ];
 
-        console.log(
-          `DEBUG: Trying direct URL navigation with base: ${baseUrl}`
-        );
-
+        // DEBUG: Trying direct URL navigation with base (suppressed)
         for (const url of profileUrls) {
           try {
-            console.log(`DEBUG: Attempting navigation to: ${url}`);
+            // DEBUG: Attempting navigation to: (suppressed)
             await this.page.goto(url);
             await this.page.waitForTimeout(2000); // Give page time to load
 
             const currentUrl = this.page.url();
-            console.log(`DEBUG: Current URL after navigation: ${currentUrl}`);
+            // DEBUG: Current URL after navigation (suppressed)
 
             // Check if we successfully navigated to a profile-like page
             if (
@@ -223,13 +216,11 @@ export class ProfilePage {
               currentUrl.includes("user") ||
               currentUrl.includes("account")
             ) {
-              console.log(
-                `DEBUG: Successfully navigated to profile page: ${currentUrl}`
-              );
+              // DEBUG: Successfully navigated to profile page (suppressed)
               return;
             }
           } catch (navError) {
-            console.log(`DEBUG: Failed to navigate to ${url}: ${navError}`);
+            // DEBUG: Failed to navigate to URL (suppressed)
             continue;
           }
         }
@@ -293,7 +284,7 @@ export class ProfilePage {
       // Verify we're on the profile page and basic elements are visible
       await this.verifyProfileDetails();
 
-      console.log("Successfully navigated to and verified profile page");
+      // Successfully navigated to and verified profile page (silent)
     } catch (error) {
       console.error(`Failed to navigate to profile page: ${error}`);
       throw new Error(`Profile navigation failed: ${error}`);

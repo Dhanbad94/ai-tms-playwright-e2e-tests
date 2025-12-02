@@ -427,11 +427,14 @@ export class DashboardPage {
         }
       }
 
-      // Wait for redirect to login page with more flexible URL matching
+      // Wait for redirect to login page OR presence of login form/login input
       await Promise.race([
         this.page.waitForURL(/.*\/login/, { timeout: 15000 }),
         this.page.waitForURL(/.*\/signin/, { timeout: 15000 }),
         this.page.waitForURL(/.*\/auth/, { timeout: 15000 }),
+        // Some apps don't navigate on logout; wait for the login form or email input to appear instead
+        this.page.locator('#frm_login').waitFor({ state: 'visible', timeout: 15000 }),
+        this.page.locator('#login_email').waitFor({ state: 'visible', timeout: 15000 }),
       ]);
     } catch (error) {
       console.warn("Logout error:", error);
@@ -688,7 +691,7 @@ export class DashboardPage {
     // Wait for page to load
     await this.waitForDashboardLoad();
 
-    console.log("✓ Default landing verified");
+    // ✓ Default landing verified (suppressed)
   }
 
   /**
@@ -697,9 +700,7 @@ export class DashboardPage {
   async verifyEnvironmentSpecificElements(): Promise<void> {
     const config = this.getEnvironmentConfig();
 
-    console.log(`Verifying elements for ${this.environment} environment:`);
-    console.log(`Expected organization: ${config.orgName}`);
-    console.log(`Expected tracking ID: ${config.trackingId}`);
+    // Verifying environment-specific elements (suppressed informational logs)
 
     // Check organization name using getByText
     try {
@@ -709,7 +710,7 @@ export class DashboardPage {
       const orgVisible = await orgElement.isVisible({ timeout: 5000 });
       if (orgVisible) {
         const orgText = await orgElement.textContent();
-        console.log(`Found organization text: ${orgText}`);
+        // Found organization text (suppressed)
       } else {
         console.warn(`Organization name "${config.orgName}" not visible`);
       }
@@ -720,13 +721,11 @@ export class DashboardPage {
     // Check tracking ID
     try {
       const trackingId = await this.getTrackingId();
-      console.log(`Found tracking ID: ${trackingId}`);
+      // Found tracking ID (suppressed)
 
       // Verify it matches expected ID for environment
       if (trackingId === config.trackingId) {
-        console.log(
-          `✓ Tracking ID matches expected value for ${this.environment}`
-        );
+        // ✓ Tracking ID matches expected value (suppressed)
       } else {
         console.warn(
           `⚠️ Tracking ID mismatch. Expected: ${config.trackingId}, Found: ${trackingId}`
@@ -749,7 +748,7 @@ export class DashboardPage {
       // Verify environment-specific elements
       await this.verifyEnvironmentSpecificElements();
 
-      console.log("✓ Dashboard page loaded successfully");
+      // ✓ Dashboard page loaded successfully (suppressed)
     } catch (error) {
       console.warn(`Page load warning: ${error}`);
       // Continue execution even if some elements aren't found
