@@ -78,8 +78,9 @@ export class ProfilePage {
         '#org_password2, input[name*="confirm"], input[placeholder*="confirm" i], input[type="password"]'
       )
       .nth(2);
-    this.updatePasswordButton = page.locator(
-      'button.submit_btn, button[type="submit"], button:has-text("Update"), button:has-text("Save")'
+    // Restrict the update password button to the change-password pane to avoid matching other buttons on the page
+    this.updatePasswordButton = this.changePasswordContent.locator(
+      'button:has-text("Update"), button:has-text("Save"), button[type="submit"].submit_btn'
     );
     this.passwordVisibilityToggles = page.locator(
       '.ShowHidepssword, .password-toggle, .eye-icon, [class*="eye"]'
