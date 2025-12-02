@@ -1,4 +1,3 @@
-// Use require to avoid needing axios types in devDeps
 const axios: any = require('axios');
 
 export type SendResponse = {
@@ -9,8 +8,8 @@ export type SendResponse = {
 };
 
 /**
- * @param {AxiosRequestConfig} options - required for executing a request
- * @returns {Promise<SendResponse>} - response or error details
+ * @param {any} options - required for executing a request
+ * @returns {Promise<SendResponse>} - either response of a successful request or error details
  */
 export default async function sendRequest(options: any): Promise<SendResponse> {
   try {
@@ -26,7 +25,7 @@ export default async function sendRequest(options: any): Promise<SendResponse> {
     return {
       status: resp.status,
       data: resp.data,
-      message: resp.data?.message || error?.message,
+      message: resp.data?.message,
     };
   }
 }

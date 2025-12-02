@@ -4,7 +4,9 @@
  * @returns updated string
  */
 export function make_first_letter_capital(text: string): string {
-  return text[0].toUpperCase() + text.slice(1);
+  if (!text) return '';
+  const first = text.charAt(0);
+  return first.toUpperCase() + text.slice(1);
 }
 
 /**

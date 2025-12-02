@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 const data = JSON.parse(fs.readFileSync('playwright.conf.json', 'utf8')) as any;
 

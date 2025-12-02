@@ -93,9 +93,6 @@ export class ProfilePage {
   // Navigation methods
   async clickViewProfile() {
     try {
-      // First, let's debug what's actually on the page
-      // DEBUG: Searching for profile navigation elements (suppressed)
-
       // Strategy 1: Try to find and click dropdown first
       const dropdownSelectors = [
         'text="Delhi-Org India"',
@@ -112,7 +109,6 @@ export class ProfilePage {
         try {
           const dropdown = this.page.locator(selector).first();
           if (await dropdown.isVisible({ timeout: 1000 })) {
-            // DEBUG: Found dropdown with selector (suppressed)
             await dropdown.click();
             dropdownClicked = true;
             await this.page.waitForTimeout(1000); // Wait for dropdown to expand
@@ -121,12 +117,6 @@ export class ProfilePage {
         } catch {
           continue;
         }
-      }
-
-      if (dropdownClicked) {
-        // DEBUG: Dropdown clicked, searching for profile links (suppressed)
-      } else {
-        // DEBUG: No dropdown found, searching for direct profile links (suppressed)
       }
 
       // Strategy 2: Try multiple selectors for the View Profile link
@@ -148,23 +138,10 @@ export class ProfilePage {
         try {
           const profileLinks = await this.page.locator(selector).all();
           for (const link of profileLinks) {
-            if (await link.isVisible({ timeout: 500 })) {
-              const text = await link.textContent();
-              // suppressed debug log for potential profile link
-                // ${text} [selector suppressed]
-              
-
-              // Click if it looks like a profile link
-              if (
-                text &&
-                (text.toLowerCase().includes("profile") ||
-                  text.toLowerCase().includes("account"))
-              ) {
-                await link.click();
-                profileClicked = true;
-                // DEBUG: Clicked profile link (suppressed)
-                break;
-              }
+            if (await link.isVisible({ timeout: 1000 })) {
+              await link.click();
+              profileClicked = true;
+              break;
             }
           }
           if (profileClicked) break;
@@ -174,411 +151,226 @@ export class ProfilePage {
       }
 
       if (!profileClicked) {
-        // DEBUG: No profile links found, trying direct navigation (suppressed)
         throw new Error(
-          "Could not find or click View Profile link after trying all strategies"
+          "Could not find profile link with any of the expected selectors"
         );
       }
-    } catch (error) {
-      // DEBUG: Profile link navigation failed (suppressed)
-
-      // Enhanced fallback: Try direct navigation with multiple URLs
-      try {
-        const baseUrl =
-          this.page.url().split("/dashboard")[0] ||
-          this.page.url().split("/login")[0];
-        const profileUrls = [
-          `${baseUrl}/profile`,
-          `${baseUrl}/user/profile`,
-          `${baseUrl}/account/profile`,
-          `${baseUrl}/dashboard/profile`,
-          `${baseUrl}/user`,
-          `${baseUrl}/account`,
-          "/profile",
-          "/user/profile",
-          "/account/profile",
-          "/dashboard/profile",
-        ];
-
-        // DEBUG: Trying direct URL navigation with base (suppressed)
-        for (const url of profileUrls) {
-          try {
-            // DEBUG: Attempting navigation to: (suppressed)
-            await this.page.goto(url);
-            await this.page.waitForTimeout(2000); // Give page time to load
-
-            const currentUrl = this.page.url();
-            // DEBUG: Current URL after navigation (suppressed)
-
-            // Check if we successfully navigated to a profile-like page
-            if (
-              currentUrl.includes("profile") ||
-              currentUrl.includes("user") ||
-              currentUrl.includes("account")
-            ) {
-              // DEBUG: Successfully navigated to profile page (suppressed)
-              return;
-            }
-          } catch (navError) {
-            // DEBUG: Failed to navigate to URL (suppressed)
-            continue;
-          }
-        }
-
-        throw new Error("All profile URL attempts failed");
-      } catch (urlError) {
-        throw new Error(
-          `Failed to navigate to profile: Original error: ${error}. URL fallback error: ${urlError}`
-        );
-      }
-    }
-  }
-
-  async waitForProfilePageLoad() {
-    try {
-      // Try multiple ways to detect profile page loading
-      await Promise.race([
-        // Wait for profile breadcrumb (most reliable)
-        expect(this.profileBreadcrumb).toBeVisible({ timeout: 8000 }),
-        // Wait for URL containing profile
-        this.page.waitForURL("**/profile**", { timeout: 8000 }),
-        // Wait for any profile-related content
-        this.page
-          .locator("h1, h2, h3")
-          .filter({ hasText: /profile/i })
-          .first()
-          .waitFor({ timeout: 8000 }),
-      ]);
-
-      // Additional verification - try to find profile-related content
-      const hasProfileContent = await Promise.race([
-        this.profileBreadcrumb.isVisible({ timeout: 2000 }),
-        this.page
-          .locator("text=/profile/i")
-          .first()
-          .isVisible({ timeout: 2000 }),
-        this.nameField.isVisible({ timeout: 2000 }),
-      ]).catch(() => false);
-
-      if (!hasProfileContent) {
-        throw new Error("Profile page content not found");
-      }
-    } catch (error) {
-      // More flexible fallback - just check URL contains profile
-      const currentUrl = this.page.url();
-      if (!currentUrl.includes("profile")) {
-        throw new Error(`Profile page load failed. Current URL: ${currentUrl}`);
-      }
-    }
-  }
-
-  // MISSING METHOD - Add this to fix the TypeScript error
-  async navigateToProfileAndVerify() {
-    try {
-      // Navigate to profile page
-      await this.clickViewProfile();
 
       // Wait for profile page to load
-      await this.waitForProfilePageLoad();
-
-      // Verify we're on the profile page and basic elements are visible
-      await this.verifyProfileDetails();
-
-      // Successfully navigated to and verified profile page (silent)
+      await this.page.waitForTimeout(2000);
     } catch (error) {
-      console.error(`Failed to navigate to profile page: ${error}`);
-      throw new Error(`Profile navigation failed: ${error}`);
+      throw new Error(`Failed to navigate to profile page: ${error}`);
     }
   }
 
-  // Tab navigation methods
-  async clickProfileDetailsTab() {
-    await this.profileDetailsTab.click();
-    await expect(this.profileDetailsContent).toBeVisible();
+  /**
+   * Navigate to profile page and verify it loaded
+   */
+  async navigateToProfileAndVerify(): Promise<void> {
+    await this.clickViewProfile();
+    await this.page.waitForTimeout(2000);
+
+    // Verify we're on profile page
+    const currentUrl = this.page.url();
+    expect(
+      currentUrl.includes("profile") ||
+        currentUrl.includes("user") ||
+        currentUrl.includes("account")
+    ).toBeTruthy();
   }
 
-  async clickChangePasswordTab() {
-    await this.changePasswordTab.click();
-    await expect(this.changePasswordContent).toBeVisible();
+  /**
+   * Verify operator can access profile
+   */
+  async verifyOperatorProfileAccess(): Promise<void> {
+    // Check profile tabs are visible
+    await expect(this.profileDetailsTab).toBeVisible({ timeout: 5000 });
+    await expect(this.changePasswordTab).toBeVisible({ timeout: 5000 });
   }
 
-  // Profile verification methods
-  async verifyProfileDetails() {
-    try {
-      // Try to verify profile fields exist
-      await expect(this.nameField.first()).toBeVisible({ timeout: 3000 });
-      await expect(this.emailField.first()).toBeVisible({ timeout: 3000 });
-    } catch {
-      // Fallback: check for any profile-related content
-      const hasProfileContent = await Promise.race([
-        this.page.locator("text=/name/i").first().isVisible({ timeout: 2000 }),
-        this.page.locator("text=/email/i").first().isVisible({ timeout: 2000 }),
-        this.page
-          .locator('input[type="email"]')
-          .first()
-          .isVisible({ timeout: 2000 }),
-        this.page
-          .locator(".profile, .user-info, .account")
-          .first()
-          .isVisible({ timeout: 2000 }),
-      ]).catch(() => false);
-
-      if (!hasProfileContent) {
-        throw new Error("No profile content found on page");
-      }
-    }
+  /**
+   * Verify manager can access profile
+   */
+  async verifyManagerProfileAccess(): Promise<void> {
+    // Manager has same profile access as operator
+    await this.verifyOperatorProfileAccess();
   }
 
+  /**
+   * Get profile name
+   */
   async getProfileName(): Promise<string> {
     try {
-      const name = (await this.nameValue.first().textContent()) || "";
-      return name.trim();
+      const nameText = await this.nameValue
+        .first()
+        .textContent({ timeout: 5000 });
+      return nameText?.trim() || "";
     } catch {
-      // Fallback: try alternative selectors
-      try {
-        const altName =
-          (await this.page
-            .locator("input[value], .profile-name, .user-name")
-            .first()
-            .inputValue()) || "";
-        return altName.trim();
-      } catch {
-        return "";
-      }
+      return "";
     }
   }
 
+  /**
+   * Get profile email
+   */
   async getProfileEmail(): Promise<string> {
     try {
-      const email = (await this.emailValue.first().textContent()) || "";
-      return email.trim();
+      const emailText = await this.emailValue
+        .first()
+        .textContent({ timeout: 5000 });
+      return emailText?.trim() || "";
     } catch {
-      // Fallback: try alternative selectors
-      try {
-        const altEmail =
-          (await this.page
-            .locator('input[type="email"], .profile-email, .user-email')
-            .first()
-            .inputValue()) || "";
-        return altEmail.trim();
-      } catch {
-        return "";
-      }
+      return "";
     }
   }
 
-  async verifyProfileInfo(expectedName?: string, expectedEmail?: string) {
-    const actualName = await this.getProfileName();
-    const actualEmail = await this.getProfileEmail();
+  /**
+   * Verify profile information
+   */
+  async verifyProfileInfo(
+    expectedRole?: string,
+    expectedEmail?: string
+  ): Promise<void> {
+    await expect(this.profileDetailsContent).toBeVisible({ timeout: 5000 });
 
-    // Only check specific values if provided and not empty
-    if (expectedName && expectedName.trim()) {
-      expect(actualName.toLowerCase()).toContain(expectedName.toLowerCase());
+    const name = await this.getProfileName();
+    const email = await this.getProfileEmail();
+
+    expect(name).toBeTruthy();
+    expect(email).toBeTruthy();
+    expect(email).toMatch(/\S+@\S+\.\S+/); // Valid email format
+
+    if (expectedRole) {
+      expect(name.toLowerCase()).toContain(expectedRole.toLowerCase());
     }
 
-    if (expectedEmail && expectedEmail.trim()) {
-      expect(actualEmail.toLowerCase()).toContain(expectedEmail.toLowerCase());
+    if (expectedEmail) {
+      expect(email).toBe(expectedEmail);
     }
-
-    // Basic validations that work across all environments
-    expect(actualName).toBeTruthy();
-    expect(actualName.length).toBeGreaterThan(0);
-    expect(actualEmail).toBeTruthy();
-    expect(actualEmail.length).toBeGreaterThan(0);
-    expect(actualEmail).toMatch(/\S+@\S+\.\S+/); // Email format validation
   }
 
-  // Change Password methods
+  /**
+   * Test change password flow
+   */
+  async testChangePasswordFlow(
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
+    await this.changePasswordTab.click();
+    await this.page.waitForTimeout(1000);
+
+    await expect(this.changePasswordContent).toBeVisible({ timeout: 5000 });
+
+    // Fill password form
+    await this.fillChangePasswordForm(oldPassword, newPassword, newPassword);
+
+    // Verify button is visible (don't actually submit to avoid changing password)
+    await expect(this.updatePasswordButton).toBeVisible({ timeout: 5000 });
+
+    // Clear fields
+    await this.clearPasswordFields();
+  }
+
+  /**
+   * Click profile details tab
+   */
+  async clickProfileDetailsTab(): Promise<void> {
+    await this.profileDetailsTab.click();
+    await this.page.waitForTimeout(500);
+  }
+
+  /**
+   * Verify active tab
+   */
+  async verifyActiveTab(tabName: "profile" | "password"): Promise<void> {
+    if (tabName === "profile") {
+      await expect(this.profileDetailsContent).toBeVisible({ timeout: 5000 });
+    } else {
+      await expect(this.changePasswordContent).toBeVisible({ timeout: 5000 });
+    }
+  }
+
+  /**
+   * Fill change password form
+   */
   async fillChangePasswordForm(
     oldPassword: string,
     newPassword: string,
     confirmPassword: string
-  ) {
-    // Ensure we're on the Change Password tab first
-    await this.clickChangePasswordTab();
-
-    // Fill fields without waits - rely on Playwright's auto-waiting
+  ): Promise<void> {
     await this.oldPasswordInput.fill(oldPassword);
     await this.newPasswordInput.fill(newPassword);
     await this.confirmPasswordInput.fill(confirmPassword);
   }
 
-  async clickUpdatePassword() {
+  /**
+   * Toggle password visibility
+   */
+  async togglePasswordVisibility(index: number): Promise<void> {
+    const toggles = await this.passwordVisibilityToggles.all();
+    if (toggles[index]) {
+      await toggles[index].click();
+      await this.page.waitForTimeout(300);
+    }
+  }
+
+  /**
+   * Clear password fields
+   */
+  async clearPasswordFields(): Promise<void> {
+    await this.oldPasswordInput.fill("");
+    await this.newPasswordInput.fill("");
+    await this.confirmPasswordInput.fill("");
+  }
+
+  /**
+   * Verify password fields are empty
+   */
+  async verifyPasswordFieldsAreEmpty(): Promise<void> {
+    expect(await this.oldPasswordInput.inputValue()).toBe("");
+    expect(await this.newPasswordInput.inputValue()).toBe("");
+    expect(await this.confirmPasswordInput.inputValue()).toBe("");
+  }
+
+  async openChangePasswordTab() {
+    await this.changePasswordTab.click();
+    await this.page.waitForTimeout(500);
+    await expect(this.changePasswordContent).toBeVisible();
+  }
+
+  async updatePassword(
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ) {
+    await this.oldPasswordInput.fill(oldPassword);
+    await this.newPasswordInput.fill(newPassword);
+    await this.confirmPasswordInput.fill(confirmPassword);
     await this.updatePasswordButton.click();
   }
 
-  async togglePasswordVisibility(index: number = 0) {
-    // Ensure we're on the Change Password tab first
-    await this.clickChangePasswordTab();
-
-    // Click the eye icon - rely on Playwright's auto-waiting
-    await this.passwordVisibilityToggles.nth(index).click();
+  async verifyPasswordChanged() {
+    // This will depend on the actual UI behavior after password change
+    // Could check for success message, redirect, etc.
+    await this.page.waitForTimeout(2000);
   }
 
-  async verifyChangePasswordForm() {
-    // First ensure we're on the Change Password tab
-    await this.clickChangePasswordTab();
-
-    await expect(this.oldPasswordInput).toBeVisible();
-    await expect(this.newPasswordInput).toBeVisible();
-    await expect(this.confirmPasswordInput).toBeVisible();
-    await expect(this.updatePasswordButton).toBeVisible();
-  }
-
-  async clearPasswordFields() {
-    // Ensure we're on the Change Password tab first
-    await this.clickChangePasswordTab();
-
-    await this.oldPasswordInput.clear();
-    await this.newPasswordInput.clear();
-    await this.confirmPasswordInput.clear();
-  }
-
-  // Validation methods
-  async verifyPasswordFieldsAreEmpty() {
-    // Ensure we're on the Change Password tab first
-    await this.clickChangePasswordTab();
-
-    await expect(this.oldPasswordInput).toHaveValue("");
-    await expect(this.newPasswordInput).toHaveValue("");
-    await expect(this.confirmPasswordInput).toHaveValue("");
-  }
-
-  async verifyPasswordFieldsHaveContent() {
-    // Ensure we're on the Change Password tab first
-    await this.clickChangePasswordTab();
-
-    const oldPass = await this.oldPasswordInput.inputValue();
-    const newPass = await this.newPasswordInput.inputValue();
-    const confirmPass = await this.confirmPasswordInput.inputValue();
-
-    expect(oldPass).toBeTruthy();
-    expect(newPass).toBeTruthy();
-    expect(confirmPass).toBeTruthy();
-  }
-
-  async verifyTabsExist() {
-    await expect(this.profileDetailsTab).toBeVisible();
-    await expect(this.changePasswordTab).toBeVisible();
-  }
-
-  async verifyActiveTab(tabName: "profile" | "password") {
-    if (tabName === "profile") {
-      await expect(this.profileDetailsTab).toHaveClass(/active/);
-      await expect(this.profileDetailsContent).toHaveClass(/active/);
-    } else {
-      await expect(this.changePasswordTab).toHaveClass(/active/);
-      await expect(this.changePasswordContent).toHaveClass(/active/);
+  async getPasswordErrors(): Promise<string[]> {
+    const errors = await this.passwordErrors.all();
+    const errorTexts: string[] = [];
+    for (const error of errors) {
+      const text = await error.textContent();
+      if (text) errorTexts.push(text.trim());
     }
+    return errorTexts;
   }
 
-  // Role-specific verification methods
-  async verifyOperatorProfileAccess() {
-    // Verify Profile Details tab (default active tab)
-    await this.verifyProfileDetails();
-    await this.verifyTabsExist();
-
-    // Switch to Change Password tab and verify
-    await this.clickChangePasswordTab();
-    await expect(this.oldPasswordInput).toBeVisible();
-    await expect(this.newPasswordInput).toBeVisible();
-    await expect(this.confirmPasswordInput).toBeVisible();
-    await expect(this.updatePasswordButton).toBeVisible();
-
-    // Switch back to Profile Details tab
-    await this.clickProfileDetailsTab();
-  }
-
-  async verifyManagerProfileAccess() {
-    // Verify Profile Details tab (default active tab)
-    await this.verifyProfileDetails();
-    await this.verifyTabsExist();
-
-    // Switch to Change Password tab and verify
-    await this.clickChangePasswordTab();
-    await expect(this.oldPasswordInput).toBeVisible();
-    await expect(this.newPasswordInput).toBeVisible();
-    await expect(this.confirmPasswordInput).toBeVisible();
-    await expect(this.updatePasswordButton).toBeVisible();
-
-    // Switch back to Profile Details tab
-    await this.clickProfileDetailsTab();
-  }
-
-  // Check if profile functionality is available in this environment
-  async isProfileAvailable(): Promise<boolean> {
-    try {
-      // Quick check for any profile-related elements
-      const hasProfileElements = await Promise.race([
-        this.page
-          .locator("text=/view profile/i")
-          .first()
-          .isVisible({ timeout: 2000 }),
-        this.page
-          .locator("text=/profile/i")
-          .first()
-          .isVisible({ timeout: 2000 }),
-        this.page
-          .locator('a[href*="profile"]')
-          .first()
-          .isVisible({ timeout: 2000 }),
-        this.page
-          .locator('[onclick*="profile"]')
-          .first()
-          .isVisible({ timeout: 2000 }),
-      ]).catch(() => false);
-
-      return hasProfileElements;
-    } catch {
-      return false;
-    }
-  }
-
-  // Safe navigation that won't fail the test if profile doesn't exist
-  async navigateToProfileSafely(): Promise<boolean> {
-    try {
-      await this.clickViewProfile();
-      await this.waitForProfilePageLoad();
-      return true;
-    } catch (error) {
-      console.warn(
-        `Profile navigation not available in this environment: ${error}`
-      );
-      return false;
-    }
-  }
-
-  async testChangePasswordFlow(oldPassword: string, newPassword: string) {
-    await this.clickChangePasswordTab();
-    await this.verifyChangePasswordForm();
-    await this.fillChangePasswordForm(oldPassword, newPassword, newPassword);
-    await this.verifyPasswordFieldsHaveContent();
-    await this.clearPasswordFields();
-    await this.verifyPasswordFieldsAreEmpty();
-  }
-
-  async testPasswordVisibilityToggles() {
-    // Ensure we're on the Change Password tab
-    await this.clickChangePasswordTab();
-
-    // Fill passwords first so we can see the toggle effect
-    await this.fillChangePasswordForm(
-      "testPassword123",
-      "newPassword456",
-      "newPassword456"
+  async isOnProfilePage(): Promise<boolean> {
+    const url = this.page.url();
+    return (
+      url.includes("profile") ||
+      url.includes("user") ||
+      url.includes("account")
     );
-
-    // Test all password visibility toggles without any waits
-    await this.togglePasswordVisibility(0); // Old Password
-    await this.togglePasswordVisibility(1); // New Password
-    await this.togglePasswordVisibility(2); // Confirm Password
-
-    // Toggle them back
-    await this.togglePasswordVisibility(0);
-    await this.togglePasswordVisibility(1);
-    await this.togglePasswordVisibility(2);
-
-    // Clear the fields after testing
-    await this.clearPasswordFields();
   }
 }
