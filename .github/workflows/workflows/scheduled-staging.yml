@@ -97,11 +97,12 @@ jobs:
 
       - name: Create .env.local from secrets
         run: |
-          cat > .env.local << EOF
-          STAGING_MANAGER_EMAIL=${{ secrets.STAGING_MANAGER_EMAIL }}
-          STAGING_MANAGER_PASSWORD=${{ secrets.STAGING_MANAGER_PASSWORD }}
-          STAGING_OPERATOR_EMAIL=${{ secrets.STAGING_OPERATOR_EMAIL }}
-          STAGING_OPERATOR_PASSWORD=${{ secrets.STAGING_OPERATOR_PASSWORD }}
+          echo "STAGING_MANAGER_EMAIL=${{ secrets.STAGING_MANAGER_EMAIL }}" > .env.local
+          echo "STAGING_MANAGER_PASSWORD=${{ secrets.STAGING_MANAGER_PASSWORD }}" >> .env.local
+          echo "STAGING_OPERATOR_EMAIL=${{ secrets.STAGING_OPERATOR_EMAIL }}" >> .env.local
+          echo "STAGING_OPERATOR_PASSWORD=${{ secrets.STAGING_OPERATOR_PASSWORD }}" >> .env.local
+          echo "Created .env.local with contents:"
+          cat .env.local | sed 's/=.*/=***/'
           EOF
 
       - name: Determine test type
