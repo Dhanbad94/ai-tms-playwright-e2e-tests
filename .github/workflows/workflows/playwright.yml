@@ -1,60 +1,56 @@
-name: Playwright E2E Tests
-
+name: Playwright Tests
+ 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Environment to run tests against'
-        required: true
-        default: 'staging'
+      test_type:
+        description: 'Test type to run'
+        required: false
+        default: 'all'
         type: choice
         options:
-          - staging
-          - preproduction
-
-# Prevent concurrent runs on the same branch
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  # Default environment
-  ENV: staging
-  BASE_URL: https://staging.trackmyshuttle.com
-
+          - all
+          - smoke
+          - regression
+          - critical
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - ASAPSettings
+          - TMSOnboarding
+ 
 jobs:
   test:
-    name: Run Playwright Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    strategy:
-      fail-fast: false
-      matrix:
-        project: [chromium]
-        # Uncomment to run on multiple browsers
-        # project: [chromium, firefox, webkit]
-
+    timeout-minutes: 60
+    outputs:
+      test_result: ${{ steps.test-result.outputs.result }}
+      total_tests: ${{ steps.test-result.outputs.total }}
+      passed_tests: ${{ steps.test-result.outputs.passed }}
+      failed_tests: ${{ steps.test-result.outputs.failed }}
+ 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+ 
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
+ 
       - name: Install dependencies
         run: npm ci
-
+ 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps ${{ matrix.project }}
-
+        run: npx playwright install --with-deps chromium
+ 
       - name: Create .env.local from secrets
         run: |
           cat > .env.local << EOF
@@ -63,44 +59,171 @@ jobs:
           STAGING_OPERATOR_EMAIL=${{ secrets.STAGING_OPERATOR_EMAIL }}
           STAGING_OPERATOR_PASSWORD=${{ secrets.STAGING_OPERATOR_PASSWORD }}
           EOF
-
+ 
       - name: Run Playwright tests
-        run: npx playwright test --project=${{ matrix.project }}
+        id: run-tests
+        run: |
+          TEST_TYPE="${{ github.event.inputs.test_type || 'all' }}"
+          TEST_SUITE="${{ github.event.inputs.test_suite || 'all' }}"
+ 
+          # Build the test command
+          CMD="npx playwright test --project=chromium"
+ 
+          # Add grep filter for test type
+          if [ "$TEST_TYPE" != "all" ]; then
+            CMD="$CMD --grep @$TEST_TYPE"
+          fi
+ 
+          # Add test suite filter
+          if [ "$TEST_SUITE" != "all" ]; then
+            CMD="$CMD tests/$TEST_SUITE/"
+          fi
+ 
+          echo "Running: $CMD"
+ 
+          # Run tests and capture exit code
+          set +e
+          eval $CMD
+          EXIT_CODE=$?
+          set -e
+ 
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+          exit $EXIT_CODE
         env:
           CI: true
-          ENV: ${{ github.event.inputs.environment || 'staging' }}
-
-      - name: Upload test results
+ 
+      - name: Parse test results
+        id: test-result
+        if: always()
+        run: |
+          if [ -f "test-results.json" ]; then
+            TOTAL=$(jq '.stats.expected + .stats.unexpected + .stats.flaky // 0' test-results.json 2>/dev/null || echo "0")
+            PASSED=$(jq '.stats.expected // 0' test-results.json 2>/dev/null || echo "0")
+            FAILED=$(jq '.stats.unexpected // 0' test-results.json 2>/dev/null || echo "0")
+          else
+            TOTAL="N/A"
+            PASSED="N/A"
+            FAILED="N/A"
+          fi
+ 
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+ 
+          if [ "${{ steps.run-tests.outputs.exit_code }}" == "0" ]; then
+            echo "result=passed" >> $GITHUB_OUTPUT
+          else
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
+ 
+      - name: Upload test report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-${{ matrix.project }}
+          name: playwright-report
           path: playwright-report/
           retention-days: 30
-
-      - name: Upload test artifacts on failure
+ 
+      - name: Upload failure artifacts
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: test-results-${{ matrix.project }}
+          name: test-failures
           path: test-results/
           retention-days: 7
-
-  # Summary job that depends on all test jobs
-  test-summary:
-    name: Test Summary
+ 
+  notify:
+    name: Send Slack Notification
     runs-on: ubuntu-latest
     needs: [test]
-    if: always()
+    if: always() && vars.SLACK_NOTIFICATIONS_ENABLED == 'true'
     steps:
-      - name: Check test results
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          if [ "${{ needs.test.result }}" == "failure" ]; then
-            echo "Tests failed!"
-            exit 1
-          elif [ "${{ needs.test.result }}" == "cancelled" ]; then
-            echo "Tests were cancelled!"
-            exit 1
-          else
-            echo "All tests passed!"
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "Slack webhook not configured, skipping notification"
+            exit 0
           fi
+ 
+          RESULT="${{ needs.test.result }}"
+          TEST_TYPE="${{ github.event.inputs.test_type || 'all' }}"
+          TOTAL="${{ needs.test.outputs.total_tests }}"
+          PASSED="${{ needs.test.outputs.passed_tests }}"
+          FAILED="${{ needs.test.outputs.failed_tests }}"
+ 
+          if [ "$RESULT" == "success" ]; then
+            EMOJI="✅"
+            COLOR="#36a64f"
+            STATUS="Passed"
+            HEADER="Playwright Tests Passed"
+          else
+            EMOJI="❌"
+            COLOR="#dc3545"
+            STATUS="Failed"
+            HEADER="Playwright Tests Failed"
+          fi
+ 
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{
+              \"attachments\": [
+                {
+                  \"color\": \"$COLOR\",
+                  \"blocks\": [
+                    {
+                      \"type\": \"header\",
+                      \"text\": {
+                        \"type\": \"plain_text\",
+                        \"text\": \"$EMOJI $HEADER\",
+                        \"emoji\": true
+                      }
+                    },
+                    {
+                      \"type\": \"section\",
+                      \"fields\": [
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Test Type:*\n${TEST_TYPE}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Total:*\n${TOTAL}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Passed:*\n${PASSED}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Failed:*\n${FAILED}\"
+                        }
+                      ]
+                    },
+                    {
+                      \"type\": \"section\",
+                      \"text\": {
+                        \"type\": \"mrkdwn\",
+                        \"text\": \"*Branch:* ${{ github.ref_name }}\"
+                      }
+                    },
+                    {
+                      \"type\": \"actions\",
+                      \"elements\": [
+                        {
+                          \"type\": \"button\",
+                          \"text\": {
+                            \"type\": \"plain_text\",
+                            \"text\": \"View Results\",
+                            \"emoji\": true
+                          },
+                          \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }" \
+            $SLACK_WEBHOOK_URL
+        continue-on-error: true
