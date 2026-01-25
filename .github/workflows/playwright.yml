@@ -6,6 +6,15 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
+      environment:
+        description: 'Environment to test'
+        required: false
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - preproduction
+          - production
       test_type:
         description: 'Test type to run'
         required: false
@@ -16,19 +25,70 @@ on:
           - smoke
           - regression
           - critical
+
+env:
+  CI: true
+  NODE_ENV: test
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'staging' }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npx playwright test
-      - uses: actions/upload-artifact@v4
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Determine environment
+        id: env
+        run: |
+          ENV="${{ github.event.inputs.environment || 'staging' }}"
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          echo "Testing against: $ENV"
+      
+      - name: Run Playwright tests
+        env:
+          ENV: ${{ steps.env.outputs.environment }}
+          BASE_URL: ${{ secrets[format('BASE_URL_{0}', steps.env.outputs.environment)] }}
+          STAGING_MANAGER_EMAIL: ${{ secrets.STAGING_MANAGER_EMAIL }}
+          STAGING_MANAGER_PASSWORD: ${{ secrets.STAGING_MANAGER_PASSWORD }}
+          PREPRODUCTION_MANAGER_EMAIL: ${{ secrets.PREPRODUCTION_MANAGER_EMAIL }}
+          PREPRODUCTION_MANAGER_PASSWORD: ${{ secrets.PREPRODUCTION_MANAGER_PASSWORD }}
+          PROD_MANAGER_EMAIL: ${{ secrets.PROD_MANAGER_EMAIL }}
+          PROD_MANAGER_PASSWORD: ${{ secrets.PROD_MANAGER_PASSWORD }}
+        run: npx playwright test
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-${{ steps.env.outputs.environment }}
           path: playwright-report/
+          retention-days: 30
+      
+      - name: Upload test results JSON
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-json-${{ steps.env.outputs.environment }}
+          path: test-results.json
+          retention-days: 30
+      
+      - name: Publish test results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: results.xml
+          check_name: Playwright Test Results
+          comment_mode: always
