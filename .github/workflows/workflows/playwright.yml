@@ -53,12 +53,16 @@ jobs:
  
       - name: Create .env.local from secrets
         run: |
-          cat > .env.local << EOF
+          cat > .env.local << 'EOF'
           STAGING_MANAGER_EMAIL=${{ secrets.STAGING_MANAGER_EMAIL }}
           STAGING_MANAGER_PASSWORD=${{ secrets.STAGING_MANAGER_PASSWORD }}
           STAGING_OPERATOR_EMAIL=${{ secrets.STAGING_OPERATOR_EMAIL }}
           STAGING_OPERATOR_PASSWORD=${{ secrets.STAGING_OPERATOR_PASSWORD }}
           EOF
+          # Remove leading whitespace from .env.local
+          sed -i 's/^[[:space:]]*//' .env.local
+          echo "Created .env.local with contents:"
+          cat .env.local | sed 's/=.*/=***/'
  
       - name: Run Playwright tests
         id: run-tests
