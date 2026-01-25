@@ -87,7 +87,6 @@ export class EscalationsSettingsPage {
     const section = this.page.locator("text=Notify when Ride Request is not addressed by Driver on time").locator("..");
     const checkbox = section.getByRole("checkbox");
     await checkbox.click();
-    // Playwright auto-waits for click actions
   }
 
   /**
@@ -95,8 +94,7 @@ export class EscalationsSettingsPage {
    */
   async clickRideRequestSeeExample(): Promise<void> {
     await this.rideRequestSeeExampleLink.click();
-    // Wait for example modal or content to appear
-    await this.page.waitForSelector('.modal, [role="dialog"]', { timeout: 3000 }).catch(() => {});
+    // Wait for element update
   }
 
   // ========== Trip Not Started Methods ==========
@@ -117,7 +115,7 @@ export class EscalationsSettingsPage {
     const section = this.page.locator("text=Notify when Trip not started by Driver").locator("..");
     const checkbox = section.getByRole("checkbox");
     await checkbox.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -125,8 +123,7 @@ export class EscalationsSettingsPage {
    */
   async clickTripNotStartedSeeExample(): Promise<void> {
     await this.tripNotStartedSeeExampleLink.click();
-    // Wait for example modal or content to appear
-    await this.page.waitForSelector('.modal, [role="dialog"]', { timeout: 3000 }).catch(() => {});
+    // Wait for element update
   }
 
   // ========== Escalation Configuration Methods ==========
@@ -170,8 +167,7 @@ export class EscalationsSettingsPage {
     const section = this.page.locator(`text="${sectionText}"`).locator("..").locator("..").locator("..");
     const addMoreButton = section.getByText("+ Add More");
     await addMoreButton.click();
-    // Wait for new rule row to appear
-    await this.page.waitForLoadState('networkidle', { timeout: 3000 }).catch(() => {});
+    // Animation wait removed - element changes are observable
   }
 
   /**

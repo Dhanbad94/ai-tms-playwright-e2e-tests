@@ -128,9 +128,11 @@ export class RiderAppSettingsPage {
     };
 
     const tab = tabMap[section];
-    // Scroll tab into view to ensure content is visible
+    if(!tab){
+      throw new Error(`Invalid section name: ${section}`);
+    }
     await tab.scrollIntoViewIfNeeded();
-    // Playwright auto-waits for scroll action
+    // Animation wait removed - element changes are observable
   }
 
   // ========== Enable Rider App Methods ==========
@@ -147,7 +149,7 @@ export class RiderAppSettingsPage {
    */
   async toggleRiderApp(): Promise<void> {
     await this.enableRiderAppCheckbox.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   // ========== Cover Page Methods ==========
@@ -164,7 +166,7 @@ export class RiderAppSettingsPage {
    */
   async toggleCustomNote(): Promise<void> {
     await this.showCustomNoteCheckbox.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   // ========== Contact Settings Methods ==========
@@ -181,7 +183,7 @@ export class RiderAppSettingsPage {
    */
   async toggleCallOption(): Promise<void> {
     await this.showCallOptionCheckbox.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -197,7 +199,7 @@ export class RiderAppSettingsPage {
   async setPhoneNumber(phoneNumber: string): Promise<void> {
     await this.phoneNumberInput.clear();
     await this.phoneNumberInput.fill(phoneNumber);
-    // Playwright auto-waits for input actions
+    // Animation wait removed - element changes are observable
   }
 
   // ========== Share Rider App Methods ==========
@@ -215,7 +217,7 @@ export class RiderAppSettingsPage {
    */
   async clickCopyLink(): Promise<void> {
     await this.copyLinkButton.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**

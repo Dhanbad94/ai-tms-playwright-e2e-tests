@@ -110,7 +110,9 @@ export class DriverAppSettingsPage {
     };
 
     const tab = tabMap[section];
-    // Scroll tab into view to ensure content is visible
+    if(!tab){
+      throw new Error(`Invalid section name: ${section}`);
+    }
     await tab.scrollIntoViewIfNeeded();
     // Playwright auto-waits for scroll action
   }

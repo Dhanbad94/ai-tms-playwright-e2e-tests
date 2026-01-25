@@ -97,7 +97,7 @@ export class OrganizationSettingsPage {
 
     // Parse tracking ID
     const trackingMatch = content?.match(/Tracking ID\s?:\s?(\w+)/);
-    const trackingId = trackingMatch ? trackingMatch[1] : "";
+    const trackingId = trackingMatch?.[1] ??"";
 
     // Parse timezone
     const timezoneMatch = content?.match(/Time Zone\s?:\s?\([^)]+\)\s?[^+]*/);
@@ -157,7 +157,7 @@ export class OrganizationSettingsPage {
    */
   async zoomInMap(): Promise<void> {
     await this.mapZoomIn.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -165,7 +165,7 @@ export class OrganizationSettingsPage {
    */
   async zoomOutMap(): Promise<void> {
     await this.mapZoomOut.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**

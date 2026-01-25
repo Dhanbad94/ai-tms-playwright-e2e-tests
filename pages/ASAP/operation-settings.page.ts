@@ -118,9 +118,12 @@ export class OperationSettingsPage {
     };
 
     const tab = tabMap[section];
+    if(!tab){
+      throw new Error(`Invalid section name: ${section}`);
+    }
     // Scroll tab into view to ensure content is visible
     await tab.scrollIntoViewIfNeeded();
-    // Playwright auto-waits for scroll action
+    // Animation wait removed - element changes are observable
   }
 
   // ========== Pick-up Time Methods ==========
@@ -165,7 +168,7 @@ export class OperationSettingsPage {
    */
   async selectPredefinedStopsOnly(): Promise<void> {
     await this.predefinedStopsOnlyRadio.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -173,7 +176,7 @@ export class OperationSettingsPage {
    */
   async selectPredefinedPlusServiceArea(): Promise<void> {
     await this.predefinedPlusServiceAreaRadio.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -225,7 +228,7 @@ export class OperationSettingsPage {
    */
   async selectOperatorAssignment(): Promise<void> {
     await this.operatorAssignmentRadio.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -233,7 +236,7 @@ export class OperationSettingsPage {
    */
   async selectDriverSelfAssignment(): Promise<void> {
     await this.driverSelfAssignmentRadio.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   // ========== Shuttle Capacity Methods ==========
@@ -267,7 +270,7 @@ export class OperationSettingsPage {
   async setMaxRidersValue(value: string): Promise<void> {
     await this.maxRidersInput.clear();
     await this.maxRidersInput.fill(value);
-    // Playwright auto-waits for input actions
+    // Animation wait removed - element changes are observable
   }
 
   /**

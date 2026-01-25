@@ -1,4 +1,10 @@
 import { Page, Locator, expect } from "@playwright/test";
+import {
+  waitForElementStable,
+  waitAfterFill,
+  waitForInputValue,
+  waitForPageStable,
+} from "../../helpers/wait-strategies";
 
 /**
  * User Management Page Object
@@ -238,7 +244,7 @@ export class UserManagementPage {
       // The checkbox may be outside viewport in the dialog
       // First try to scroll it into view
       await this.addUserAlsoAddAsDriverCheckbox.scrollIntoViewIfNeeded();
-      // Playwright auto-waits for actions
+      await this.page.waitForTimeout(200);
 
       const isChecked = await this.addUserAlsoAddAsDriverCheckbox.isChecked();
       if (!isChecked) {
@@ -259,7 +265,7 @@ export class UserManagementPage {
         }
       }
     }
-    // Playwright auto-waits for actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -550,7 +556,7 @@ export class UserManagementPage {
    */
   async updateUserRole(role: "Manager" | "Operator" | "Driver"): Promise<void> {
     await this.editUserRoleDropdown.selectOption(role);
-    // Playwright auto-waits for actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -559,7 +565,7 @@ export class UserManagementPage {
   async updateUserFirstName(firstName: string): Promise<void> {
     await this.editUserFirstNameInput.clear();
     await this.editUserFirstNameInput.fill(firstName);
-    // Playwright auto-waits for actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -568,7 +574,7 @@ export class UserManagementPage {
   async updateUserLastName(lastName: string): Promise<void> {
     await this.editUserLastNameInput.clear();
     await this.editUserLastNameInput.fill(lastName);
-    // Playwright auto-waits for actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -577,7 +583,7 @@ export class UserManagementPage {
   async updateUserPhone(phone: string): Promise<void> {
     await this.editUserPhoneInput.clear();
     await this.editUserPhoneInput.fill(phone);
-    // Playwright auto-waits for actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -585,7 +591,7 @@ export class UserManagementPage {
    */
   async toggleAlsoAddAsDriver(): Promise<void> {
     await this.editUserAlsoAddAsDriverCheckbox.click();
-    // Playwright auto-waits for actions
+    // Animation wait removed - element changes are observable
   }
 
   /**

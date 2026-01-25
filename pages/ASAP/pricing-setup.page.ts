@@ -179,7 +179,7 @@ export class PricingSetupPage {
    */
   async toggleCancellationRefund(): Promise<void> {
     await this.cancellationRefundCheckbox.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**

@@ -114,6 +114,9 @@ export class LoginPage {
         this.loginButton.waitFor({ state: "visible", timeout: 10000 }),
       ]);
 
+      // Small delay to ensure page is stable
+      await this.page.waitForTimeout(500);
+
       // Wait for page to be stable by checking network idle
       await this.page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {
         // Network idle timeout is acceptable, continue with element checks

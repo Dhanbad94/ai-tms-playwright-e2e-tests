@@ -260,7 +260,8 @@ export class ProfilePage {
     newPassword: string,
   ): Promise<void> {
     await this.changePasswordTab.click();
-    // Wait for change password content to be visible
+    await this.page.waitForTimeout(1000);
+
     await expect(this.changePasswordContent).toBeVisible({ timeout: 5000 });
 
     // Fill password form
@@ -313,7 +314,7 @@ export class ProfilePage {
     const toggles = await this.passwordVisibilityToggles.all();
     if (toggles[index]) {
       await toggles[index].click();
-      // Playwright auto-waits for the click action to complete
+      // Animation complete
     }
   }
 

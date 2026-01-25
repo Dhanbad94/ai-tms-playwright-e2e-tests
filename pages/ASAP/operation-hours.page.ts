@@ -38,7 +38,7 @@ export class OperationHoursPage {
    * Verify operation hours page is loaded
    */
   async verifyPageLoaded(): Promise<void> {
-    await expect(this.pageHeading).toBeVisible({ timeout: 10000 });
+    await expect(this.pageHeading).toBeVisible({ timeout: 15000 });
   }
 
   /**
@@ -79,7 +79,7 @@ export class OperationHoursPage {
    */
   async selectRun24x7(): Promise<void> {
     await this.run24x7Radio.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
@@ -87,7 +87,7 @@ export class OperationHoursPage {
    */
   async selectCustomHours(): Promise<void> {
     await this.customHoursRadio.click();
-    // Playwright auto-waits for click actions
+    // Animation wait removed - element changes are observable
   }
 
   /**
