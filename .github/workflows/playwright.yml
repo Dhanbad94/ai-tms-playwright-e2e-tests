@@ -144,8 +144,13 @@ jobs:
       contents: read
     steps:
       - name: Send Slack notification
-        if: secrets.SLACK_WEBHOOK_URL != ''
         run: |
+          # Skip if webhook URL is not configured
+          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "Slack webhook not configured, skipping notification"
+            exit 0
+          fi
+          
           RESULT="${{ needs.test.result }}"
           ENV="${{ github.event.inputs.environment || 'staging' }}"
           TEST_TYPE="${{ github.event.inputs.test_type || 'all' }}"
