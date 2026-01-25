@@ -34,7 +34,6 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'staging' }}
     permissions:
       contents: read
       checks: write
