@@ -91,6 +91,7 @@ jobs:
           exit $EXIT_CODE
         env:
           CI: true
+          ENV: staging
  
       - name: Parse test results
         id: test-result
