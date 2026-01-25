@@ -23,6 +23,7 @@ while [[ $# -gt 0 ]]; do
   case $key in
     -e|--env)
       ENV="$2"
+      ENV_SET_EXPLICITLY=true
       shift; shift
       ;;
     -f|--file)
@@ -43,10 +44,17 @@ while [[ $# -gt 0 ]]; do
       ;;
     -u|--update-all)
       RUN_ALL=true
-      ENV="dev"
+      # Only set ENV to dev if not already specified via -e
+      if [[ "$ENV" == "staging" && -z "$ENV_SET_EXPLICITLY" ]]; then
+        ENV="dev"
+      fi
       BROWSERS=("chromium")
       FILE_FILTER=""
       shift
+      # Skip optional 'all' argument if provided
+      if [[ $# -gt 0 && "$1" == "all" ]]; then
+        shift
+      fi
       ;;
     -h|--help)
       show_help
@@ -87,7 +95,23 @@ for b in "${BROWSERS[@]}"; do
 done
 
 if [[ -n "$FILE_FILTER" ]]; then
-  CMD+=" tests/**/*$FILE_FILTER*.spec.ts"
+  # Check if FILE_FILTER matches a folder name in tests/ (case-insensitive)
+  MATCHED_FOLDER=""
+  for folder in tests/*/; do
+    folder_name=$(basename "$folder")
+    if [[ "${folder_name,,}" == "${FILE_FILTER,,}" ]]; then
+      MATCHED_FOLDER="$folder_name"
+      break
+    fi
+  done
+
+  if [[ -n "$MATCHED_FOLDER" ]]; then
+    # Run all tests in the matched folder
+    CMD+=" tests/$MATCHED_FOLDER/"
+  else
+    # Fallback to file pattern matching
+    CMD+=" tests/**/*$FILE_FILTER*.spec.ts"
+  fi
 fi
 
 if [[ "$RUN_ALL" == true ]]; then

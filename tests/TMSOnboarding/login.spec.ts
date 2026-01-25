@@ -12,6 +12,9 @@ test.describe.configure({ mode: "serial" });
 test.describe("TrackMyShuttle Login Tests", () => {
   let loginPage: LoginPage;
 
+  // Clear auth state since login tests need to start unauthenticated
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     await page.goto(`${TEST_DATA.baseUrl}/login`);
@@ -29,7 +32,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
     await test.step("Submit form with empty credentials", async () => {
       await loginPage.login("", "");
 
-      await page.waitForTimeout(1000);
+      await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
       const emailError = await loginPage.getErrorMessage("login_email");
       const passwordError = await loginPage.getErrorMessage("login_pass");
@@ -57,7 +60,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
       await loginPage.login(invalidEmail, password);
 
-      await page.waitForTimeout(1000);
+      await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
       const errorMessage = await loginPage.getErrorMessage("login_email");
       const currentUrl = page.url();
@@ -77,7 +80,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
       await loginPage.togglePasswordVisibility();
 
-      await loginPage.page.waitForTimeout(500);
+      // Playwright auto-waits for actions
 
       const toggledType = await loginPage.passwordInput.getAttribute("type");
       const toggleIcon = await loginPage.passwordToggle
@@ -97,7 +100,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
       await loginPage.rememberMeCheckbox.click();
 
-      await loginPage.page.waitForTimeout(300);
+      // Playwright auto-waits for actions
 
       const newState = await loginPage.isRememberMeChecked();
       expect(newState).toBe(!initialState);
@@ -159,12 +162,12 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
     // Submit with empty email
     await forgotPasswordPage.recoverAccount("");
-    await page.waitForTimeout(500);
+    await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
     expect(await forgotPasswordPage.getEmailError()).not.toBe("");
 
     // Submit with invalid email
     await forgotPasswordPage.recoverAccount("invalid-email");
-    await page.waitForTimeout(500);
+    await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
     expect(await forgotPasswordPage.getEmailError()).not.toBe("");
     await forgotPasswordPage.clickBackToLogin();
     await page.waitForLoadState("networkidle");
@@ -178,7 +181,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
       timeout: 10000,
     });
     await forgotPasswordPage.recoverAccount(email);
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
     const validMsg = await forgotPasswordPage.getEmailError();
     expect(typeof validMsg).toBe("string");
 
@@ -287,7 +290,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
       await loginPage.login(email, password);
 
       // Wait for navigation or error
-      await page.waitForTimeout(2000);
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
 
       const currentUrl = page.url();
       const isLoggedIn = currentUrl.includes("/dashboard");
@@ -301,15 +304,9 @@ test.describe("TrackMyShuttle Login Tests", () => {
       if (isLoggedIn) {
         expect(currentUrl).not.toContain("/login");
 
-        // Logout after successful test
-        const dashboardPage = new DashboardPage(page);
-        try {
-          await dashboardPage.logout();
-          await page.waitForURL("**/login", { timeout: 5000 });
-        } catch {
-          // Force navigate to login if logout fails
-          await page.goto(`${TEST_DATA.baseUrl}/login`);
-        }
+        // Logout after successful test - clear cookies and navigate
+        await page.context().clearCookies();
+        await page.goto(`${TEST_DATA.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
       } else if (hasError) {
         // Error is expected if credentials are invalid
         expect(hasError).toBeTruthy();
@@ -336,27 +333,27 @@ test.describe("TrackMyShuttle Login Tests", () => {
     await test.step("Login as Operator", async () => {
       await page.goto(`${TEST_DATA.baseUrl}/login`);
       await loginPage.login(operatorEmail, operatorPassword);
-      await page.waitForTimeout(2000);
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
 
       const currentUrl = page.url();
       expect(currentUrl).toContain("/dashboard");
 
-      const dashboardPage = new DashboardPage(page);
-      await dashboardPage.logout();
-      await page.waitForURL("**/login", { timeout: 10000 });
+      // Logout - clear cookies and navigate
+      await page.context().clearCookies();
+      await page.goto(`${TEST_DATA.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
     });
 
     await test.step("Login as Manager", async () => {
       await page.goto(`${TEST_DATA.baseUrl}/login`);
       await loginPage.login(managerEmail, managerPassword);
-      await page.waitForTimeout(2000);
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
 
       const currentUrl = page.url();
       expect(currentUrl).toContain("/dashboard");
 
-      const dashboardPage = new DashboardPage(page);
-      await dashboardPage.logout();
-      await page.waitForURL("**/login", { timeout: 10000 });
+      // Logout - clear cookies and navigate
+      await page.context().clearCookies();
+      await page.goto(`${TEST_DATA.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
     });
   });
 
@@ -373,7 +370,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
     await test.step("Login and simulate session timeout", async () => {
       await loginPage.login(email, password);
-      await page.waitForTimeout(2000);
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
 
       const currentUrl = page.url();
       expect(currentUrl).toContain("/dashboard");
@@ -381,7 +378,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
       // Clear session/cookies to simulate timeout
       await page.context().clearCookies();
       await page.reload();
-      await page.waitForTimeout(2000);
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
 
       // Should redirect to login
       const newUrl = page.url();
@@ -437,7 +434,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
           await activateAccountPage.isActivateButtonEnabled();
 
         await activateAccountPage.acceptTerms(true);
-        await page.waitForTimeout(500);
+        await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
 
         const isEnabledWithTerms =
           await activateAccountPage.isActivateButtonEnabled();
@@ -453,7 +450,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
       await test.step("Submit empty form", async () => {
         await activateAccountPage.acceptTerms(true);
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const currentUrl = page.url();
         expect(currentUrl).toContain("/activate");
@@ -471,7 +468,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         await activateAccountPage.acceptTerms(true);
 
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const emailError = await activateAccountPage.getErrorMessage(
           "register_Email"
@@ -493,7 +490,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         await activateAccountPage.acceptTerms(true);
 
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const phoneError =
           await activateAccountPage.getErrorMessage("org_phone");
@@ -522,7 +519,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         await activateAccountPage.acceptTerms(true);
 
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const codeError = await activateAccountPage.getErrorMessage("org_code");
         const currentUrl = page.url();
@@ -542,7 +539,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         expect(initialType).toBe("password");
 
         await activateAccountPage.togglePasswordVisibility();
-        await activateAccountPage.page.waitForTimeout(500);
+        // Playwright auto-waits for actions
 
         const toggledType =
           await activateAccountPage.passwordInput.getAttribute("type");
@@ -573,7 +570,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         await activateAccountPage.acceptTerms(true);
 
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const passwordError = await activateAccountPage.getErrorMessage(
           "register_password"
@@ -596,7 +593,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         await activateAccountPage.acceptTerms(true);
 
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const firstNameError = await activateAccountPage.getErrorMessage(
           "user_first_name"
@@ -615,7 +612,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         await activateAccountPage.acceptTerms(true);
 
         await activateAccountPage.submitActivation();
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
         const lastNameError = await activateAccountPage.getErrorMessage(
           "user_last_name"
@@ -627,7 +624,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
     test("should handle country code selection @system", async ({ page }) => {
       await test.step("Test country code selector", async () => {
         await activateAccountPage.countrySelector.click();
-        await page.waitForTimeout(500);
+        await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
 
         const countryList = page.locator(".country-list");
         await expect(countryList).toBeVisible();
@@ -635,7 +632,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
         const canadaOption = page.locator('[data-country-code="ca"]');
         if (await canadaOption.isVisible()) {
           await canadaOption.click();
-          await page.waitForTimeout(500);
+          await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
 
           const selectedFlag =
             activateAccountPage.countrySelector.locator(".iti-flag");

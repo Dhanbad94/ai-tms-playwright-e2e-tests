@@ -9,19 +9,19 @@ export interface EnvironmentConfig {
 
 // Define the configurations with explicit typing
 const STAGING_CONFIG: EnvironmentConfig = {
-  orgName: "Delhi-Org India",
-  trackingId: "rit123",
+  orgName: "Automated OD ASAP",
+  trackingId: "ODASAP",
   orgSelectors: [
-    'a:has-text("Delhi-Org India")',
-    'a:has-text("Delhi-Org")',
-    'text="Delhi-Org India"',
-    '[title="Delhi-Org India"]',
+    'a:has-text("Automated OD ASAP")',
+    'a:has-text("Automated OD ASAP")',
+    'text="Automated OD ASAP"',
+    '[title="Automated OD ASAP"]',
   ],
   trackingSelectors: [
-    'text="Tracking ID : rit123"',
-    'text="Tracking ID: rit123"',
-    'text="rit123"',
-    '[data-tracking-id="rit123"]',
+    'text="Tracking ID : ODASAP"',
+    'text="Tracking ID: ODASAP"',
+    'text="ODASAP"',
+    '[data-tracking-id="ODASAP"]',
   ],
 };
 
@@ -43,19 +43,19 @@ const PREPRODUCTION_CONFIG: EnvironmentConfig = {
 };
 
 const PRODUCTION_CONFIG: EnvironmentConfig = {
-  orgName: "Delhi-Org India", // Update this if production has different org name
-  trackingId: "rit123", // Update this if production has different tracking ID
+  orgName: "-Automated OD ASAP", // Update this if production has different org name
+  trackingId: "ODASAP", // Update this if production has different tracking ID
   orgSelectors: [
-    'a:has-text("Delhi-Org India")',
-    'a:has-text("Delhi-Org")',
-    'text="Delhi-Org India"',
-    '[title="Delhi-Org India"]',
+    'a:has-text("Automated OD ASAP")',
+    'a:has-text("Automated OD ASAP")',
+    'text="Automated OD ASAP"',
+    '[title="Automated OD ASAP"]',
   ],
   trackingSelectors: [
-    'text="Tracking ID : rit123"',
-    'text="Tracking ID: rit123"',
-    'text="rit123"',
-    '[data-tracking-id="rit123"]',
+    'text="Tracking ID : ODASAP"',
+    'text="Tracking ID: ODASAP"',
+    'text="ODASAP"',
+    '[data-tracking-id="ODASAP"]',
   ],
 };
 
@@ -101,7 +101,7 @@ export function getEnvironmentConfig(page?: any): EnvironmentConfig {
       return ENVIRONMENT_CONFIGS.production;
     default:
       console.warn(
-        `Unknown environment '${environment}', defaulting to staging`
+        `Unknown environment '${environment}', defaulting to staging`,
       );
       return ENVIRONMENT_CONFIGS.staging;
   }
@@ -116,13 +116,13 @@ export function getAllOrgSelectors(): string[] {
 
   // Add selectors from all environments
   ENVIRONMENT_CONFIGS.staging.orgSelectors.forEach((selector) =>
-    allSelectors.add(selector)
+    allSelectors.add(selector),
   );
   ENVIRONMENT_CONFIGS.preproduction.orgSelectors.forEach((selector) =>
-    allSelectors.add(selector)
+    allSelectors.add(selector),
   );
   ENVIRONMENT_CONFIGS.production.orgSelectors.forEach((selector) =>
-    allSelectors.add(selector)
+    allSelectors.add(selector),
   );
 
   // Add generic fallback selectors
@@ -148,13 +148,13 @@ export function getAllTrackingSelectors(): string[] {
 
   // Add selectors from all environments
   ENVIRONMENT_CONFIGS.staging.trackingSelectors.forEach((selector) =>
-    allSelectors.add(selector)
+    allSelectors.add(selector),
   );
   ENVIRONMENT_CONFIGS.preproduction.trackingSelectors.forEach((selector) =>
-    allSelectors.add(selector)
+    allSelectors.add(selector),
   );
   ENVIRONMENT_CONFIGS.production.trackingSelectors.forEach((selector) =>
-    allSelectors.add(selector)
+    allSelectors.add(selector),
   );
 
   // Add generic fallback selectors
@@ -201,7 +201,7 @@ export function logEnvironmentConfig(environment: string): void {
       break;
     default:
       console.warn(
-        `Unknown environment '${environment}', showing staging config`
+        `Unknown environment '${environment}', showing staging config`,
       );
       config = ENVIRONMENT_CONFIGS.staging;
       break;

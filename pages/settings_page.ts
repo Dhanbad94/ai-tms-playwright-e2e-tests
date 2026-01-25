@@ -26,8 +26,8 @@ export class SettingsPage {
     try {
       await this.page.waitForURL("**/setting**", { timeout: 5000 });
     } catch {
-      // Fallback: check if URL contains 'setting' or if we've navigated away from dashboard
-      await this.page.waitForTimeout(2000); // Give navigation time to complete
+      // Fallback: wait for page load and check if URL contains 'setting'
+      await this.page.waitForLoadState('domcontentloaded', { timeout: 5000 });
       const currentUrl = this.page.url();
       if (!currentUrl.includes("setting") && currentUrl.includes("dashboard")) {
         throw new Error("Settings navigation failed - still on dashboard");

@@ -34,7 +34,7 @@ export class ProfilePage {
     this.page = page;
 
     // Navigation elements - multiple strategies for different environments
-    this.userDropdown = page.locator('text="Delhi-Org India"').first();
+    this.userDropdown = page.locator('text="Automated OD ASAP"').first();
     this.viewProfileLink = page
       .locator("a")
       .filter({ hasText: /View Profile|Profile/i });
@@ -65,25 +65,25 @@ export class ProfilePage {
     // Change Password elements - more flexible selectors
     this.oldPasswordInput = page
       .locator(
-        '#org_password, input[name*="old"], input[placeholder*="old" i], input[type="password"]'
+        '#org_password, input[name*="old"], input[placeholder*="old" i], input[type="password"]',
       )
       .first();
     this.newPasswordInput = page
       .locator(
-        '#org_password1, input[name*="new"], input[placeholder*="new" i], input[type="password"]'
+        '#org_password1, input[name*="new"], input[placeholder*="new" i], input[type="password"]',
       )
       .nth(1);
     this.confirmPasswordInput = page
       .locator(
-        '#org_password2, input[name*="confirm"], input[placeholder*="confirm" i], input[type="password"]'
+        '#org_password2, input[name*="confirm"], input[placeholder*="confirm" i], input[type="password"]',
       )
       .nth(2);
     // Restrict the update password button to the change-password pane to avoid matching other buttons on the page
     this.updatePasswordButton = this.changePasswordContent.locator(
-      'button:has-text("Update"), button:has-text("Save"), button[type="submit"].submit_btn'
+      'button:has-text("Update"), button:has-text("Save"), button[type="submit"].submit_btn',
     );
     this.passwordVisibilityToggles = page.locator(
-      '.ShowHidepssword, .password-toggle, .eye-icon, [class*="eye"]'
+      '.ShowHidepssword, .password-toggle, .eye-icon, [class*="eye"]',
     );
 
     // Error elements
@@ -95,8 +95,8 @@ export class ProfilePage {
     try {
       // Strategy 1: Try to find and click dropdown first
       const dropdownSelectors = [
-        'text="Delhi-Org India"',
-        'text="Delhi-Org"',
+        'text="Automated OD ASAP"',
+        'text="Automated OD ASAP"',
         '[data-toggle="dropdown"]',
         ".dropdown-toggle",
         ".profile-dropdown",
@@ -111,7 +111,8 @@ export class ProfilePage {
           if (await dropdown.isVisible({ timeout: 1000 })) {
             await dropdown.click();
             dropdownClicked = true;
-            await this.page.waitForTimeout(1000); // Wait for dropdown to expand
+            // Wait for dropdown menu to appear
+            await this.page.waitForSelector('a:has-text("View Profile"), .dropdown-menu.show', { timeout: 3000 }).catch(() => {});
             break;
           }
         } catch {
@@ -152,12 +153,13 @@ export class ProfilePage {
 
       if (!profileClicked) {
         throw new Error(
-          "Could not find profile link with any of the expected selectors"
+          "Could not find profile link with any of the expected selectors",
         );
       }
 
       // Wait for profile page to load
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+      await this.page.waitForSelector('.profile_breadcrumb, [class*="profile"]', { timeout: 5000 }).catch(() => {});
     } catch (error) {
       throw new Error(`Failed to navigate to profile page: ${error}`);
     }
@@ -168,14 +170,15 @@ export class ProfilePage {
    */
   async navigateToProfileAndVerify(): Promise<void> {
     await this.clickViewProfile();
-    await this.page.waitForTimeout(2000);
+    // Wait for profile content to be visible
+    await expect(this.profileDetailsTab).toBeVisible({ timeout: 10000 });
 
     // Verify we're on profile page
     const currentUrl = this.page.url();
     expect(
       currentUrl.includes("profile") ||
         currentUrl.includes("user") ||
-        currentUrl.includes("account")
+        currentUrl.includes("account"),
     ).toBeTruthy();
   }
 
@@ -229,7 +232,7 @@ export class ProfilePage {
    */
   async verifyProfileInfo(
     expectedRole?: string,
-    expectedEmail?: string
+    expectedEmail?: string,
   ): Promise<void> {
     await expect(this.profileDetailsContent).toBeVisible({ timeout: 5000 });
 
@@ -254,11 +257,10 @@ export class ProfilePage {
    */
   async testChangePasswordFlow(
     oldPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<void> {
     await this.changePasswordTab.click();
-    await this.page.waitForTimeout(1000);
-
+    // Wait for change password content to be visible
     await expect(this.changePasswordContent).toBeVisible({ timeout: 5000 });
 
     // Fill password form
@@ -276,7 +278,8 @@ export class ProfilePage {
    */
   async clickProfileDetailsTab(): Promise<void> {
     await this.profileDetailsTab.click();
-    await this.page.waitForTimeout(500);
+    // Wait for profile details content to be visible
+    await expect(this.profileDetailsContent).toBeVisible({ timeout: 5000 });
   }
 
   /**
@@ -296,7 +299,7 @@ export class ProfilePage {
   async fillChangePasswordForm(
     oldPassword: string,
     newPassword: string,
-    confirmPassword: string
+    confirmPassword: string,
   ): Promise<void> {
     await this.oldPasswordInput.fill(oldPassword);
     await this.newPasswordInput.fill(newPassword);
@@ -310,7 +313,7 @@ export class ProfilePage {
     const toggles = await this.passwordVisibilityToggles.all();
     if (toggles[index]) {
       await toggles[index].click();
-      await this.page.waitForTimeout(300);
+      // Playwright auto-waits for the click action to complete
     }
   }
 
@@ -334,14 +337,14 @@ export class ProfilePage {
 
   async openChangePasswordTab() {
     await this.changePasswordTab.click();
-    await this.page.waitForTimeout(500);
-    await expect(this.changePasswordContent).toBeVisible();
+    // Wait for change password content to be visible
+    await expect(this.changePasswordContent).toBeVisible({ timeout: 5000 });
   }
 
   async updatePassword(
     oldPassword: string,
     newPassword: string,
-    confirmPassword: string
+    confirmPassword: string,
   ) {
     await this.oldPasswordInput.fill(oldPassword);
     await this.newPasswordInput.fill(newPassword);
@@ -350,9 +353,15 @@ export class ProfilePage {
   }
 
   async verifyPasswordChanged() {
-    // This will depend on the actual UI behavior after password change
-    // Could check for success message, redirect, etc.
-    await this.page.waitForTimeout(2000);
+    // Wait for success message or UI feedback after password change
+    // Try multiple possible success indicators
+    await Promise.race([
+      this.page.waitForSelector('.alert-success, .toast-success, [class*="success"]', { timeout: 10000 }),
+      this.page.waitForSelector('text="Password updated"', { timeout: 10000 }),
+      this.page.waitForLoadState('networkidle', { timeout: 10000 }),
+    ]).catch(() => {
+      // Continue if no specific success indicator found
+    });
   }
 
   async getPasswordErrors(): Promise<string[]> {
@@ -368,9 +377,7 @@ export class ProfilePage {
   async isOnProfilePage(): Promise<boolean> {
     const url = this.page.url();
     return (
-      url.includes("profile") ||
-      url.includes("user") ||
-      url.includes("account")
+      url.includes("profile") || url.includes("user") || url.includes("account")
     );
   }
 }
