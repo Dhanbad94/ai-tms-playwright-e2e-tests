@@ -135,11 +135,12 @@ jobs:
     name: Send Slack Notification
     runs-on: ubuntu-latest
     needs: [test]
-    if: always() && secrets.SLACK_WEBHOOK_URL != ''
+    if: always()
     permissions:
       contents: read
     steps:
       - name: Send Slack notification
+        if: secrets.SLACK_WEBHOOK_URL != ''
         run: |
           RESULT="${{ needs.test.result }}"
           ENV="${{ github.event.inputs.environment || 'staging' }}"
