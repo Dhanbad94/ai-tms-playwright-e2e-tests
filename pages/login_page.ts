@@ -117,6 +117,11 @@ export class LoginPage {
       // Small delay to ensure page is stable
       await this.page.waitForTimeout(500);
 
+      // Wait for page to be stable by checking network idle
+      await this.page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {
+        // Network idle timeout is acceptable, continue with element checks
+      });
+
       // Check if heading is visible (but don't fail if it's not immediately visible)
       try {
         await this.loginHeading.waitFor({ state: "visible", timeout: 2000 });

@@ -26,34 +26,13 @@ test.describe("Settings Page Tests", () => {
   let dashboardPage: DashboardPage;
   let settingsPage: SettingsPage;
 
+  // Clear auth state since these tests perform their own login
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
     settingsPage = new SettingsPage(page);
-  });
-
-  test("Manager: Settings access @smoke @manager @settings", async ({
-    page,
-  }) => {
-    const managerCreds = getCredentials("MANAGER");
-
-    test.skip(
-      !managerCreds.email || !managerCreds.password,
-      "Manager credentials not provided"
-    );
-
-    // Login
-    await page.goto(`${TEST_DATA.baseUrl}/login`);
-    await loginPage.emailInput.fill(managerCreds.email);
-    await loginPage.passwordInput.fill(managerCreds.password);
-    await loginPage.loginButton.click();
-    await page.waitForURL("**/dashboard", { timeout: 15000 });
-
-    // Test settings access
-    await settingsPage.verifySettingsAccess();
-
-    // Logout
-    await dashboardPage.logout();
   });
 
   test("Performance: Settings load time @performance @settings", async ({

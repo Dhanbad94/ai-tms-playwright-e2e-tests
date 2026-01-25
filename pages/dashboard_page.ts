@@ -220,8 +220,10 @@ export class DashboardPage {
         this.page.waitForSelector('a[href*="dashboard"]', { timeout: 15000 }),
       ]);
 
-      // Small wait for dynamic content
-      await this.page.waitForTimeout(2000);
+      // Wait for network to settle for dynamic content
+      await this.page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {
+        // Network idle timeout is acceptable, continue
+      });
     } catch (error) {
       console.warn("Dashboard load warning:", error);
       // Continue even if some elements aren't found
@@ -241,7 +243,8 @@ export class DashboardPage {
         .first();
       if (await orgElement.isVisible({ timeout: 3000 })) {
         await orgElement.click();
-        await this.page.waitForTimeout(1000);
+        // Wait for dropdown to open by checking for Sign Out link
+        await this.page.waitForSelector('a:has-text("Sign Out"), .dropdown-menu.show', { timeout: 3000 }).catch(() => {});
 
         if (await this.isDropdownOpen()) {
           return;
@@ -261,7 +264,8 @@ export class DashboardPage {
           const element = this.page.locator(selector).first();
           if (await element.isVisible({ timeout: 2000 })) {
             await element.click();
-            await this.page.waitForTimeout(1000);
+            // Wait for dropdown menu to appear
+            await this.page.waitForSelector('a:has-text("Sign Out"), .dropdown-menu.show', { timeout: 3000 }).catch(() => {});
 
             if (await this.isDropdownOpen()) {
               return;
@@ -287,7 +291,8 @@ export class DashboardPage {
           const element = this.page.locator(selector).first();
           if (await element.isVisible({ timeout: 2000 })) {
             await element.click();
-            await this.page.waitForTimeout(1000);
+            // Wait for dropdown menu to appear
+            await this.page.waitForSelector('a:has-text("Sign Out"), .dropdown-menu.show', { timeout: 3000 }).catch(() => {});
 
             if (await this.isDropdownOpen()) {
               return;
@@ -321,7 +326,8 @@ export class DashboardPage {
               className.includes("dropdown"))
           ) {
             await element.click();
-            await this.page.waitForTimeout(1000);
+            // Wait for dropdown menu to appear
+            await this.page.waitForSelector('a:has-text("Sign Out"), .dropdown-menu.show', { timeout: 3000 }).catch(() => {});
 
             if (await this.isDropdownOpen()) {
               return;
@@ -397,7 +403,8 @@ export class DashboardPage {
   async closeProfileDropdown() {
     // Click outside the dropdown
     await this.page.mouse.click(0, 0);
-    await this.page.waitForTimeout(500);
+    // Wait for dropdown to close
+    await this.page.waitForSelector('.dropdown-menu.show', { state: 'hidden', timeout: 3000 }).catch(() => {});
   }
 
   /**
@@ -616,7 +623,8 @@ export class DashboardPage {
         const element = this.page.locator(selector).first();
         if (await element.isVisible({ timeout: 2000 })) {
           await element.click();
-          await this.page.waitForTimeout(2000);
+          // Wait for navigation or page content to load
+          await this.page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
           return;
         }
       } catch {

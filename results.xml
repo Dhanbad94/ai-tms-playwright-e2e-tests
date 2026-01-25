@@ -1,469 +1,507 @@
-<testsuites id="" name="" tests="43" failures="4" skipped="0" errors="0" time="277.835293">
-<testsuite name="TMS/dashboard.spec.ts" timestamp="2025-12-02T12:29:36.150Z" hostname="chromium" tests="9" failures="4" skipped="0" time="222.132" errors="0">
-<testcase name="Role-Based Dashboard Access Tests › Operator: Login, verify menus, and logout @smoke @operator" classname="TMS/dashboard.spec.ts" time="21.223">
+<testsuites id="" name="" tests="214" failures="0" skipped="2" errors="0" time="916.75077">
+<testsuite name="auth.teardown.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="cleanup" tests="1" failures="0" skipped="0" time="0.009" errors="0">
+<testcase name="cleanup auth state" classname="auth.teardown.ts" time="0.009">
+<system-out>
+<![CDATA[🧹 Auth state cleaned up
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="auth.setup.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="setup" tests="1" failures="0" skipped="0" time="6.142" errors="0">
+<testcase name="authenticate" classname="auth.setup.ts" time="6.142">
+<system-out>
+<![CDATA[🔐 Authenticating as: automated.manager@trackmyshuttle.com
+✅ Authentication successful
+💾 Auth state saved to: playwright/.auth/user.json
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/alerts-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="11" failures="0" skipped="0" time="200.341" errors="0">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › AL-001: Verify Alert Settings page loads @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="19.508">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › AL-002: Verify User notification section @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="29.5">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › User Notification Section › AL-003: Verify user search input @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="24.015">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › User Notification Section › AL-004: Verify already added users display @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="25.85">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Alerts Table › AL-005: Verify alerts table headers @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="15.699">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Alerts Table › AL-006: Verify page content is visible @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.922">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-007: Verify Geolocation section @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="14.155">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-008: Verify Geofence Alert section @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="16.838">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-009: Verify default geofence radius @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.853">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-010: Verify Email notification checkbox @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.044">
+</testcase>
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-011: Verify SMS notification checkbox @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.957">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/driver-app-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="16" failures="0" skipped="0" time="227.867" errors="0">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › DA-001: Verify Driver App page loads @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.371">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › DA-002: Verify all accordion sections visible @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.705">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Introduction Section › DA-003: Verify Introduction section content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.62">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Introduction Section › DA-004: Verify click here link for adding drivers @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="15.512">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Smart Tablet Section › DA-005: Verify Smart Tablet section @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.248">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Smart Tablet Section › DA-006: Verify Smart Tablet content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.409">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-007: Verify Download App section @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.484">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-008: Verify Download App content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.937">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-009: Verify Google Play Store image @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.964">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-010: Verify Apple App Store image @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.981">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-011: Verify Quick Start Guides available @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.094">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-012: Verify English Quick Start Guide link @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.047">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-013: Verify Spanish Quick Start Guide link @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.404">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-014: Verify Notification Settings section @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.97">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-015: Verify Notification Settings content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.595">
+</testcase>
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-016: Verify SMS notification option exists @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="16.526">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/escalations-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="10" failures="0" skipped="0" time="203.672" errors="0">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › ES-001: Verify Escalation Settings page loads @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="24.4">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › ES-002: Verify page content is visible @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.308">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-003: Verify Ride Request escalation section @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="19.948">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-004: Verify Ride Request checkbox exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="25.391">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-005: Verify Ride Request See Example link @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.627">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-006: Verify Trip Not Started section @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.153">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-007: Verify Trip Not Started checkbox exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="17.861">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-008: Verify Trip Not Started See Example link @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.888">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Escalation Configuration › ES-009: Verify escalation configuration UI elements @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="20.913">
+</testcase>
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Escalation Configuration › ES-010: Verify Add More button exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="21.183">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/live-display-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="7" failures="0" skipped="0" time="149.915" errors="0">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-001: Verify Live Display Settings page loads @smoke @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="19.016">
+</testcase>
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-002: Verify section heading @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="26.506">
+</testcase>
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-003: Verify section description @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="20.025">
+</testcase>
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-004: Verify warning message @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="16.466">
+</testcase>
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-005: Verify Create Live Display button @smoke @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="20.172">
+</testcase>
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-006: Verify Create Live Display button is enabled @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="29.061">
+</testcase>
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-007: Verify page content is complete @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="18.669">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/operation-hours.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="8" failures="0" skipped="0" time="150.878" errors="0">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-001: Verify Operation Hours page loads @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="20.141">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-002: Verify Run 24/7 option visible @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="15.147">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-003: Verify Custom Hours option visible @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="17.412">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-004: Verify Run 24/7 is default for ASAP @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="18.603">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-005: Verify option descriptions @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="22.488">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-006: Verify all options are visible @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="21.688">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-007: Verify Run 24/7 option is not disabled @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="17.466">
+</testcase>
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-008: Verify Custom Hours option is not disabled @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="17.933">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/operation-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="25" failures="0" skipped="0" time="377.812" errors="0">
+<testcase name="ASAP Operation Settings Tests @asap @settings › OPS-001: Verify Operation Settings page loads @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.316">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › OPS-002: Verify all 5 accordion sections visible @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.738">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-003: Verify Pick-up Time section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.998">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-004: Verify ASAP Pickup is default selected @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.394">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-005: Verify Future Pickup option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.178">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-006: Verify Both ASAP &amp; Future option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="17.851">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-007: Verify current pickup time setting matches ASAP default @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.047">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-008: Verify Pick-up Stops section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.561">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-009: Verify Pre-Defined Stops Only option @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.562">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-010: Verify Pre-Defined + Service Area option @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="21.096">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-011: Verify Add Service Area link exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.359">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-012: Verify Ride Sharing section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="18.373">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-013: Verify Shared Rides option selected (ASAP default) @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="17.665">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-014: Verify Private Rides option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.445">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-015: Verify current ride sharing setting matches ASAP default @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.86">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-016: Verify Driver Assignment section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.821">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-017: Verify Operator Assignment option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.556">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-018: Verify Driver Self-Assignment option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.085">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-019: Verify current driver assignment setting @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.777">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-020: Verify Shuttle Capacity section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.559">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-021: Verify Static Capacity selected (ASAP default) @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="15.289">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-022: Verify Dynamic Capacity option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.294">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-023: Verify current shuttle capacity setting @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.261">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-024: Verify Max Riders input is visible @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.228">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-025: Verify Max Riders value can be retrieved @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.499">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/organization-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="8" failures="0" skipped="0" time="122.328" errors="0">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-001: Verify Organization Settings page loads @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="14.87">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-002: Verify organization name display @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="13.295">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-004: Verify tracking ID display @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="12.39">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-005: Verify timezone display @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="12.365">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-007: Verify map is visible @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="16.851">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-008: Verify map zoom controls @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="18.449">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-009: Verify map type switch (Map/Satellite) @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="17.583">
+</testcase>
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-010: Verify edit organization button exists @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="16.525">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/pricing-setup.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="10" failures="0" skipped="0" time="146.102" errors="0">
+<testcase name="ASAP Pricing Setup Tests @asap @settings › PS-002: Verify page content is visible @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="13.889">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Payout Account Setup Section › PS-003: Verify Payout Account Setup section @smoke @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="14.444">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Payout Account Setup Section › PS-004: Verify Start Setup button @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="15.424">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Payout Account Setup Section › PS-005: Verify Start Setup button is enabled @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="14.471">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Enable Payment Section › PS-006: Verify Enable Payment section @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="13.914">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Enable Payment Section › PS-007: Verify payment checkbox is disabled (Stripe not setup) @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="15.878">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Configure Pricing Section › PS-008: Verify Configure Pricing section @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="13.319">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Configure Pricing Section › PS-009: Verify currency display @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="12.545">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Cancellation &amp; Refund Section › PS-010: Verify Cancellation &amp; Refund section @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="18.119">
+</testcase>
+<testcase name="ASAP Pricing Setup Tests @asap @settings › Cancellation &amp; Refund Section › PS-011: Verify cancellation checkbox is disabled (Stripe not setup) @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="14.099">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/rider-app-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="15" failures="0" skipped="0" time="221.834" errors="0">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-001: Verify Rider App Settings page loads @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.3">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-002: Verify all accordion sections visible @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.513">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-003: Verify Enable Rider App checkbox exists @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="12.608">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Configure Cover Page Section › RA-004: Verify Configure Cover Page section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.777">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Configure Contact Settings Section › RA-006: Verify Contact Settings section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.845">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-009: Verify Share Rider App Access section @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.227">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-011: Verify Share Tracking Code heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.611">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-012: Verify Share Link &amp; QR Code heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="13.667">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-013: Verify tracking link URL format @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.633">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-014: Verify Copy Link button exists @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.624">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-015: Verify QR Code button exists @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="13.813">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-016: Verify Voicemail Script heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="13.712">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-017: Verify Display QR Signage heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.042">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-018: Verify PDF download options @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.115">
+</testcase>
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Ride Cancellation Options Section › RA-019: Verify Ride Cancellation section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="15.347">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/settings-navigation.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="3" failures="0" skipped="0" time="53.637" errors="0">
+<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-001: Verify all 10 settings tabs are visible @smoke @manager" classname="ASAPSettings/settings-navigation.spec.ts" time="17.596">
+</testcase>
+<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-005: Verify settings page loads within threshold @performance" classname="ASAPSettings/settings-navigation.spec.ts" time="18.865">
+</testcase>
+<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-006: Verify URL hash persistence on page refresh @regression @manager" classname="ASAPSettings/settings-navigation.spec.ts" time="17.176">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/settings-rbac.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="9" failures="0" skipped="0" time="104.557" errors="0">
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-002: Manager can access User Management tab @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="15.249">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-003: Manager can see Add User button @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="13.738">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-004: Manager can open Edit User dialog @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="17.555">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-005: Manager can see Delete option @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="15.732">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-006: Manager sees Manage link in sidebar @smoke" classname="ASAPSettings/settings-rbac.spec.ts" time="7.675">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-008: Operator cannot see Stops menu @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="8.474">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-009: Operator cannot see Analytics menu @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="7.665">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-010: Operator cannot see Manage/Settings link @smoke" classname="ASAPSettings/settings-rbac.spec.ts" time="7.461">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-011: Operator direct navigation to settings redirects @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="11.008">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/user-management.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="34" failures="0" skipped="2" time="780.031" errors="0">
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R001: Verify User Management page loads @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.662">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R002: Verify users table headers @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="14.792">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R003: Verify existing users displayed @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="13.702">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R004: Verify user search functionality @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.242">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R005: Verify user role display @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.321">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R006: Verify user status display @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.546">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R007: Verify table sorting by Name @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.31">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R008: Verify table sorting by Role @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.309">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R009: Verify table sorting by Last Login @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="16.57">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R010: Verify table sorting by Status @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.115">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R011: Verify user data retrieval @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.409">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C001: Verify Add User button is visible @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="17.551">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C002: Verify Add User dialog opens @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.888">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C003: Verify role dropdown options @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.588">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C004: Verify Continue button disabled without email @regression @manager @negative" classname="ASAPSettings/user-management.spec.ts" time="16.384">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C005: Verify Step 2 form fields @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="20.819">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C006: Verify Cancel button closes dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.191">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C007: Add new Operator user (Data Modification) @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U001: Verify action menu opens on click @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.756">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U002: Verify Edit dialog opens @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="18.495">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U003: Verify Edit form displays current values @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.588">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U004: Verify Update button is visible @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.923">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U005: Verify close button closes Edit dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.515">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U006: Verify Also add as Driver checkbox @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.369">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D001: Verify Delete option in action menu @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="14.466">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D002: Verify Delete button in Edit dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.273">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D003: Delete user via action menu (Data Modification) @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Password Reset › UM-P001: Verify Reset Password option in menu @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.164">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-001: Manager role - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="50.797">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-002: Operator role - Create, Read, Update, Reset Password, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="63.167">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-003: Driver role - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="49.177">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-004: Operator with Also-Add-As-Driver - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="58.529">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-005: Role change - Create Operator, Update to Manager, Delete @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="44.47">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-006: Reset Password - Create Manager, Reset Password, Delete @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="81.943">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="TMSOnboarding/dashboard.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="9" failures="0" skipped="0" time="144.035" errors="0">
+<testcase name="Role-Based Dashboard Access Tests › Operator: Login, verify menus, and logout @smoke @operator" classname="TMSOnboarding/dashboard.spec.ts" time="13.086">
 <system-err>
 <![CDATA[⚠️ RBAC Issue: Operator has access to Alerts menu
 ]]>
 </system-err>
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Manager: Login, verify menus, and logout @smoke @manager" classname="TMS/dashboard.spec.ts" time="19.75">
+<testcase name="Role-Based Dashboard Access Tests › Manager: Login, verify menus, and logout @smoke @manager" classname="TMSOnboarding/dashboard.spec.ts" time="12.367">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Compare operator vs manager role-based access @smoke @rbac" classname="TMS/dashboard.spec.ts" time="41.181">
-<failure message="dashboard.spec.ts:385:7 Compare operator vs manager role-based access @smoke @rbac" type="FAILURE">
-<![CDATA[  [chromium] › TMS/dashboard.spec.ts:385:7 › Role-Based Dashboard Access Tests › Compare operator vs manager role-based access @smoke @rbac 
-
-    Test timeout of 35000ms exceeded.
-
-    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace ../test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/video.webm]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/error-context.md]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-c55ff-ole-based-access-smoke-rbac-chromium/trace.zip]]
-]]>
-</system-out>
-<system-err>
-<![CDATA[Logout error: page.waitForURL: Test timeout of 35000ms exceeded.
-=========================== logs ===========================
-waiting for navigation until "load"
-============================================================
-    at DashboardPage.logout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mpages/dashboard_page.ts:432:19[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:429:11
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:394:5 {
-  [[32mSymbol(step)[39m]: {
-    stepId: [32m'pw:api@74'[39m,
-    location: {
-      file: [32m'/home/user/Documents/ai-tms-playwright-ts-e2e-tests/pages/dashboard_page.ts'[39m,
-      line: [33m432[39m,
-      column: [33m19[39m,
-      function: [32m'DashboardPage.logout'[39m
-    },
-    category: [32m'pw:api'[39m,
-    title: [32m'Wait for navigation'[39m,
-    apiName: [32m'page.waitForURL'[39m,
-    params: { info: [36m[Object][39m },
-    boxedStack: [90mundefined[39m,
-    steps: [],
-    attachmentIndices: [],
-    info: TestStepInfoImpl {
-      annotations: [],
-      _testInfo: [36m[TestInfoImpl][39m,
-      _stepId: [32m'pw:api@74'[39m,
-      skip: [36m[Function (anonymous)][39m
-    },
-    complete: [36m[Function: complete][39m,
-    endWallTime: [33m1764678659347[39m,
-    error: {
-      message: [32m'Error: page.waitForURL: Test timeout of 35000ms exceeded.\n'[39m +
-        [32m'=========================== logs ===========================\n'[39m +
-        [32m'waiting for navigation until "load"\n'[39m +
-        [32m'============================================================'[39m,
-      stack: [32m'Error: page.waitForURL: Test timeout of 35000ms exceeded.\n'[39m +
-        [32m'=========================== logs ===========================\n'[39m +
-        [32m'waiting for navigation until "load"\n'[39m +
-        [32m'============================================================\n'[39m +
-        [32m'    at DashboardPage.logout (/home/user/Documents/ai-tms-playwright-ts-e2e-tests/pages/dashboard_page.ts:432:19)\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:429:11\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:394:5'[39m,
-      cause: [90mundefined[39m
-    }
-  }
-}
-Error during operator test: page.goto: Target page, context or browser has been closed
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:431:22
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:394:5 {
-  [[32mSymbol(step)[39m]: {
-    stepId: [32m'pw:api@84'[39m,
-    location: {
-      file: [32m'/home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts'[39m,
-      line: [33m431[39m,
-      column: [33m22[39m
-    },
-    category: [32m'pw:api'[39m,
-    title: [32m'Navigate to "/login"'[39m,
-    apiName: [32m'page.goto'[39m,
-    params: {
-      url: [32m'https://staging.trackmyshuttle.com/login'[39m,
-      waitUntil: [32m'load'[39m,
-      timeout: [33m30000[39m
-    },
-    boxedStack: [90mundefined[39m,
-    steps: [],
-    attachmentIndices: [],
-    info: TestStepInfoImpl {
-      annotations: [],
-      _testInfo: [36m[TestInfoImpl][39m,
-      _stepId: [32m'pw:api@84'[39m,
-      skip: [36m[Function (anonymous)][39m
-    },
-    complete: [36m[Function: complete][39m,
-    endWallTime: [33m1764678659376[39m,
-    error: {
-      message: [32m'Error: page.goto: Target page, context or browser has been closed'[39m,
-      stack: [32m'Error: page.goto: Target page, context or browser has been closed\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:431:22\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:394:5'[39m,
-      cause: [90mundefined[39m
-    }
-  }
-}
-Error during manager test: page.goto: Target page, context or browser has been closed
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:452:20
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:439:16 {
-  [[32mSymbol(step)[39m]: {
-    stepId: [32m'pw:api@86'[39m,
-    location: {
-      file: [32m'/home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts'[39m,
-      line: [33m452[39m,
-      column: [33m20[39m
-    },
-    category: [32m'pw:api'[39m,
-    title: [32m'Navigate to "/login"'[39m,
-    apiName: [32m'page.goto'[39m,
-    params: {
-      url: [32m'https://staging.trackmyshuttle.com/login'[39m,
-      waitUntil: [32m'load'[39m,
-      timeout: [33m30000[39m
-    },
-    boxedStack: [90mundefined[39m,
-    steps: [],
-    attachmentIndices: [],
-    info: TestStepInfoImpl {
-      annotations: [],
-      _testInfo: [36m[TestInfoImpl][39m,
-      _stepId: [32m'pw:api@86'[39m,
-      skip: [36m[Function (anonymous)][39m
-    },
-    complete: [36m[Function: complete][39m,
-    endWallTime: [33m1764678659383[39m,
-    error: {
-      message: [32m'Error: page.goto: Target page, context or browser has been closed'[39m,
-      stack: [32m'Error: page.goto: Target page, context or browser has been closed\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:452:20\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:439:16'[39m,
-      cause: [90mundefined[39m
-    }
-  }
-}
-]]>
-</system-err>
+<testcase name="Role-Based Dashboard Access Tests › Compare operator vs manager role-based access @smoke @rbac" classname="TMSOnboarding/dashboard.spec.ts" time="29.648">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Performance: Dashboard load time measurement @performance" classname="TMS/dashboard.spec.ts" time="22.993">
+<testcase name="Role-Based Dashboard Access Tests › Performance: Dashboard load time measurement @performance" classname="TMSOnboarding/dashboard.spec.ts" time="17.834">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Menu Navigation: Test all accessible menus with 5 second intervals @navigation" classname="TMS/dashboard.spec.ts" time="15.476">
+<testcase name="Role-Based Dashboard Access Tests › Menu Navigation: Test all accessible menus with 5 second intervals @navigation" classname="TMSOnboarding/dashboard.spec.ts" time="13.736">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Manager Menu Navigation: Simplified test @navigation @manager" classname="TMS/dashboard.spec.ts" time="10.262">
+<testcase name="Role-Based Dashboard Access Tests › Manager Menu Navigation: Simplified test @navigation @manager" classname="TMSOnboarding/dashboard.spec.ts" time="15.275">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Operator: Profile access and functionality @smoke @operator @profile" classname="TMS/dashboard.spec.ts" time="23.346">
-<failure message="dashboard.spec.ts:739:7 Operator: Profile access and functionality @smoke @operator @profile" type="FAILURE">
-<![CDATA[  [chromium] › TMS/dashboard.spec.ts:739:7 › Role-Based Dashboard Access Tests › Operator: Profile access and functionality @smoke @operator @profile › Access and verify operator profile 
-
-    Error: expect(received).toBeTruthy()
-
-    Received: false
-
-       at ../pages/profile_page.ts:179
-
-      177 |         currentUrl.includes("user") ||
-      178 |         currentUrl.includes("account")
-    > 179 |     ).toBeTruthy();
-          |       ^
-      180 |   }
-      181 |
-      182 |   /**
-        at ProfilePage.navigateToProfileAndVerify (/home/user/Documents/ai-tms-playwright-ts-e2e-tests/pages/profile_page.ts:179:7)
-        at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:767:7
-        at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:765:5
-
-    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace ../test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/video.webm]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/error-context.md]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-95930-lity-smoke-operator-profile-chromium/trace.zip]]
-]]>
-</system-out>
+<testcase name="Role-Based Dashboard Access Tests › Operator: Profile access and functionality @smoke @operator @profile" classname="TMSOnboarding/dashboard.spec.ts" time="12.254">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Manager: Profile access and functionality @smoke @manager @profile" classname="TMS/dashboard.spec.ts" time="35.925">
-<failure message="dashboard.spec.ts:788:7 Manager: Profile access and functionality @smoke @manager @profile" type="FAILURE">
-<![CDATA[  [chromium] › TMS/dashboard.spec.ts:788:7 › Role-Based Dashboard Access Tests › Manager: Profile access and functionality @smoke @manager @profile 
-
-    Test timeout of 30000ms exceeded.
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace ../test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/video.webm]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/error-context.md]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-84e84-ality-smoke-manager-profile-chromium/trace.zip]]
-]]>
-</system-out>
-<system-err>
-<![CDATA[Logout error: page.waitForURL: Test timeout of 30000ms exceeded.
-=========================== logs ===========================
-waiting for navigation until "load"
-============================================================
-    at DashboardPage.logout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mpages/dashboard_page.ts:432:19[90m)[39m
-    at performReliableLogout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:54:5[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:842:7
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/dashboard.spec.ts:841:5 {
-  [[32mSymbol(step)[39m]: {
-    stepId: [32m'pw:api@99'[39m,
-    location: {
-      file: [32m'/home/user/Documents/ai-tms-playwright-ts-e2e-tests/pages/dashboard_page.ts'[39m,
-      line: [33m432[39m,
-      column: [33m19[39m,
-      function: [32m'DashboardPage.logout'[39m
-    },
-    category: [32m'pw:api'[39m,
-    title: [32m'Wait for navigation'[39m,
-    apiName: [32m'page.waitForURL'[39m,
-    params: { info: [36m[Object][39m },
-    boxedStack: [90mundefined[39m,
-    steps: [],
-    attachmentIndices: [],
-    info: TestStepInfoImpl {
-      annotations: [],
-      _testInfo: [36m[TestInfoImpl][39m,
-      _stepId: [32m'pw:api@99'[39m,
-      skip: [36m[Function (anonymous)][39m
-    },
-    complete: [36m[Function: complete][39m,
-    endWallTime: [33m1764678772305[39m,
-    error: {
-      message: [32m'Error: page.waitForURL: Test timeout of 30000ms exceeded.\n'[39m +
-        [32m'=========================== logs ===========================\n'[39m +
-        [32m'waiting for navigation until "load"\n'[39m +
-        [32m'============================================================'[39m,
-      stack: [32m'Error: page.waitForURL: Test timeout of 30000ms exceeded.\n'[39m +
-        [32m'=========================== logs ===========================\n'[39m +
-        [32m'waiting for navigation until "load"\n'[39m +
-        [32m'============================================================\n'[39m +
-        [32m'    at DashboardPage.logout (/home/user/Documents/ai-tms-playwright-ts-e2e-tests/pages/dashboard_page.ts:432:19)\n'[39m +
-        [32m'    at performReliableLogout (/home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:54:5)\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:842:7\n'[39m +
-        [32m'    at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:841:5'[39m,
-      cause: [90mundefined[39m
-    }
-  }
-}
-]]>
-</system-err>
+<testcase name="Role-Based Dashboard Access Tests › Manager: Profile access and functionality @smoke @manager @profile" classname="TMSOnboarding/dashboard.spec.ts" time="13.261">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Profile: Role comparison test @smoke @profile @rbac" classname="TMS/dashboard.spec.ts" time="31.976">
-<failure message="dashboard.spec.ts:846:7 Profile: Role comparison test @smoke @profile @rbac" type="FAILURE">
-<![CDATA[  [chromium] › TMS/dashboard.spec.ts:846:7 › Role-Based Dashboard Access Tests › Profile: Role comparison test @smoke @profile @rbac › Test manager profile access 
-
-    Test timeout of 30000ms exceeded.
-
-    Error: page.waitForTimeout: Test timeout of 30000ms exceeded.
-
-       at ../pages/profile_page.ts:171
-
-      169 |   async navigateToProfileAndVerify(): Promise<void> {
-      170 |     await this.clickViewProfile();
-    > 171 |     await this.page.waitForTimeout(2000);
-          |                     ^
-      172 |
-      173 |     // Verify we're on profile page
-      174 |     const currentUrl = this.page.url();
-        at ProfilePage.navigateToProfileAndVerify (/home/user/Documents/ai-tms-playwright-ts-e2e-tests/pages/profile_page.ts:171:21)
-        at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:892:7
-        at /home/user/Documents/ai-tms-playwright-ts-e2e-tests/tests/TMS/dashboard.spec.ts:884:5
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace ../test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/video.webm]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/error-context.md]]
-
-[[ATTACHMENT|test-results/TMS-dashboard-Role-Based-D-e828b-son-test-smoke-profile-rbac-chromium/trace.zip]]
-]]>
-</system-out>
+<testcase name="Role-Based Dashboard Access Tests › Profile: Role comparison test @smoke @profile @rbac" classname="TMSOnboarding/dashboard.spec.ts" time="16.574">
 </testcase>
 </testsuite>
-<testsuite name="TMS/login.spec.ts" timestamp="2025-12-02T12:29:36.150Z" hostname="chromium" tests="32" failures="0" skipped="0" time="238.025" errors="0">
-<testcase name="TrackMyShuttle Login Tests › should display all login page elements @smoke @system" classname="TMS/login.spec.ts" time="3.837">
+<testsuite name="TMSOnboarding/example-improved.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="14" failures="0" skipped="0" time="45.788" errors="0">
+<testcase name="Login Tests with Fixtures @smoke @critical › should display login form elements" classname="TMSOnboarding/example-improved.spec.ts" time="3.287">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should handle empty credentials @smoke @regression" classname="TMS/login.spec.ts" time="4.503">
+<testcase name="Login Tests with Fixtures @smoke @critical › should show error for invalid credentials @regression" classname="TMSOnboarding/example-improved.spec.ts" time="5.437">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should handle invalid email format @regression" classname="TMS/login.spec.ts" time="5.246">
+<testcase name="Timeout and Path Constants @system › should navigate using path constants" classname="TMSOnboarding/example-improved.spec.ts" time="4.151">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should toggle password visibility @system" classname="TMS/login.spec.ts" time="3.628">
+<testcase name="Timeout and Path Constants @system › should use timeout constants" classname="TMSOnboarding/example-improved.spec.ts" time="3.047">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should remember me checkbox functionality @system @regression" classname="TMS/login.spec.ts" time="3.392">
+<testcase name="Tagged Tests › quick login page check @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="2.99">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should navigate to activate account page and verify elements @smoke @system" classname="TMS/login.spec.ts" time="6.922">
+<testcase name="Tagged Tests › login form submission @critical @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="3.136">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should navigate to forgot password page @smoke @system" classname="TMS/login.spec.ts" time="6.194">
+<testcase name="Tagged Tests › complete form validation @regression" classname="TMSOnboarding/example-improved.spec.ts" time="4.452">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should display and submit forgot password page" classname="TMS/login.spec.ts" time="9.333">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should display phone number correctly @system" classname="TMS/login.spec.ts" time="2.919">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should have correct form action and method @system @regression" classname="TMS/login.spec.ts" time="7.578">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should load login page within acceptable time @system" classname="TMS/login.spec.ts" time="6.476">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should validate cross-page navigation flow @system @integration" classname="TMS/login.spec.ts" time="15.726">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should maintain consistent UI elements across pages @system" classname="TMS/login.spec.ts" time="5.133">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should login with valid credentials @smoke @system @regression" classname="TMS/login.spec.ts" time="24.225">
-<system-err>
-<![CDATA[Could not open profile dropdown: Error: Could not find any clickable dropdown button for "Delhi-Org India"
-    at DashboardPage.openProfileDropdown [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mpages/dashboard_page.ts:335:13[90m)[39m
-    at DashboardPage.logout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mpages/dashboard_page.ts:408:7[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/login.spec.ts:307:11
-    at TestStepInfoImpl._runStepBody [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/testInfo.js:449:14[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/testType.js:244:20
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/testType.js:242:18
-    at TestTypeImpl._step [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/testType.js:239:12[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/login.spec.ts:276:5
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:304:9
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/testInfo.js:289:11
-    at TimeoutManager.withRunnable [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/timeoutManager.js:67:14[90m)[39m
-    at TestInfoImpl._runWithTimeout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/testInfo.js:287:7[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:302:7
-    at WorkerMain._runTest [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:277:5[90m)[39m
-    at WorkerMain.runTestGroup [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:193:11[90m)[39m
-    at process.<anonymous> [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/process.js:65:22[90m)[39m
-Logout error: Error: Failed to open profile dropdown menu
-    at DashboardPage.openProfileDropdown [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mpages/dashboard_page.ts:340:13[90m)[39m
-    at DashboardPage.logout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mpages/dashboard_page.ts:408:7[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/login.spec.ts:307:11
-    at TestStepInfoImpl._runStepBody [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/testInfo.js:449:14[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/testType.js:244:20
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/testType.js:242:18
-    at TestTypeImpl._step [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/testType.js:239:12[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mtests/TMS/login.spec.ts:276:5
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:304:9
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/testInfo.js:289:11
-    at TimeoutManager.withRunnable [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/timeoutManager.js:67:14[90m)[39m
-    at TestInfoImpl._runWithTimeout [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/testInfo.js:287:7[90m)[39m
-    at [90m/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:302:7
-    at WorkerMain._runTest [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:277:5[90m)[39m
-    at WorkerMain.runTestGroup [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/worker/workerMain.js:193:11[90m)[39m
-    at process.<anonymous> [90m(/home/user/Documents/ai-tms-playwright-ts-e2e-tests/[39mnode_modules/[4mplaywright[24m/lib/common/process.js:65:22[90m)[39m
+<testcase name="Tagged Tests › full page load performance @slow @performance" classname="TMSOnboarding/example-improved.spec.ts" time="2.965">
+<system-out>
+<![CDATA[Page loaded in 2605ms
 ]]>
-</system-err>
+</system-out>
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should login as operator and manager @smoke @system" classname="TMS/login.spec.ts" time="17.422">
+<testcase name="Independent Tests (Parallel) › email input accepts text" classname="TMSOnboarding/example-improved.spec.ts" time="3.079">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › should handle session timeout and redirect @system @regression" classname="TMS/login.spec.ts" time="9.333">
+<testcase name="Independent Tests (Parallel) › password input accepts text" classname="TMSOnboarding/example-improved.spec.ts" time="2.838">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should display all activate account page elements @smoke @system" classname="TMS/login.spec.ts" time="4.755">
+<testcase name="Independent Tests (Parallel) › remember me checkbox toggles" classname="TMSOnboarding/example-improved.spec.ts" time="3.226">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should have correct form attributes @system" classname="TMS/login.spec.ts" time="9">
+<testcase name="Dependent Tests (Serial) › step 1: enter email" classname="TMSOnboarding/example-improved.spec.ts" time="2.931">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should require terms acceptance to enable activate button @system @regression" classname="TMS/login.spec.ts" time="5.452">
+<testcase name="Dependent Tests (Serial) › step 2: verify email was entered" classname="TMSOnboarding/example-improved.spec.ts" time="0.235">
 </testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle empty form submission @smoke @regression" classname="TMS/login.spec.ts" time="12.736">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate email format @regression" classname="TMS/login.spec.ts" time="6.148">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate phone number format @regression" classname="TMS/login.spec.ts" time="13.234">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate activation code format @regression" classname="TMS/login.spec.ts" time="5.886">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should toggle password visibility @system" classname="TMS/login.spec.ts" time="4.777">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate password requirements @regression" classname="TMS/login.spec.ts" time="6.276">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate first name field @regression" classname="TMS/login.spec.ts" time="5.945">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate last name field @regression" classname="TMS/login.spec.ts" time="6.17">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle country code selection @system" classname="TMS/login.spec.ts" time="5.237">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should clear form fields @system" classname="TMS/login.spec.ts" time="5.656">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should navigate back to login page @system" classname="TMS/login.spec.ts" time="5.078">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should verify privacy policy link @system" classname="TMS/login.spec.ts" time="5.019">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle maximum character limits @regression" classname="TMS/login.spec.ts" time="4.789">
+<testcase name="Test Steps for Reporting › complete login flow with steps @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="4.014">
 </testcase>
 </testsuite>
-<testsuite name="TMS/settings.spec.ts" timestamp="2025-12-02T12:29:36.150Z" hostname="chromium" tests="2" failures="0" skipped="0" time="43.05" errors="0">
-<testcase name="Settings Page Tests › Manager: Settings access @smoke @manager @settings" classname="TMS/settings.spec.ts" time="23.036">
+<testsuite name="TMSOnboarding/login.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="32" failures="0" skipped="0" time="191.674" errors="0">
+<testcase name="TrackMyShuttle Login Tests › should display all login page elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="3.209">
 </testcase>
-<testcase name="Settings Page Tests › Performance: Settings load time @performance @settings" classname="TMS/settings.spec.ts" time="20.014">
+<testcase name="TrackMyShuttle Login Tests › should handle empty credentials @smoke @regression" classname="TMSOnboarding/login.spec.ts" time="4.482">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should handle invalid email format @regression" classname="TMSOnboarding/login.spec.ts" time="5.502">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should toggle password visibility @system" classname="TMSOnboarding/login.spec.ts" time="2.953">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should remember me checkbox functionality @system @regression" classname="TMSOnboarding/login.spec.ts" time="3.274">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should navigate to activate account page and verify elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="7.423">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should navigate to forgot password page @smoke @system" classname="TMSOnboarding/login.spec.ts" time="4.818">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should display and submit forgot password page" classname="TMSOnboarding/login.spec.ts" time="9.294">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should display phone number correctly @system" classname="TMSOnboarding/login.spec.ts" time="2.898">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should have correct form action and method @system @regression" classname="TMSOnboarding/login.spec.ts" time="2.938">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should load login page within acceptable time @system" classname="TMSOnboarding/login.spec.ts" time="4.54">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should validate cross-page navigation flow @system @integration" classname="TMSOnboarding/login.spec.ts" time="9.829">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should maintain consistent UI elements across pages @system" classname="TMSOnboarding/login.spec.ts" time="5.026">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should login with valid credentials @smoke @system @regression" classname="TMSOnboarding/login.spec.ts" time="16.047">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should login as operator and manager @smoke @system" classname="TMSOnboarding/login.spec.ts" time="18.968">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should handle session timeout and redirect @system @regression" classname="TMSOnboarding/login.spec.ts" time="12.266">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should display all activate account page elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="4.538">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should have correct form attributes @system" classname="TMSOnboarding/login.spec.ts" time="3.975">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should require terms acceptance to enable activate button @system @regression" classname="TMSOnboarding/login.spec.ts" time="4.561">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle empty form submission @smoke @regression" classname="TMSOnboarding/login.spec.ts" time="5.469">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate email format @regression" classname="TMSOnboarding/login.spec.ts" time="5.413">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate phone number format @regression" classname="TMSOnboarding/login.spec.ts" time="5.615">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate activation code format @regression" classname="TMSOnboarding/login.spec.ts" time="5.261">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should toggle password visibility @system" classname="TMSOnboarding/login.spec.ts" time="4.244">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate password requirements @regression" classname="TMSOnboarding/login.spec.ts" time="5.2">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate first name field @regression" classname="TMSOnboarding/login.spec.ts" time="5.092">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate last name field @regression" classname="TMSOnboarding/login.spec.ts" time="5.071">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle country code selection @system" classname="TMSOnboarding/login.spec.ts" time="4.37">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should clear form fields @system" classname="TMSOnboarding/login.spec.ts" time="5.14">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should navigate back to login page @system" classname="TMSOnboarding/login.spec.ts" time="5.766">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should verify privacy policy link @system" classname="TMSOnboarding/login.spec.ts" time="4.015">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle maximum character limits @regression" classname="TMSOnboarding/login.spec.ts" time="4.477">
+</testcase>
+</testsuite>
+<testsuite name="TMSOnboarding/settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="1" failures="0" skipped="0" time="11.515" errors="0">
+<testcase name="Settings Page Tests › Performance: Settings load time @performance @settings" classname="TMSOnboarding/settings.spec.ts" time="11.515">
 </testcase>
 </testsuite>
 </testsuites>

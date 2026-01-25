@@ -1,3 +1,9 @@
 {
-  "features": ["login", "dashboard", "settings", "notifications", "analytics"]
+  "features": [
+    "login",
+    "dashboard",
+    "ASAPSettings",
+    "notifications",
+    "analytics"
+  ]
 }

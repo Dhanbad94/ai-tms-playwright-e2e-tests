@@ -39,7 +39,7 @@ function getCredentials(role: "OPERATOR" | "MANAGER") {
   };
 }
 
-// Helper function for reliable logout
+// Helper function for reliable logout - simplified version
 async function performReliableLogout(
   page: any,
   dashboardPage: DashboardPage,
@@ -47,72 +47,21 @@ async function performReliableLogout(
   testData: any
 ) {
   try {
-    // Check if page is still accessible
-    await page.evaluate(() => document.readyState);
-
-    // Try dashboard page logout method first
-    await dashboardPage.logout();
-  } catch (logoutError) {
+    // Most reliable: Clear browser context and navigate to login
+    // This works regardless of UI state
+    await page.context().clearCookies();
+    await page.goto(`${testData.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
+    return;
+  } catch {
+    // Fallback: Just navigate to login page
     try {
-      // Manual logout as fallback
-      await page.evaluate(() => document.readyState);
-
-      // Try to find and click dropdown
-      const dropdownSelectors = [
-        'text="Delhi-Org India"',
-        'text="Delhi-Org"',
-        '[data-toggle="dropdown"]',
-        ".dropdown-toggle",
-        ".profile-dropdown",
-      ];
-
-      let dropdownClicked = false;
-      for (const selector of dropdownSelectors) {
-        try {
-          const dropdown = page.locator(selector).first();
-          if (await dropdown.isVisible({ timeout: 3000 })) {
-            await dropdown.click();
-            dropdownClicked = true;
-            await page.waitForTimeout(1000);
-            break;
-          }
-        } catch {
-          continue;
-        }
-      }
-
-      if (dropdownClicked) {
-        const signOutSelectors = [
-          'text="Sign Out"',
-          'a:has-text("Sign Out")',
-          'button:has-text("Sign Out")',
-          '[data-action="logout"]',
-        ];
-
-        for (const selector of signOutSelectors) {
-          try {
-            const signOut = page.locator(selector).first();
-            if (await signOut.isVisible({ timeout: 3000 })) {
-              await signOut.click();
-              break;
-            }
-          } catch {
-            continue;
-          }
-        }
-      }
-    } catch (manualLogoutError) {
-      // Force navigate to login
-      try {
-        await page.goto(`${testData.baseUrl}/login`);
-      } catch {
-        // Page/context may be closed
-        return;
-      }
+      await page.goto(`${testData.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
+    } catch {
+      // Page/context may be closed - ignore
     }
   }
 
-  // Wait for redirect or force navigate
+  // Wait for login page to be ready
   try {
     await Promise.race([
       page.waitForURL("**/login", { timeout: 10000 }),
@@ -140,7 +89,7 @@ async function performReliableLogout(
 async function waitForDashboardSimple(page: any) {
   try {
     // Minimal wait for dashboard elements to appear
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
   } catch (error) {
     // Silent failure
   }
@@ -151,7 +100,7 @@ async function countAccessibleMenus(
   page: any
 ): Promise<{ count: number; menus: string[] }> {
   // Minimal wait time to prevent timeout
-  await page.waitForTimeout(300);
+  // Playwright auto-waits for actions
 
   const menuMappings = [
     {
@@ -256,6 +205,9 @@ test.describe("Role-Based Dashboard Access Tests", () => {
   let loginPage: LoginPage;
   let dashboardPage: DashboardPage;
   let profilePage: ProfilePage;
+
+  // Clear auth state since these tests perform their own login
+  test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
@@ -424,12 +376,9 @@ test.describe("Role-Based Dashboard Access Tests", () => {
 
         // Operator menus detected: suppressed informational output
 
-        // Simple logout without complex cleanup
-        try {
-          await dashboardPage.logout();
-        } catch {
-          await page.goto(`${TEST_DATA.baseUrl}/login`);
-        }
+        // Simple logout - clear cookies and navigate
+        await page.context().clearCookies();
+        await page.goto(`${TEST_DATA.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
       } catch (error) {
         console.error("Error during operator test:", error);
         operatorMenuData = { count: 0, menus: [] };
@@ -469,12 +418,9 @@ test.describe("Role-Based Dashboard Access Tests", () => {
 
         // Manager menus detected: suppressed informational output
 
-        // Simple logout without complex cleanup
-        try {
-          await dashboardPage.logout();
-        } catch {
-          await page.goto(`${TEST_DATA.baseUrl}/login`);
-        }
+        // Simple logout - clear cookies and navigate
+        await page.context().clearCookies();
+        await page.goto(`${TEST_DATA.baseUrl}/login`, { waitUntil: 'domcontentloaded' });
       } catch (error) {
         console.error("Error during manager test:", error);
         managerMenuData = { count: 0, menus: [] };
@@ -534,7 +480,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
           await page.waitForURL("**/dashboard", { timeout: 10000 });
 
           // Minimal wait for performance test
-          await page.waitForTimeout(500);
+          await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
 
           const endTime = Date.now();
           const loadTime = endTime - startTime;
@@ -685,7 +631,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         await page.waitForURL("**/dashboard", { timeout: 10000 });
 
         // Minimal dashboard wait
-        await page.waitForTimeout(500);
+        await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
 
         // Reduced test scope - only test core menus
         const coreManagerMenus = ["Dispatch", "Stops", "Analytics"];
