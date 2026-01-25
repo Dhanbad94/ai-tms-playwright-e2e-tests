@@ -26,6 +26,11 @@ on:
           - regression
           - critical
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 env:
   CI: true
   NODE_ENV: test
@@ -34,7 +39,6 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'staging' }}
     permissions:
       contents: read
       checks: write
