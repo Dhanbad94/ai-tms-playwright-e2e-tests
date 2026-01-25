@@ -41,8 +41,10 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
   });
 
   test.afterEach(async ({ page }) => {
-    // Close any open dialogs
-    await userManagementPage.closeAnyOpenDialog().catch(() => {});
+
+    if (userManagementPage) {
+      await userManagementPage.closeAnyOpenDialog().catch(() => {});
+    }
     await page.context().clearCookies();
   });
 
