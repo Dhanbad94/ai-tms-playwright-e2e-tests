@@ -2,6 +2,15 @@
 
 This repository contains end-to-end (E2E) test automation for the TrackMyShuttle web application using Playwright + TypeScript.
 
+## Workflows Status
+
+[![Playwright Tests](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/playwright.yml/badge.svg)](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/playwright.yml)
+[![Scheduled Tests - Staging](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/scheduled-staging.yml/badge.svg)](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/scheduled-staging.yml)
+[![Scheduled Tests - Full Suite](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/scheduled-full.yml/badge.svg)](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/scheduled-full.yml)
+[![Scheduled Tests - Production](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/scheduled-production.yml/badge.svg)](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/actions/workflows/scheduled-production.yml)
+
+See [.github/workflows/README.md](.github/workflows/README.md) for detailed workflow documentation.
+
 ## Quick overview
 
 - Tests are in: `tests/TMS/*.spec.ts`
