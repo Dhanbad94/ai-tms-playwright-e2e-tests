@@ -76,10 +76,16 @@ jobs:
           BASE_URL: ${{ secrets[format('BASE_URL_{0}', steps.env.outputs.environment)] }}
           STAGING_MANAGER_EMAIL: ${{ secrets.STAGING_MANAGER_EMAIL }}
           STAGING_MANAGER_PASSWORD: ${{ secrets.STAGING_MANAGER_PASSWORD }}
+          STAGING_OPERATOR_EMAIL: ${{ secrets.STAGING_OPERATOR_EMAIL }}
+          STAGING_OPERATOR_PASSWORD: ${{ secrets.STAGING_OPERATOR_PASSWORD }}
           PREPRODUCTION_MANAGER_EMAIL: ${{ secrets.PREPRODUCTION_MANAGER_EMAIL }}
           PREPRODUCTION_MANAGER_PASSWORD: ${{ secrets.PREPRODUCTION_MANAGER_PASSWORD }}
+          PREPRODUCTION_OPERATOR_EMAIL: ${{ secrets.PREPRODUCTION_OPERATOR_EMAIL }}
+          PREPRODUCTION_OPERATOR_PASSWORD: ${{ secrets.PREPRODUCTION_OPERATOR_PASSWORD }}
           PROD_MANAGER_EMAIL: ${{ secrets.PROD_MANAGER_EMAIL }}
           PROD_MANAGER_PASSWORD: ${{ secrets.PROD_MANAGER_PASSWORD }}
+          PROD_OPERATOR_EMAIL: ${{ secrets.PROD_OPERATOR_EMAIL }}
+          PROD_OPERATOR_PASSWORD: ${{ secrets.PROD_OPERATOR_PASSWORD }}
         run: npx playwright test
       
       - name: Determine test status
