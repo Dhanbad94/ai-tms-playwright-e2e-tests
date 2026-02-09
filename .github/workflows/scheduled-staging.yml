@@ -103,7 +103,6 @@ jobs:
           echo "STAGING_OPERATOR_PASSWORD=${{ secrets.STAGING_OPERATOR_PASSWORD }}" >> .env.local
           echo "Created .env.local with contents:"
           cat .env.local | sed 's/=.*/=***/'
-          EOF
 
       - name: Determine test type
         id: test-config

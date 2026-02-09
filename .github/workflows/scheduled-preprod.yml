@@ -4,305 +4,303 @@ name: Scheduled Tests - Preproduction
 # - Full suite Wednesday at 7:00 AM UTC (Pre-release validation)
 
 on:
-  schedule:
-    # Wednesday at 7:00 AM UTC
-    - cron: '0 7 * * 3'
+  schedule:
+    # Wednesday at 7:00 AM UTC
+    - cron: '0 7 * * 3'
 
-  # Allow manual trigger
-  workflow_dispatch:
-    inputs:
-      test_type:
-        description: 'Test type to run'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - smoke
-          - regression
-          - critical
-          - all
-      test_suite:
-        description: 'Test suite to run'
-        required: false
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - ASAPSettings
-          - TMSOnboarding
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Test type to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - critical
+          - all
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - ASAPSettings
+          - TMSOnboarding
 
 env:
-  ENV: preproduction
-  BASE_URL: https://preproduction.trackmyshuttle.com
+  ENV: preproduction
+  BASE_URL: https://preproduction.trackmyshuttle.com
 
 jobs:
-  # Check if secrets are configured
-  check-secrets:
-    name: Verify Preproduction Secrets
-    runs-on: ubuntu-latest
-    outputs:
-      secrets_configured: ${{ steps.check.outputs.configured }}
-      slack_configured: ${{ steps.check.outputs.slack }}
-    steps:
-      - name: Check if preproduction secrets exist
-        id: check
-        run: |
-          if [ -n "${{ secrets.PREPROD_MANAGER_EMAIL }}" ] && [ -n "${{ secrets.PREPROD_MANAGER_PASSWORD }}" ]; then
-            echo "configured=true" >> $GITHUB_OUTPUT
-            echo "✅ Preproduction secrets are configured"
-          else
-            echo "configured=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Preproduction secrets not configured - skipping tests"
-          fi
+  # Check if secrets are configured
+  check-secrets:
+    name: Verify Preproduction Secrets
+    runs-on: ubuntu-latest
+    outputs:
+      secrets_configured: ${{ steps.check.outputs.configured }}
+      slack_configured: ${{ steps.check.outputs.slack }}
+    steps:
+      - name: Check if preproduction secrets exist
+        id: check
+        run: |
+          if [ -n "${{ secrets.PREPROD_MANAGER_EMAIL }}" ] && [ -n "${{ secrets.PREPROD_MANAGER_PASSWORD }}" ]; then
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo " Preproduction secrets are configured"
+          else
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo " Preproduction secrets not configured - skipping tests"
+          fi
 
-          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
-            echo "slack=true" >> $GITHUB_OUTPUT
-          else
-            echo "slack=false" >> $GITHUB_OUTPUT
-          fi
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "slack=true" >> $GITHUB_OUTPUT
+          else
+            echo "slack=false" >> $GITHUB_OUTPUT
+          fi
 
-  preprod-tests:
-    name: Preproduction ${{ github.event.inputs.test_type || 'Full Suite' }} Tests
-    runs-on: ubuntu-latest
-    needs: check-secrets
-    if: needs.check-secrets.outputs.secrets_configured == 'true'
-    timeout-minutes: 90
-    outputs:
-      test_type: ${{ steps.test-config.outputs.test_type }}
-      test_suite: ${{ steps.test-config.outputs.test_suite }}
-      total_tests: ${{ steps.test-result.outputs.total }}
-      passed_tests: ${{ steps.test-result.outputs.passed }}
-      failed_tests: ${{ steps.test-result.outputs.failed }}
-      duration: ${{ steps.test-result.outputs.duration }}
+  preprod-tests:
+    name: Preproduction ${{ github.event.inputs.test_type || 'Full Suite' }} Tests
+    runs-on: ubuntu-latest
+    needs: check-secrets
+    if: needs.check-secrets.outputs.secrets_configured == 'true'
+    timeout-minutes: 90
+    outputs:
+      test_type: ${{ steps.test-config.outputs.test_type }}
+      test_suite: ${{ steps.test-config.outputs.test_suite }}
+      total_tests: ${{ steps.test-result.outputs.total }}
+      passed_tests: ${{ steps.test-result.outputs.passed }}
+      failed_tests: ${{ steps.test-result.outputs.failed }}
+      duration: ${{ steps.test-result.outputs.duration }}
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
-      - name: Create .env.local from secrets
-        run: |
-          cat > .env.local << EOF
-          STAGING_MANAGER_EMAIL=${{ secrets.PREPROD_MANAGER_EMAIL }}
-          STAGING_MANAGER_PASSWORD=${{ secrets.PREPROD_MANAGER_PASSWORD }}
-          STAGING_OPERATOR_EMAIL=${{ secrets.PREPROD_OPERATOR_EMAIL }}
-          STAGING_OPERATOR_PASSWORD=${{ secrets.PREPROD_OPERATOR_PASSWORD }}
-          EOF
+      - name: Create .env.local from secrets
+        run: |
+          echo "STAGING_MANAGER_EMAIL=${{ secrets.PREPROD_MANAGER_EMAIL }}" > .env.local
+          echo "STAGING_MANAGER_PASSWORD=${{ secrets.PREPROD_MANAGER_PASSWORD }}" >> .env.local
+          echo "STAGING_OPERATOR_EMAIL=${{ secrets.PREPROD_OPERATOR_EMAIL }}" >> .env.local
+          echo "STAGING_OPERATOR_PASSWORD=${{ secrets.PREPROD_OPERATOR_PASSWORD }}" >> .env.local
 
-      - name: Determine test configuration
-        id: test-config
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            TEST_TYPE="${{ github.event.inputs.test_type }}"
-            TEST_SUITE="${{ github.event.inputs.test_suite }}"
-          else
-            # Scheduled run - full suite
-            TEST_TYPE="all"
-            TEST_SUITE="all"
-          fi
+      - name: Determine test configuration
+        id: test-config
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TEST_TYPE="${{ github.event.inputs.test_type }}"
+            TEST_SUITE="${{ github.event.inputs.test_suite }}"
+          else
+            # Scheduled run - full suite
+            TEST_TYPE="all"
+            TEST_SUITE="all"
+          fi
 
-          echo "test_type=$TEST_TYPE" >> $GITHUB_OUTPUT
-          echo "test_suite=$TEST_SUITE" >> $GITHUB_OUTPUT
-          echo "📋 Test Type: $TEST_TYPE"
-          echo "📁 Test Suite: $TEST_SUITE"
+          echo "test_type=$TEST_TYPE" >> $GITHUB_OUTPUT
+          echo "test_suite=$TEST_SUITE" >> $GITHUB_OUTPUT
+          echo " Test Type: $TEST_TYPE"
+          echo " Test Suite: $TEST_SUITE"
 
-      - name: Run Playwright tests
-        id: run-tests
-        run: |
-          TEST_TYPE="${{ steps.test-config.outputs.test_type }}"
-          TEST_SUITE="${{ steps.test-config.outputs.test_suite }}"
+      - name: Run Playwright tests
+        id: run-tests
+        run: |
+          TEST_TYPE="${{ steps.test-config.outputs.test_type }}"
+          TEST_SUITE="${{ steps.test-config.outputs.test_suite }}"
 
-          CMD="npx playwright test --project=chromium"
+          CMD="npx playwright test --project=chromium"
 
-          if [ "$TEST_TYPE" != "all" ]; then
-            CMD="$CMD --grep @$TEST_TYPE"
-          fi
+          if [ "$TEST_TYPE" != "all" ]; then
+            CMD="$CMD --grep @$TEST_TYPE"
+          fi
 
-          if [ "$TEST_SUITE" != "all" ]; then
-            CMD="$CMD tests/$TEST_SUITE/"
-          fi
+          if [ "$TEST_SUITE" != "all" ]; then
+            CMD="$CMD tests/$TEST_SUITE/"
+          fi
 
-          echo "Running: $CMD"
-          START_TIME=$(date +%s)
+          echo "Running: $CMD"
+          START_TIME=$(date +%s)
 
-          set +e
-          eval $CMD
-          EXIT_CODE=$?
-          set -e
+          set +e
+          eval $CMD
+          EXIT_CODE=$?
+          set -e
 
-          END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-          echo "duration=$DURATION" >> $GITHUB_OUTPUT
-          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "duration=$DURATION" >> $GITHUB_OUTPUT
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
 
-          exit $EXIT_CODE
-        env:
-          CI: true
-          ENV: preproduction
-          BASE_URL: https://preproduction.trackmyshuttle.com
+          exit $EXIT_CODE
+        env:
+          CI: true
+          ENV: preproduction
+          BASE_URL: https://preproduction.trackmyshuttle.com
 
-      - name: Parse test results
-        id: test-result
-        if: always()
-        run: |
-          if [ -f "test-results.json" ]; then
-            TOTAL=$(jq '.stats.expected + .stats.unexpected + .stats.flaky // 0' test-results.json 2>/dev/null || echo "0")
-            PASSED=$(jq '.stats.expected // 0' test-results.json 2>/dev/null || echo "0")
-            FAILED=$(jq '.stats.unexpected // 0' test-results.json 2>/dev/null || echo "0")
-            DURATION=$(jq '.stats.duration // 0' test-results.json 2>/dev/null || echo "0")
-            DURATION_SEC=$((DURATION / 1000))
-          else
-            TOTAL="N/A"
-            PASSED="N/A"
-            FAILED="N/A"
-            DURATION_SEC="${{ steps.run-tests.outputs.duration }}"
-          fi
+      - name: Parse test results
+        id: test-result
+        if: always()
+        run: |
+          if [ -f "test-results.json" ]; then
+            TOTAL=$(jq '.stats.expected + .stats.unexpected + .stats.flaky // 0' test-results.json 2>/dev/null || echo "0")
+            PASSED=$(jq '.stats.expected // 0' test-results.json 2>/dev/null || echo "0")
+            FAILED=$(jq '.stats.unexpected // 0' test-results.json 2>/dev/null || echo "0")
+            DURATION=$(jq '.stats.duration // 0' test-results.json 2>/dev/null || echo "0")
+            DURATION_SEC=$((DURATION / 1000))
+          else
+            TOTAL="N/A"
+            PASSED="N/A"
+            FAILED="N/A"
+            DURATION_SEC="${{ steps.run-tests.outputs.duration }}"
+          fi
 
-          echo "total=$TOTAL" >> $GITHUB_OUTPUT
-          echo "passed=$PASSED" >> $GITHUB_OUTPUT
-          echo "failed=$FAILED" >> $GITHUB_OUTPUT
-          echo "duration=${DURATION_SEC}s" >> $GITHUB_OUTPUT
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+          echo "duration=${DURATION_SEC}s" >> $GITHUB_OUTPUT
 
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: preprod-report-${{ steps.test-config.outputs.test_type }}-${{ github.run_number }}
-          path: playwright-report/
-          retention-days: 30
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: preprod-report-${{ steps.test-config.outputs.test_type }}-${{ github.run_number }}
+          path: playwright-report/
+          retention-days: 30
 
-      - name: Upload failure artifacts
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: preprod-failures-${{ github.run_number }}
-          path: test-results/
-          retention-days: 7
+      - name: Upload failure artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: preprod-failures-${{ github.run_number }}
+          path: test-results/
+          retention-days: 7
 
-  # Unified notification job
-  notify:
-    name: Send Notification
-    runs-on: ubuntu-latest
-    needs: [check-secrets, preprod-tests]
-    if: always() && needs.check-secrets.outputs.secrets_configured == 'true' && needs.check-secrets.outputs.slack_configured == 'true'
-    steps:
-      - name: Send Slack notification
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          RESULT="${{ needs.preprod-tests.result }}"
-          TEST_TYPE="${{ needs.preprod-tests.outputs.test_type }}"
-          TOTAL="${{ needs.preprod-tests.outputs.total_tests }}"
-          PASSED="${{ needs.preprod-tests.outputs.passed_tests }}"
-          FAILED="${{ needs.preprod-tests.outputs.failed_tests }}"
-          DURATION="${{ needs.preprod-tests.outputs.duration }}"
+  # Unified notification job
+  notify:
+    name: Send Notification
+    runs-on: ubuntu-latest
+    needs: [check-secrets, preprod-tests]
+    if: always() && needs.check-secrets.outputs.secrets_configured == 'true' && needs.check-secrets.outputs.slack_configured == 'true'
+    steps:
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          RESULT="${{ needs.preprod-tests.result }}"
+          TEST_TYPE="${{ needs.preprod-tests.outputs.test_type }}"
+          TOTAL="${{ needs.preprod-tests.outputs.total_tests }}"
+          PASSED="${{ needs.preprod-tests.outputs.passed_tests }}"
+          FAILED="${{ needs.preprod-tests.outputs.failed_tests }}"
+          DURATION="${{ needs.preprod-tests.outputs.duration }}"
 
-          if [ "$RESULT" == "success" ]; then
-            EMOJI="✅"
-            COLOR="#36a64f"
-            HEADER="Preproduction Tests Passed"
-            EXTRA_MSG=""
-          else
-            EMOJI="🔶"
-            COLOR="#ff9800"
-            HEADER="Preproduction Tests Failed"
-            EXTRA_MSG="\n\n⚠️ *Action Required:* Review failures before release!"
-          fi
+          if [ "$RESULT" == "success" ]; then
+            EMOJI=" "
+            COLOR="#36a64f"
+            HEADER="Preproduction Tests Passed"
+            EXTRA_MSG=""
+          else
+            EMOJI=" "
+            COLOR="#ff9800"
+            HEADER="Preproduction Tests Failed"
+            EXTRA_MSG="\n\n *Action Required:* Review failures before release!"
+          fi
 
-          curl -X POST -H 'Content-type: application/json' \
-            --data "{
-              \"attachments\": [
-                {
-                  \"color\": \"$COLOR\",
-                  \"blocks\": [
-                    {
-                      \"type\": \"header\",
-                      \"text\": {
-                        \"type\": \"plain_text\",
-                        \"text\": \"$EMOJI $HEADER\",
-                        \"emoji\": true
-                      }
-                    },
-                    {
-                      \"type\": \"section\",
-                      \"fields\": [
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Environment:*\nPreproduction\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Test Type:*\n${TEST_TYPE}\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Total Tests:*\n${TOTAL}\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Passed:*\n${PASSED}\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Failed:*\n${FAILED}\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Duration:*\n${DURATION}\"
-                        }
-                      ]
-                    },
-                    {
-                      \"type\": \"section\",
-                      \"text\": {
-                        \"type\": \"mrkdwn\",
-                        \"text\": \"*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}${EXTRA_MSG}\"
-                      }
-                    },
-                    {
-                      \"type\": \"actions\",
-                      \"elements\": [
-                        {
-                          \"type\": \"button\",
-                          \"text\": {
-                            \"type\": \"plain_text\",
-                            \"text\": \"View Results\",
-                            \"emoji\": true
-                          },
-                          \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }" \
-            $SLACK_WEBHOOK_URL
-        continue-on-error: true
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{
+              \"attachments\": [
+                {
+                  \"color\": \"$COLOR\",
+                  \"blocks\": [
+                    {
+                      \"type\": \"header\",
+                      \"text\": {
+                        \"type\": \"plain_text\",
+                        \"text\": \"$EMOJI $HEADER\",
+                        \"emoji\": true
+                      }
+                    },
+                    {
+                      \"type\": \"section\",
+                      \"fields\": [
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Environment:*\nPreproduction\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Test Type:*\n${TEST_TYPE}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Total Tests:*\n${TOTAL}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Passed:*\n${PASSED}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Failed:*\n${FAILED}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Duration:*\n${DURATION}\"
+                        }
+                      ]
+                    },
+                    {
+                      \"type\": \"section\",
+                      \"text\": {
+                        \"type\": \"mrkdwn\",
+                        \"text\": \"*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}${EXTRA_MSG}\"
+                      }
+                    },
+                    {
+                      \"type\": \"actions\",
+                      \"elements\": [
+                        {
+                          \"type\": \"button\",
+                          \"text\": {
+                            \"type\": \"plain_text\",
+                            \"text\": \"View Results\",
+                            \"emoji\": true
+                          },
+                          \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }" \
+            $SLACK_WEBHOOK_URL
+        continue-on-error: true
 
-  # Skip notification
-  notify-skipped:
-    name: Notify Skipped
-    runs-on: ubuntu-latest
-    needs: check-secrets
-    if: needs.check-secrets.outputs.secrets_configured == 'false'
-    steps:
-      - name: Log skip reason
-        run: |
-          echo "⏭️ Preproduction tests skipped - secrets not configured"
-          echo "To enable, add these GitHub Secrets:"
-          echo "  - PREPROD_MANAGER_EMAIL"
-          echo "  - PREPROD_MANAGER_PASSWORD"
-          echo "  - PREPROD_OPERATOR_EMAIL"
-          echo "  - PREPROD_OPERATOR_PASSWORD"
+  # Skip notification
+  notify-skipped:
+    name: Notify Skipped
+    runs-on: ubuntu-latest
+    needs: check-secrets
+    if: needs.check-secrets.outputs.secrets_configured == 'false'
+    steps:
+      - name: Log skip reason
+        run: |
+          echo " Preproduction tests skipped - secrets not configured"
+          echo "To enable, add these GitHub Secrets:"
+          echo "  - PREPROD_MANAGER_EMAIL"
+          echo "  - PREPROD_MANAGER_PASSWORD"
+          echo "  - PREPROD_OPERATOR_EMAIL"
+          echo "  - PREPROD_OPERATOR_PASSWORD"
