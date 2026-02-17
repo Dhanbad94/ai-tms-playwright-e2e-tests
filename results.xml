@@ -1,14 +1,14 @@
-<testsuites id="" name="" tests="214" failures="0" skipped="2" errors="0" time="916.75077">
-<testsuite name="auth.teardown.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="cleanup" tests="1" failures="0" skipped="0" time="0.009" errors="0">
-<testcase name="cleanup auth state" classname="auth.teardown.ts" time="0.009">
+<testsuites id="" name="" tests="204" failures="0" skipped="2" errors="0" time="1055.648696">
+<testsuite name="auth.teardown.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="cleanup" tests="1" failures="0" skipped="0" time="0.004" errors="0">
+<testcase name="cleanup auth state" classname="auth.teardown.ts" time="0.004">
 <system-out>
 <![CDATA[🧹 Auth state cleaned up
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="auth.setup.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="setup" tests="1" failures="0" skipped="0" time="6.142" errors="0">
-<testcase name="authenticate" classname="auth.setup.ts" time="6.142">
+<testsuite name="auth.setup.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="setup" tests="1" failures="0" skipped="0" time="8.377" errors="0">
+<testcase name="authenticate" classname="auth.setup.ts" time="8.377">
 <system-out>
 <![CDATA[🔐 Authenticating as: automated.manager@trackmyshuttle.com
 ✅ Authentication successful
@@ -17,306 +17,350 @@
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/alerts-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="11" failures="0" skipped="0" time="200.341" errors="0">
-<testcase name="ASAP Alerts Settings Tests @asap @settings › AL-001: Verify Alert Settings page loads @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="19.508">
+<testsuite name="ASAPSettings/alerts-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="11" failures="0" skipped="0" time="270.833" errors="0">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › AL-001: Verify Alert Settings page loads @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="22.746">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › AL-002: Verify User notification section @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="29.5">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › AL-002: Verify User notification section @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="20.266">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › User Notification Section › AL-003: Verify user search input @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="24.015">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › User Notification Section › AL-003: Verify user search input @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="30.307">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › User Notification Section › AL-004: Verify already added users display @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="25.85">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › User Notification Section › AL-004: Verify already added users display @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="54.148">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-alerts-settin-b808c--display-regression-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-alerts-settin-b808c--display-regression-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-alerts-settin-b808c--display-regression-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-alerts-settin-b808c--display-regression-manager-chromium/trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Alerts Table › AL-005: Verify alerts table headers @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="15.699">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Alerts Table › AL-005: Verify alerts table headers @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="28.782">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Alerts Table › AL-006: Verify page content is visible @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.922">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Alerts Table › AL-006: Verify page content is visible @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="17.522">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-007: Verify Geolocation section @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="14.155">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-007: Verify Geolocation section @smoke @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="19.069">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-008: Verify Geofence Alert section @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="16.838">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-008: Verify Geofence Alert section @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="20.291">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-009: Verify default geofence radius @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.853">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-009: Verify default geofence radius @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="19.483">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-010: Verify Email notification checkbox @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.044">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-010: Verify Email notification checkbox @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="19.64">
 </testcase>
-<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-011: Verify SMS notification checkbox @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="13.957">
-</testcase>
-</testsuite>
-<testsuite name="ASAPSettings/driver-app-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="16" failures="0" skipped="0" time="227.867" errors="0">
-<testcase name="ASAP Driver App Settings Tests @asap @settings › DA-001: Verify Driver App page loads @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.371">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › DA-002: Verify all accordion sections visible @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.705">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Introduction Section › DA-003: Verify Introduction section content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.62">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Introduction Section › DA-004: Verify click here link for adding drivers @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="15.512">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Smart Tablet Section › DA-005: Verify Smart Tablet section @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.248">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Smart Tablet Section › DA-006: Verify Smart Tablet content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.409">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-007: Verify Download App section @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.484">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-008: Verify Download App content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.937">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-009: Verify Google Play Store image @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.964">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-010: Verify Apple App Store image @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.981">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-011: Verify Quick Start Guides available @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.094">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-012: Verify English Quick Start Guide link @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="14.047">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-013: Verify Spanish Quick Start Guide link @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.404">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-014: Verify Notification Settings section @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.97">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-015: Verify Notification Settings content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="13.595">
-</testcase>
-<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-016: Verify SMS notification option exists @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="16.526">
+<testcase name="ASAP Alerts Settings Tests @asap @settings › Geolocation Section › AL-011: Verify SMS notification checkbox @regression @manager" classname="ASAPSettings/alerts-settings.spec.ts" time="18.579">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/escalations-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="10" failures="0" skipped="0" time="203.672" errors="0">
-<testcase name="ASAP Escalations Settings Tests @asap @settings › ES-001: Verify Escalation Settings page loads @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="24.4">
+<testsuite name="ASAPSettings/driver-app-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="16" failures="0" skipped="0" time="376.007" errors="0">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › DA-001: Verify Driver App page loads @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="19.165">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › ES-002: Verify page content is visible @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.308">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › DA-002: Verify all accordion sections visible @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="19.853">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-003: Verify Ride Request escalation section @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="19.948">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Introduction Section › DA-003: Verify Introduction section content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="23.03">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-004: Verify Ride Request checkbox exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="25.391">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Introduction Section › DA-004: Verify click here link for adding drivers @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="21.301">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-005: Verify Ride Request See Example link @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.627">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Smart Tablet Section › DA-005: Verify Smart Tablet section @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="19.31">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-006: Verify Trip Not Started section @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.153">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Smart Tablet Section › DA-006: Verify Smart Tablet content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="24.799">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-007: Verify Trip Not Started checkbox exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="17.861">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-007: Verify Download App section @smoke @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="19.822">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-008: Verify Trip Not Started See Example link @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="18.888">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-008: Verify Download App content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="27.533">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Escalation Configuration › ES-009: Verify escalation configuration UI elements @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="20.913">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-009: Verify Google Play Store image @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="20.207">
 </testcase>
-<testcase name="ASAP Escalations Settings Tests @asap @settings › Escalation Configuration › ES-010: Verify Add More button exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="21.183">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-010: Verify Apple App Store image @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="21.413">
 </testcase>
-</testsuite>
-<testsuite name="ASAPSettings/live-display-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="7" failures="0" skipped="0" time="149.915" errors="0">
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-001: Verify Live Display Settings page loads @smoke @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="19.016">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-011: Verify Quick Start Guides available @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="55.23">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-driver-app-se-200b6-vailable-regression-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-driver-app-se-200b6-vailable-regression-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-driver-app-se-200b6-vailable-regression-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-driver-app-se-200b6-vailable-regression-manager-chromium/trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-002: Verify section heading @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="26.506">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-012: Verify English Quick Start Guide link @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="23.036">
 </testcase>
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-003: Verify section description @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="20.025">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Download App Section › DA-013: Verify Spanish Quick Start Guide link @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="18.848">
 </testcase>
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-004: Verify warning message @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="16.466">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-014: Verify Notification Settings section @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="20.96">
 </testcase>
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-005: Verify Create Live Display button @smoke @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="20.172">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-015: Verify Notification Settings content @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="20.847">
 </testcase>
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-006: Verify Create Live Display button is enabled @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="29.061">
-</testcase>
-<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-007: Verify page content is complete @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="18.669">
-</testcase>
-</testsuite>
-<testsuite name="ASAPSettings/operation-hours.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="8" failures="0" skipped="0" time="150.878" errors="0">
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-001: Verify Operation Hours page loads @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="20.141">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-002: Verify Run 24/7 option visible @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="15.147">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-003: Verify Custom Hours option visible @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="17.412">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-004: Verify Run 24/7 is default for ASAP @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="18.603">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-005: Verify option descriptions @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="22.488">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-006: Verify all options are visible @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="21.688">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-007: Verify Run 24/7 option is not disabled @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="17.466">
-</testcase>
-<testcase name="ASAP Operation Hours Tests @asap @settings › OH-008: Verify Custom Hours option is not disabled @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="17.933">
+<testcase name="ASAP Driver App Settings Tests @asap @settings › Notification Settings Section › DA-016: Verify SMS notification option exists @regression @manager" classname="ASAPSettings/driver-app-settings.spec.ts" time="20.653">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/operation-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="25" failures="0" skipped="0" time="377.812" errors="0">
-<testcase name="ASAP Operation Settings Tests @asap @settings › OPS-001: Verify Operation Settings page loads @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.316">
+<testsuite name="ASAPSettings/escalations-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="10" failures="0" skipped="0" time="238.313" errors="0">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › ES-001: Verify Escalation Settings page loads @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="25.829">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › OPS-002: Verify all 5 accordion sections visible @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.738">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › ES-002: Verify page content is visible @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="22.59">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-003: Verify Pick-up Time section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.998">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-003: Verify Ride Request escalation section @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="21.587">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-004: Verify ASAP Pickup is default selected @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.394">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-004: Verify Ride Request checkbox exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="22.843">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-005: Verify Future Pickup option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.178">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Ride Request Escalation Section › ES-005: Verify Ride Request See Example link @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="24.664">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-006: Verify Both ASAP &amp; Future option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="17.851">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-006: Verify Trip Not Started section @smoke @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="25.462">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-007: Verify current pickup time setting matches ASAP default @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.047">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-007: Verify Trip Not Started checkbox exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="23.931">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-008: Verify Pick-up Stops section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.561">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Trip Not Started Escalation Section › ES-008: Verify Trip Not Started See Example link @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="27.143">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-009: Verify Pre-Defined Stops Only option @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.562">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Escalation Configuration › ES-009: Verify escalation configuration UI elements @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="22.447">
 </testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-010: Verify Pre-Defined + Service Area option @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="21.096">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-011: Verify Add Service Area link exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.359">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-012: Verify Ride Sharing section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="18.373">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-013: Verify Shared Rides option selected (ASAP default) @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="17.665">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-014: Verify Private Rides option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.445">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-015: Verify current ride sharing setting matches ASAP default @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.86">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-016: Verify Driver Assignment section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.821">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-017: Verify Operator Assignment option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.556">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-018: Verify Driver Self-Assignment option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.085">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-019: Verify current driver assignment setting @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="13.777">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-020: Verify Shuttle Capacity section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.559">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-021: Verify Static Capacity selected (ASAP default) @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="15.289">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-022: Verify Dynamic Capacity option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.294">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-023: Verify current shuttle capacity setting @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.261">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-024: Verify Max Riders input is visible @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.228">
-</testcase>
-<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-025: Verify Max Riders value can be retrieved @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="14.499">
+<testcase name="ASAP Escalations Settings Tests @asap @settings › Escalation Configuration › ES-010: Verify Add More button exists @regression @manager" classname="ASAPSettings/escalations-settings.spec.ts" time="21.817">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/organization-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="8" failures="0" skipped="0" time="122.328" errors="0">
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-001: Verify Organization Settings page loads @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="14.87">
+<testsuite name="ASAPSettings/live-display-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="7" failures="0" skipped="0" time="182.825" errors="0">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-001: Verify Live Display Settings page loads @smoke @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="21.367">
 </testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-002: Verify organization name display @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="13.295">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-002: Verify section heading @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="20.384">
 </testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-004: Verify tracking ID display @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="12.39">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-003: Verify section description @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="19.404">
 </testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-005: Verify timezone display @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="12.365">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-004: Verify warning message @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="58.975">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-live-display--4e36d--message-regression-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-live-display--4e36d--message-regression-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-live-display--4e36d--message-regression-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-live-display--4e36d--message-regression-manager-chromium/trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-007: Verify map is visible @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="16.851">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-005: Verify Create Live Display button @smoke @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="21.156">
 </testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-008: Verify map zoom controls @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="18.449">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-006: Verify Create Live Display button is enabled @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="19.237">
 </testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-009: Verify map type switch (Map/Satellite) @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="17.583">
-</testcase>
-<testcase name="ASAP Organization Settings Tests @asap @settings › OS-010: Verify edit organization button exists @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="16.525">
-</testcase>
-</testsuite>
-<testsuite name="ASAPSettings/pricing-setup.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="10" failures="0" skipped="0" time="146.102" errors="0">
-<testcase name="ASAP Pricing Setup Tests @asap @settings › PS-002: Verify page content is visible @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="13.889">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Payout Account Setup Section › PS-003: Verify Payout Account Setup section @smoke @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="14.444">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Payout Account Setup Section › PS-004: Verify Start Setup button @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="15.424">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Payout Account Setup Section › PS-005: Verify Start Setup button is enabled @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="14.471">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Enable Payment Section › PS-006: Verify Enable Payment section @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="13.914">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Enable Payment Section › PS-007: Verify payment checkbox is disabled (Stripe not setup) @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="15.878">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Configure Pricing Section › PS-008: Verify Configure Pricing section @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="13.319">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Configure Pricing Section › PS-009: Verify currency display @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="12.545">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Cancellation &amp; Refund Section › PS-010: Verify Cancellation &amp; Refund section @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="18.119">
-</testcase>
-<testcase name="ASAP Pricing Setup Tests @asap @settings › Cancellation &amp; Refund Section › PS-011: Verify cancellation checkbox is disabled (Stripe not setup) @regression @manager" classname="ASAPSettings/pricing-setup.spec.ts" time="14.099">
+<testcase name="ASAP Live Display Settings Tests @asap @settings › LD-007: Verify page content is complete @regression @manager" classname="ASAPSettings/live-display-settings.spec.ts" time="22.302">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/rider-app-settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="15" failures="0" skipped="0" time="221.834" errors="0">
-<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-001: Verify Rider App Settings page loads @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.3">
+<testsuite name="ASAPSettings/operation-hours.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="8" failures="0" skipped="0" time="190.244" errors="0">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-001: Verify Operation Hours page loads @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="27.733">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-002: Verify all accordion sections visible @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.513">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-002: Verify Run 24/7 option visible @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="23.12">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-003: Verify Enable Rider App checkbox exists @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="12.608">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-003: Verify Custom Hours option visible @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="22.999">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Configure Cover Page Section › RA-004: Verify Configure Cover Page section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.777">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-004: Verify Run 24/7 is default for ASAP @smoke @manager" classname="ASAPSettings/operation-hours.spec.ts" time="22.557">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Configure Contact Settings Section › RA-006: Verify Contact Settings section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.845">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-005: Verify option descriptions @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="23.212">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-009: Verify Share Rider App Access section @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.227">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-006: Verify all options are visible @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="24.179">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-011: Verify Share Tracking Code heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.611">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-007: Verify Run 24/7 option is not disabled @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="23.061">
 </testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-012: Verify Share Link &amp; QR Code heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="13.667">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-013: Verify tracking link URL format @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.633">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-014: Verify Copy Link button exists @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.624">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-015: Verify QR Code button exists @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="13.813">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-016: Verify Voicemail Script heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="13.712">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-017: Verify Display QR Signage heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="14.042">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-018: Verify PDF download options @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.115">
-</testcase>
-<testcase name="ASAP Rider App Settings Tests @asap @settings › Ride Cancellation Options Section › RA-019: Verify Ride Cancellation section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="15.347">
+<testcase name="ASAP Operation Hours Tests @asap @settings › OH-008: Verify Custom Hours option is not disabled @regression @manager" classname="ASAPSettings/operation-hours.spec.ts" time="23.383">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/settings-navigation.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="3" failures="0" skipped="0" time="53.637" errors="0">
-<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-001: Verify all 10 settings tabs are visible @smoke @manager" classname="ASAPSettings/settings-navigation.spec.ts" time="17.596">
+<testsuite name="ASAPSettings/operation-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="25" failures="0" skipped="0" time="612.4" errors="0">
+<testcase name="ASAP Operation Settings Tests @asap @settings › OPS-001: Verify Operation Settings page loads @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="20.671">
 </testcase>
-<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-005: Verify settings page loads within threshold @performance" classname="ASAPSettings/settings-navigation.spec.ts" time="18.865">
+<testcase name="ASAP Operation Settings Tests @asap @settings › OPS-002: Verify all 5 accordion sections visible @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="21.303">
 </testcase>
-<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-006: Verify URL hash persistence on page refresh @regression @manager" classname="ASAPSettings/settings-navigation.spec.ts" time="17.176">
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-003: Verify Pick-up Time section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="19.716">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-004: Verify ASAP Pickup is default selected @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="22.269">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-005: Verify Future Pickup option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="21.851">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-006: Verify Both ASAP &amp; Future option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="22.217">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Time Section › OPS-007: Verify current pickup time setting matches ASAP default @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="22.287">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-008: Verify Pick-up Stops section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="22.601">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-009: Verify Pre-Defined Stops Only option @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="56.93">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-da75f-y-option-regression-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-da75f-y-option-regression-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-da75f-y-option-regression-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-da75f-y-option-regression-manager-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-010: Verify Pre-Defined + Service Area option @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="19.84">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Pick-up Stops Section › OPS-011: Verify Add Service Area link exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="22.736">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-012: Verify Ride Sharing section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="20.209">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-013: Verify Shared Rides option selected (ASAP default) @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="20.81">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-014: Verify Private Rides option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="20.282">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Ride Sharing Section › OPS-015: Verify current ride sharing setting matches ASAP default @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="20.259">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-016: Verify Driver Assignment section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="24.492">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-017: Verify Operator Assignment option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="21.036">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-018: Verify Driver Self-Assignment option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="61.764">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-dbe81-n-exists-regression-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-dbe81-n-exists-regression-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-dbe81-n-exists-regression-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-operation-set-dbe81-n-exists-regression-manager-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Driver Assignment Section › OPS-019: Verify current driver assignment setting @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="29.57">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-020: Verify Shuttle Capacity section expands @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="23.068">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-021: Verify Static Capacity selected (ASAP default) @smoke @manager" classname="ASAPSettings/operation-settings.spec.ts" time="23.881">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-022: Verify Dynamic Capacity option exists @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="19.389">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-023: Verify current shuttle capacity setting @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="19.79">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-024: Verify Max Riders input is visible @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="18.733">
+</testcase>
+<testcase name="ASAP Operation Settings Tests @asap @settings › Shuttle Capacity Section › OPS-025: Verify Max Riders value can be retrieved @regression @manager" classname="ASAPSettings/operation-settings.spec.ts" time="16.696">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/settings-rbac.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="9" failures="0" skipped="0" time="104.557" errors="0">
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-002: Manager can access User Management tab @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="15.249">
+<testsuite name="ASAPSettings/organization-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="8" failures="0" skipped="0" time="173.937" errors="0">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-001: Verify Organization Settings page loads @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="17.266">
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-003: Manager can see Add User button @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="13.738">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-002: Verify organization name display @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="15.941">
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-004: Manager can open Edit User dialog @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="17.555">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-004: Verify tracking ID display @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="16.646">
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-005: Manager can see Delete option @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="15.732">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-005: Verify timezone display @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="17.391">
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-006: Manager sees Manage link in sidebar @smoke" classname="ASAPSettings/settings-rbac.spec.ts" time="7.675">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-007: Verify map is visible @smoke @manager" classname="ASAPSettings/organization-settings.spec.ts" time="51.357">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/ASAPSettings-organization--2a2a4-ap-is-visible-smoke-manager-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/ASAPSettings-organization--2a2a4-ap-is-visible-smoke-manager-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/ASAPSettings-organization--2a2a4-ap-is-visible-smoke-manager-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/ASAPSettings-organization--2a2a4-ap-is-visible-smoke-manager-chromium/trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-008: Operator cannot see Stops menu @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="8.474">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-008: Verify map zoom controls @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="20.409">
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-009: Operator cannot see Analytics menu @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="7.665">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-009: Verify map type switch (Map/Satellite) @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="18.912">
 </testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-010: Operator cannot see Manage/Settings link @smoke" classname="ASAPSettings/settings-rbac.spec.ts" time="7.461">
-</testcase>
-<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-011: Operator direct navigation to settings redirects @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="11.008">
+<testcase name="ASAP Organization Settings Tests @asap @settings › OS-010: Verify edit organization button exists @regression @manager" classname="ASAPSettings/organization-settings.spec.ts" time="16.015">
 </testcase>
 </testsuite>
-<testsuite name="ASAPSettings/user-management.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="34" failures="0" skipped="2" time="780.031" errors="0">
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R001: Verify User Management page loads @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.662">
+<testsuite name="ASAPSettings/rider-app-settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="15" failures="0" skipped="0" time="261.209" errors="0">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-001: Verify Rider App Settings page loads @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.651">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R002: Verify users table headers @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="14.792">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-002: Verify all accordion sections visible @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="25.851">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R003: Verify existing users displayed @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="13.702">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › RA-003: Verify Enable Rider App checkbox exists @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="23.984">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R004: Verify user search functionality @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.242">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Configure Cover Page Section › RA-004: Verify Configure Cover Page section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="17.992">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R005: Verify user role display @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.321">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Configure Contact Settings Section › RA-006: Verify Contact Settings section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="15.304">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R006: Verify user status display @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.546">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-009: Verify Share Rider App Access section @smoke @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="15.626">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R007: Verify table sorting by Name @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.31">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-011: Verify Share Tracking Code heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="15.628">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R008: Verify table sorting by Role @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.309">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-012: Verify Share Link &amp; QR Code heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.131">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R009: Verify table sorting by Last Login @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="16.57">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-013: Verify tracking link URL format @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.214">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R010: Verify table sorting by Status @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.115">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-014: Verify Copy Link button exists @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.21">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R011: Verify user data retrieval @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.409">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-015: Verify QR Code button exists @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.746">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C001: Verify Add User button is visible @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="17.551">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-016: Verify Voicemail Script heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.066">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C002: Verify Add User dialog opens @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.888">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-017: Verify Display QR Signage heading @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="15.529">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C003: Verify role dropdown options @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.588">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Share Rider App Access Section › RA-018: Verify PDF download options @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="16.095">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C004: Verify Continue button disabled without email @regression @manager @negative" classname="ASAPSettings/user-management.spec.ts" time="16.384">
+<testcase name="ASAP Rider App Settings Tests @asap @settings › Ride Cancellation Options Section › RA-019: Verify Ride Cancellation section @regression @manager" classname="ASAPSettings/rider-app-settings.spec.ts" time="17.182">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C005: Verify Step 2 form fields @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="20.819">
+</testsuite>
+<testsuite name="ASAPSettings/settings-navigation.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="3" failures="0" skipped="0" time="62.412" errors="0">
+<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-001: Verify all 9 settings tabs are visible @smoke @manager" classname="ASAPSettings/settings-navigation.spec.ts" time="23.926">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C006: Verify Cancel button closes dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.191">
+<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-005: Verify settings page loads within threshold @performance" classname="ASAPSettings/settings-navigation.spec.ts" time="19.826">
+</testcase>
+<testcase name="ASAP Settings Navigation Tests @asap @settings › SN-006: Verify URL hash persistence on page refresh @regression @manager" classname="ASAPSettings/settings-navigation.spec.ts" time="18.66">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/settings-rbac.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="9" failures="0" skipped="0" time="108.743" errors="0">
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-002: Manager can access User Management tab @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="16.87">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-003: Manager can see Add User button @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="13.938">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-004: Manager can open Edit User dialog @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="18.501">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-005: Manager can see Delete option @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="15.593">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Manager Role Access @manager › RBAC-006: Manager sees Manage link in sidebar @smoke" classname="ASAPSettings/settings-rbac.spec.ts" time="8.708">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-008: Operator cannot see Stops menu @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="8.01">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-009: Operator cannot see Analytics menu @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="8.123">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-010: Operator cannot see Manage/Settings link @smoke" classname="ASAPSettings/settings-rbac.spec.ts" time="8.154">
+</testcase>
+<testcase name="ASAP Settings RBAC Tests @asap @settings @rbac › Operator Role Access @operator @negative › RBAC-011: Operator direct navigation to settings redirects @regression" classname="ASAPSettings/settings-rbac.spec.ts" time="10.846">
+</testcase>
+</testsuite>
+<testsuite name="ASAPSettings/user-management.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="34" failures="0" skipped="2" time="818.638" errors="0">
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R001: Verify User Management page loads @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.135">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R002: Verify users table headers @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.537">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R003: Verify existing users displayed @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="19.714">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R004: Verify user search functionality @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="19.286">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R005: Verify user role display @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="19.914">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R006: Verify user status display @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="21.221">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R007: Verify table sorting by Name @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.93">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R008: Verify table sorting by Role @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="16.374">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R009: Verify table sorting by Last Login @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.103">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R010: Verify table sorting by Status @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="16.767">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Read Operations @crud › UM-R011: Verify user data retrieval @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.213">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C001: Verify Add User button is visible @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.442">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C002: Verify Add User dialog opens @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="18.462">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C003: Verify role dropdown options @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="19.126">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C004: Verify Continue button disabled without email @regression @manager @negative" classname="ASAPSettings/user-management.spec.ts" time="17.27">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C005: Verify Step 2 form fields @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="19.149">
+</testcase>
+<testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C006: Verify Cancel button closes dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="26.949">
 </testcase>
 <testcase name="ASAP User Management Tests @asap @settings › Create Operations @crud › UM-C007: Add new Operator user (Data Modification) @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="0">
 <properties>
@@ -326,21 +370,21 @@
 <skipped>
 </skipped>
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U001: Verify action menu opens on click @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="14.756">
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U001: Verify action menu opens on click @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="16.038">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U002: Verify Edit dialog opens @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="18.495">
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U002: Verify Edit dialog opens @smoke @manager" classname="ASAPSettings/user-management.spec.ts" time="21.57">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U003: Verify Edit form displays current values @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.588">
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U003: Verify Edit form displays current values @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="20.186">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U004: Verify Update button is visible @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.923">
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U004: Verify Update button is visible @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.88">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U005: Verify close button closes Edit dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.515">
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U005: Verify close button closes Edit dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="19.497">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U006: Verify Also add as Driver checkbox @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="17.369">
+<testcase name="ASAP User Management Tests @asap @settings › Update Operations @crud › UM-U006: Verify Also add as Driver checkbox @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="20.342">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D001: Verify Delete option in action menu @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="14.466">
+<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D001: Verify Delete option in action menu @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.94">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D002: Verify Delete button in Edit dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.273">
+<testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D002: Verify Delete button in Edit dialog @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="18.942">
 </testcase>
 <testcase name="ASAP User Management Tests @asap @settings › Delete Operations @crud › UM-D003: Delete user via action menu (Data Modification) @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="0">
 <properties>
@@ -350,158 +394,147 @@
 <skipped>
 </skipped>
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › Password Reset › UM-P001: Verify Reset Password option in menu @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="15.164">
+<testcase name="ASAP User Management Tests @asap @settings › Password Reset › UM-P001: Verify Reset Password option in menu @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="24.639">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-001: Manager role - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="50.797">
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-001: Manager role - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="52.912">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-002: Operator role - Create, Read, Update, Reset Password, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="63.167">
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-002: Operator role - Create, Read, Update, Reset Password, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="64.971">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-003: Driver role - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="49.177">
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-003: Driver role - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="51.46">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-004: Operator with Also-Add-As-Driver - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="58.529">
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-004: Operator with Also-Add-As-Driver - Create, Read, Update, Delete lifecycle @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="60.426">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-005: Role change - Create Operator, Update to Manager, Delete @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="44.47">
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-005: Role change - Create Operator, Update to Manager, Delete @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="54.453">
 </testcase>
-<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-006: Reset Password - Create Manager, Reset Password, Delete @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="81.943">
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/video.webm]]
-
-[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/error-context.md]]
-
-[[ATTACHMENT|test-results/ASAPSettings-user-manageme-1f67f-d-Delete-regression-manager-chromium/trace.zip]]
-]]>
-</system-out>
+<testcase name="ASAP User Management Tests @asap @settings › CRUD Lifecycle Tests @crud @e2e › UM-CRUD-006: Reset Password - Create Manager, Reset Password, Delete @regression @manager" classname="ASAPSettings/user-management.spec.ts" time="49.79">
 </testcase>
 </testsuite>
-<testsuite name="TMSOnboarding/dashboard.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="9" failures="0" skipped="0" time="144.035" errors="0">
-<testcase name="Role-Based Dashboard Access Tests › Operator: Login, verify menus, and logout @smoke @operator" classname="TMSOnboarding/dashboard.spec.ts" time="13.086">
+<testsuite name="TMSOnboarding/dashboard.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="9" failures="0" skipped="0" time="138.848" errors="0">
+<testcase name="Role-Based Dashboard Access Tests › Operator: Login, verify menus, and logout @smoke @operator" classname="TMSOnboarding/dashboard.spec.ts" time="16.681">
 <system-err>
 <![CDATA[⚠️ RBAC Issue: Operator has access to Alerts menu
 ]]>
 </system-err>
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Manager: Login, verify menus, and logout @smoke @manager" classname="TMSOnboarding/dashboard.spec.ts" time="12.367">
+<testcase name="Role-Based Dashboard Access Tests › Manager: Login, verify menus, and logout @smoke @manager" classname="TMSOnboarding/dashboard.spec.ts" time="12.986">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Compare operator vs manager role-based access @smoke @rbac" classname="TMSOnboarding/dashboard.spec.ts" time="29.648">
+<testcase name="Role-Based Dashboard Access Tests › Compare operator vs manager role-based access @smoke @rbac" classname="TMSOnboarding/dashboard.spec.ts" time="18.95">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Performance: Dashboard load time measurement @performance" classname="TMSOnboarding/dashboard.spec.ts" time="17.834">
+<testcase name="Role-Based Dashboard Access Tests › Performance: Dashboard load time measurement @performance" classname="TMSOnboarding/dashboard.spec.ts" time="10.919">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Menu Navigation: Test all accessible menus with 5 second intervals @navigation" classname="TMSOnboarding/dashboard.spec.ts" time="13.736">
+<testcase name="Role-Based Dashboard Access Tests › Menu Navigation: Test all accessible menus with 5 second intervals @navigation" classname="TMSOnboarding/dashboard.spec.ts" time="13.693">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Manager Menu Navigation: Simplified test @navigation @manager" classname="TMSOnboarding/dashboard.spec.ts" time="15.275">
+<testcase name="Role-Based Dashboard Access Tests › Manager Menu Navigation: Simplified test @navigation @manager" classname="TMSOnboarding/dashboard.spec.ts" time="17.677">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Operator: Profile access and functionality @smoke @operator @profile" classname="TMSOnboarding/dashboard.spec.ts" time="12.254">
+<testcase name="Role-Based Dashboard Access Tests › Operator: Profile access and functionality @smoke @operator @profile" classname="TMSOnboarding/dashboard.spec.ts" time="15.43">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Manager: Profile access and functionality @smoke @manager @profile" classname="TMSOnboarding/dashboard.spec.ts" time="13.261">
+<testcase name="Role-Based Dashboard Access Tests › Manager: Profile access and functionality @smoke @manager @profile" classname="TMSOnboarding/dashboard.spec.ts" time="15.161">
 </testcase>
-<testcase name="Role-Based Dashboard Access Tests › Profile: Role comparison test @smoke @profile @rbac" classname="TMSOnboarding/dashboard.spec.ts" time="16.574">
+<testcase name="Role-Based Dashboard Access Tests › Profile: Role comparison test @smoke @profile @rbac" classname="TMSOnboarding/dashboard.spec.ts" time="17.351">
 </testcase>
 </testsuite>
-<testsuite name="TMSOnboarding/example-improved.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="14" failures="0" skipped="0" time="45.788" errors="0">
-<testcase name="Login Tests with Fixtures @smoke @critical › should display login form elements" classname="TMSOnboarding/example-improved.spec.ts" time="3.287">
+<testsuite name="TMSOnboarding/example-improved.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="14" failures="0" skipped="0" time="43.833" errors="0">
+<testcase name="Login Tests with Fixtures @smoke @critical › should display login form elements" classname="TMSOnboarding/example-improved.spec.ts" time="3.464">
 </testcase>
-<testcase name="Login Tests with Fixtures @smoke @critical › should show error for invalid credentials @regression" classname="TMSOnboarding/example-improved.spec.ts" time="5.437">
+<testcase name="Login Tests with Fixtures @smoke @critical › should show error for invalid credentials @regression" classname="TMSOnboarding/example-improved.spec.ts" time="5.511">
 </testcase>
-<testcase name="Timeout and Path Constants @system › should navigate using path constants" classname="TMSOnboarding/example-improved.spec.ts" time="4.151">
+<testcase name="Timeout and Path Constants @system › should navigate using path constants" classname="TMSOnboarding/example-improved.spec.ts" time="3.535">
 </testcase>
-<testcase name="Timeout and Path Constants @system › should use timeout constants" classname="TMSOnboarding/example-improved.spec.ts" time="3.047">
+<testcase name="Timeout and Path Constants @system › should use timeout constants" classname="TMSOnboarding/example-improved.spec.ts" time="3.213">
 </testcase>
-<testcase name="Tagged Tests › quick login page check @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="2.99">
+<testcase name="Tagged Tests › quick login page check @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="2.98">
 </testcase>
-<testcase name="Tagged Tests › login form submission @critical @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="3.136">
+<testcase name="Tagged Tests › login form submission @critical @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="2.856">
 </testcase>
-<testcase name="Tagged Tests › complete form validation @regression" classname="TMSOnboarding/example-improved.spec.ts" time="4.452">
+<testcase name="Tagged Tests › complete form validation @regression" classname="TMSOnboarding/example-improved.spec.ts" time="4.266">
 </testcase>
-<testcase name="Tagged Tests › full page load performance @slow @performance" classname="TMSOnboarding/example-improved.spec.ts" time="2.965">
+<testcase name="Tagged Tests › full page load performance @slow @performance" classname="TMSOnboarding/example-improved.spec.ts" time="2.84">
 <system-out>
-<![CDATA[Page loaded in 2605ms
+<![CDATA[Page loaded in 2540ms
 ]]>
 </system-out>
 </testcase>
-<testcase name="Independent Tests (Parallel) › email input accepts text" classname="TMSOnboarding/example-improved.spec.ts" time="3.079">
+<testcase name="Independent Tests (Parallel) › email input accepts text" classname="TMSOnboarding/example-improved.spec.ts" time="2.963">
 </testcase>
-<testcase name="Independent Tests (Parallel) › password input accepts text" classname="TMSOnboarding/example-improved.spec.ts" time="2.838">
+<testcase name="Independent Tests (Parallel) › password input accepts text" classname="TMSOnboarding/example-improved.spec.ts" time="2.864">
 </testcase>
-<testcase name="Independent Tests (Parallel) › remember me checkbox toggles" classname="TMSOnboarding/example-improved.spec.ts" time="3.226">
+<testcase name="Independent Tests (Parallel) › remember me checkbox toggles" classname="TMSOnboarding/example-improved.spec.ts" time="2.794">
 </testcase>
-<testcase name="Dependent Tests (Serial) › step 1: enter email" classname="TMSOnboarding/example-improved.spec.ts" time="2.931">
+<testcase name="Dependent Tests (Serial) › step 1: enter email" classname="TMSOnboarding/example-improved.spec.ts" time="2.784">
 </testcase>
-<testcase name="Dependent Tests (Serial) › step 2: verify email was entered" classname="TMSOnboarding/example-improved.spec.ts" time="0.235">
+<testcase name="Dependent Tests (Serial) › step 2: verify email was entered" classname="TMSOnboarding/example-improved.spec.ts" time="0.157">
 </testcase>
-<testcase name="Test Steps for Reporting › complete login flow with steps @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="4.014">
-</testcase>
-</testsuite>
-<testsuite name="TMSOnboarding/login.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="32" failures="0" skipped="0" time="191.674" errors="0">
-<testcase name="TrackMyShuttle Login Tests › should display all login page elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="3.209">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should handle empty credentials @smoke @regression" classname="TMSOnboarding/login.spec.ts" time="4.482">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should handle invalid email format @regression" classname="TMSOnboarding/login.spec.ts" time="5.502">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should toggle password visibility @system" classname="TMSOnboarding/login.spec.ts" time="2.953">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should remember me checkbox functionality @system @regression" classname="TMSOnboarding/login.spec.ts" time="3.274">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should navigate to activate account page and verify elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="7.423">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should navigate to forgot password page @smoke @system" classname="TMSOnboarding/login.spec.ts" time="4.818">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should display and submit forgot password page" classname="TMSOnboarding/login.spec.ts" time="9.294">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should display phone number correctly @system" classname="TMSOnboarding/login.spec.ts" time="2.898">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should have correct form action and method @system @regression" classname="TMSOnboarding/login.spec.ts" time="2.938">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should load login page within acceptable time @system" classname="TMSOnboarding/login.spec.ts" time="4.54">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should validate cross-page navigation flow @system @integration" classname="TMSOnboarding/login.spec.ts" time="9.829">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should maintain consistent UI elements across pages @system" classname="TMSOnboarding/login.spec.ts" time="5.026">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should login with valid credentials @smoke @system @regression" classname="TMSOnboarding/login.spec.ts" time="16.047">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should login as operator and manager @smoke @system" classname="TMSOnboarding/login.spec.ts" time="18.968">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › should handle session timeout and redirect @system @regression" classname="TMSOnboarding/login.spec.ts" time="12.266">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should display all activate account page elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="4.538">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should have correct form attributes @system" classname="TMSOnboarding/login.spec.ts" time="3.975">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should require terms acceptance to enable activate button @system @regression" classname="TMSOnboarding/login.spec.ts" time="4.561">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle empty form submission @smoke @regression" classname="TMSOnboarding/login.spec.ts" time="5.469">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate email format @regression" classname="TMSOnboarding/login.spec.ts" time="5.413">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate phone number format @regression" classname="TMSOnboarding/login.spec.ts" time="5.615">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate activation code format @regression" classname="TMSOnboarding/login.spec.ts" time="5.261">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should toggle password visibility @system" classname="TMSOnboarding/login.spec.ts" time="4.244">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate password requirements @regression" classname="TMSOnboarding/login.spec.ts" time="5.2">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate first name field @regression" classname="TMSOnboarding/login.spec.ts" time="5.092">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate last name field @regression" classname="TMSOnboarding/login.spec.ts" time="5.071">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle country code selection @system" classname="TMSOnboarding/login.spec.ts" time="4.37">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should clear form fields @system" classname="TMSOnboarding/login.spec.ts" time="5.14">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should navigate back to login page @system" classname="TMSOnboarding/login.spec.ts" time="5.766">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should verify privacy policy link @system" classname="TMSOnboarding/login.spec.ts" time="4.015">
-</testcase>
-<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle maximum character limits @regression" classname="TMSOnboarding/login.spec.ts" time="4.477">
+<testcase name="Test Steps for Reporting › complete login flow with steps @smoke" classname="TMSOnboarding/example-improved.spec.ts" time="3.606">
 </testcase>
 </testsuite>
-<testsuite name="TMSOnboarding/settings.spec.ts" timestamp="2026-01-25T07:19:26.637Z" hostname="chromium" tests="1" failures="0" skipped="0" time="11.515" errors="0">
-<testcase name="Settings Page Tests › Performance: Settings load time @performance @settings" classname="TMSOnboarding/settings.spec.ts" time="11.515">
+<testsuite name="TMSOnboarding/login.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="32" failures="0" skipped="0" time="178.268" errors="0">
+<testcase name="TrackMyShuttle Login Tests › should display all login page elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="3.236">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should handle empty credentials @smoke @regression" classname="TMSOnboarding/login.spec.ts" time="4.39">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should handle invalid email format @regression" classname="TMSOnboarding/login.spec.ts" time="5.604">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should toggle password visibility @system" classname="TMSOnboarding/login.spec.ts" time="3.111">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should remember me checkbox functionality @system @regression" classname="TMSOnboarding/login.spec.ts" time="3.024">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should navigate to activate account page and verify elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="7.318">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should navigate to forgot password page @smoke @system" classname="TMSOnboarding/login.spec.ts" time="4.2">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should display and submit forgot password page" classname="TMSOnboarding/login.spec.ts" time="8.579">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should display phone number correctly @system" classname="TMSOnboarding/login.spec.ts" time="2.731">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should have correct form action and method @system @regression" classname="TMSOnboarding/login.spec.ts" time="2.536">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should load login page within acceptable time @system" classname="TMSOnboarding/login.spec.ts" time="4.555">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should validate cross-page navigation flow @system @integration" classname="TMSOnboarding/login.spec.ts" time="10.828">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should maintain consistent UI elements across pages @system" classname="TMSOnboarding/login.spec.ts" time="5.215">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should login with valid credentials @smoke @system @regression" classname="TMSOnboarding/login.spec.ts" time="13.934">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should login as operator and manager @smoke @system" classname="TMSOnboarding/login.spec.ts" time="13.804">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › should handle session timeout and redirect @system @regression" classname="TMSOnboarding/login.spec.ts" time="9.767">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should display all activate account page elements @smoke @system" classname="TMSOnboarding/login.spec.ts" time="4.343">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should have correct form attributes @system" classname="TMSOnboarding/login.spec.ts" time="3.955">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should require terms acceptance to enable activate button @system @regression" classname="TMSOnboarding/login.spec.ts" time="4.284">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle empty form submission @smoke @regression" classname="TMSOnboarding/login.spec.ts" time="4.982">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate email format @regression" classname="TMSOnboarding/login.spec.ts" time="4.819">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate phone number format @regression" classname="TMSOnboarding/login.spec.ts" time="5.073">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate activation code format @regression" classname="TMSOnboarding/login.spec.ts" time="5.761">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should toggle password visibility @system" classname="TMSOnboarding/login.spec.ts" time="3.787">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate password requirements @regression" classname="TMSOnboarding/login.spec.ts" time="5.214">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate first name field @regression" classname="TMSOnboarding/login.spec.ts" time="4.967">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should validate last name field @regression" classname="TMSOnboarding/login.spec.ts" time="5.432">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle country code selection @system" classname="TMSOnboarding/login.spec.ts" time="4.067">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should clear form fields @system" classname="TMSOnboarding/login.spec.ts" time="4.802">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should navigate back to login page @system" classname="TMSOnboarding/login.spec.ts" time="5.741">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should verify privacy policy link @system" classname="TMSOnboarding/login.spec.ts" time="4.185">
+</testcase>
+<testcase name="TrackMyShuttle Login Tests › Activate Account Page Tests › should handle maximum character limits @regression" classname="TMSOnboarding/login.spec.ts" time="4.024">
+</testcase>
+</testsuite>
+<testsuite name="TMSOnboarding/settings.spec.ts" timestamp="2026-02-17T11:10:27.828Z" hostname="chromium" tests="1" failures="0" skipped="0" time="12.581" errors="0">
+<testcase name="Settings Page Tests › Performance: Settings load time @performance @settings" classname="TMSOnboarding/settings.spec.ts" time="12.581">
 </testcase>
 </testsuite>
 </testsuites>

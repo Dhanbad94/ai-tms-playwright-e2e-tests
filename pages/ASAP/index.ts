@@ -14,4 +14,3 @@ export { DriverAppSettingsPage } from "./driver-app-settings.page";
 export { LiveDisplaySettingsPage } from "./live-display-settings.page";
 export { AlertsSettingsPage } from "./alerts-settings.page";
 export { EscalationsSettingsPage } from "./escalations-settings.page";
-export { PricingSetupPage } from "./pricing-setup.page";
