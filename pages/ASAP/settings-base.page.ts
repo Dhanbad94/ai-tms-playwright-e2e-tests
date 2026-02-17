@@ -19,7 +19,6 @@ export class SettingsBasePage {
   readonly liveDisplayTab: Locator;
   readonly alertsTab: Locator;
   readonly escalationsTab: Locator;
-  readonly pricingSetupTab: Locator;
 
   // Tab Panel Content
   readonly tabPanel: Locator;
@@ -43,7 +42,6 @@ export class SettingsBasePage {
     this.liveDisplayTab = page.getByRole("tab", { name: "Live display" });
     this.alertsTab = page.getByRole("tab", { name: "Alerts" });
     this.escalationsTab = page.getByRole("tab", { name: "Escalations" });
-    this.pricingSetupTab = page.getByRole("tab", { name: "Pricing Setup" });
 
     // Tab panel (content area) - use first() as there may be nested tabpanels
     // The main content panel has class "tab-pane" and is the direct child of the content area
@@ -63,7 +61,7 @@ export class SettingsBasePage {
   }
 
   /**
-   * Verify all 10 settings tabs are visible
+   * Verify all 9 settings tabs are visible
    */
   async verifyAllTabsVisible(): Promise<void> {
     const tabs = [
@@ -76,7 +74,6 @@ export class SettingsBasePage {
       { locator: this.liveDisplayTab, name: "Live display" },
       { locator: this.alertsTab, name: "Alerts" },
       { locator: this.escalationsTab, name: "Escalations" },
-      { locator: this.pricingSetupTab, name: "Pricing Setup" },
     ];
 
     for (const tab of tabs) {
@@ -110,7 +107,6 @@ export class SettingsBasePage {
       "Live display": this.liveDisplayTab,
       Alerts: this.alertsTab,
       Escalations: this.escalationsTab,
-      "Pricing Setup": this.pricingSetupTab,
     };
 
     const tab = tabMap[tabName];

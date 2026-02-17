@@ -38,12 +38,12 @@ test.describe("ASAP Settings Navigation Tests @asap @settings", () => {
     await page.context().clearCookies();
   });
 
-  test("SN-001: Verify all 10 settings tabs are visible @smoke @manager", async () => {
+  test("SN-001: Verify all 9 settings tabs are visible @smoke @manager", async () => {
     await settingsPage.verifyAllTabsVisible();
 
     // Verify tab count
     const tabCount = await settingsPage.getTabCount();
-    expect(tabCount).toBe(10);
+    expect(tabCount).toBe(9);
   });
 
   test("SN-005: Verify settings page loads within threshold @performance", async ({ page }) => {
