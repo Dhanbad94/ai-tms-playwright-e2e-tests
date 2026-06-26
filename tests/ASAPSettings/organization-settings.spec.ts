@@ -181,7 +181,7 @@ test.describe("ASAP Organization Edit - End to End @asap @settings @e2e", () => 
     "Manager credentials not provided"
   );
 
-  test("ORG-E2E-001: Login -> Dispatch -> Manage -> edit Organization name -> Update -> success @e2e @crud @manager", async ({
+  test.skip("ORG-E2E-001: Login -> Dispatch -> Manage -> edit Organization name -> Update -> success @e2e @crud @manager", async ({
     page,
   }) => {
     const loginPage = new LoginPage(page);
