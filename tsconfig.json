@@ -1,44 +1,37 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "CommonJS",
-    "target": "esnext",
-    "types": ["node"],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
-
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleResolution": "node",
+    // Environment. "bundler" resolution is the modern replacement for the
+    // deprecated "node"/"node10"; it needs module = esnext/preserve. Type-check
+    // only (noEmit) — Playwright transpiles at runtime, so this doesn't affect execution.
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler",
     "moduleDetection": "force",
+    "lib": ["ESNext", "DOM"],
+    "types": ["node"],
+
+    // Module interop (required for `import fs from "fs"` / `import path from "path"`)
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // This is a test project run by Playwright/ts-node — type-check only, never emit.
+    "noEmit": true,
+    "isolatedModules": true,
     "skipLibCheck": true,
-  }
+
+    // Type-checking
+    "strict": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "test-results",
+    "test-results-*",
+    "playwright-report",
+    "playwright-report-*",
+    "reports",
+    "dist"
+  ]
 }

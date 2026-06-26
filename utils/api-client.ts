@@ -76,10 +76,8 @@ export class ApiClient {
       timeout: options.timeout || TIMEOUTS.API,
     });
 
-    const responseHeaders: Record<string, string> = {};
-    response.headers().forEach((value, key) => {
-      responseHeaders[key] = value;
-    });
+    // Playwright's APIResponse.headers() already returns a Record<string, string>.
+    const responseHeaders: Record<string, string> = response.headers();
 
     let data: T;
     try {

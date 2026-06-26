@@ -16,8 +16,6 @@ test.describe("ASAP Settings Navigation Tests @asap @settings", () => {
   const baseUrl = getBaseUrl();
   const managerCreds = getCredentials("MANAGER");
 
-  // Clear auth state since these tests perform their own login
-  test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeEach(async ({ page }) => {
     test.skip(!managerCreds.email || !managerCreds.password, "Manager credentials not provided");
@@ -25,10 +23,6 @@ test.describe("ASAP Settings Navigation Tests @asap @settings", () => {
     loginPage = new LoginPage(page);
     settingsPage = new SettingsBasePage(page);
 
-    // Login as Manager
-    await page.goto(`${baseUrl}/login`);
-    await loginPage.login(managerCreds.email, managerCreds.password);
-    await page.waitForURL("**/dashboard", { timeout: TIMEOUTS.navigation });
 
     // Navigate to Settings
     await settingsPage.navigateToSettings(baseUrl);
@@ -38,13 +32,28 @@ test.describe("ASAP Settings Navigation Tests @asap @settings", () => {
     await page.context().clearCookies();
   });
 
-  test("SN-001: Verify all 9 settings tabs are visible @smoke @manager", async () => {
+  test("SN-001: Verify all 11 settings left-panel tabs are visible @smoke @manager", async () => {
     await settingsPage.verifyAllTabsVisible();
 
     // Verify tab count
     const tabCount = await settingsPage.getTabCount();
-    expect(tabCount).toBe(9);
+    expect(tabCount).toBe(11);
   });
+
+  test("SET-NAV-002: Organization is the active tab by default @regression @manager", async ({ page }) => {
+    // Organization is the default tab: its settings content is shown on load.
+    await expect(
+      page.getByRole("heading", { name: "Organization Settings" })
+    ).toBeVisible({ timeout: 10000 });
+  });
+
+  // SET-NAV-003..013: click each left-panel tab and verify it becomes active.
+  for (const tabName of SETTINGS_TAB_NAMES) {
+    test(`SET-NAV: Navigate to "${tabName}" tab @navigation @manager`, async () => {
+      await settingsPage.clickTab(tabName);
+      await settingsPage.verifyTabIsActive(tabName);
+    });
+  }
 
   test("SN-005: Verify settings page loads within threshold @performance", async ({ page }) => {
     // Navigate away first

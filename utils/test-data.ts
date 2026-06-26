@@ -1,6 +1,6 @@
 export const environments = {
   staging: {
-    baseUrl: 'https://staging.trackmyshuttle.com',
+    baseUrl: 'https://php-staging.trackmyshuttle.com',
     loginEmail: process.env.STAGING_MANAGER_EMAIL || 'your-staging-email@example.com',
     loginPassword: process.env.STAGING_MANAGER_PASSWORD || 'your-staging-password',
   },
@@ -16,5 +16,17 @@ export const environments = {
   }
 };
 
-const ENV = (process.env.ENV || 'staging') as keyof typeof environments;
+// Normalize ENV: lowercase, map common aliases, and fall back to staging for
+// any unknown value so TEST_DATA is always defined (avoids crashes like
+// `Cannot read properties of undefined (reading 'baseUrl')`).
+function resolveEnv(raw: string | undefined): keyof typeof environments {
+  const e = (raw || 'staging').toLowerCase();
+  if (e === 'prod' || e === 'production') return 'production';
+  if (e === 'preprod' || e === 'preproduction') return 'preproduction';
+  if (e === 'staging') return 'staging';
+  console.warn(`⚠️  Unknown ENV "${raw}", falling back to "staging".`);
+  return 'staging';
+}
+
+const ENV = resolveEnv(process.env.ENV);
 export const TEST_DATA = environments[ENV];

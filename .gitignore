@@ -11,10 +11,22 @@ node_modules/
 .env.local
 .env.*.local
 
-# Test artifacts
+# Test artifacts & screenshots (generated - never commit)
 *.png
+*.webm
 test-results.json
 results.xml
+# Per-environment / suffixed reports & results
+results-*.xml
+test-results-*.json
+/test-results*/
+/playwright-report*/
+/reports/
+/.playwright-mcp/
+# Generated report artifacts
+dashboard-report.html
+report-summary.json
+slack-payload.json
 
 # IDE
 .idea/

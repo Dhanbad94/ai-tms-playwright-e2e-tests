@@ -188,18 +188,20 @@ export class EscalationsSettingsPage {
   /**
    * Verify escalation configuration UI elements are visible
    * The escalation config has columns: After, Select Action, To
-   * Using locator that targets visible elements in the configuration section
+   * Scoped to #escaltionSettings (the active Escalations tab panel) to avoid
+   * matching identical-text elements inside hidden panels of other Settings tabs.
    */
   async verifyEscalationConfigVisible(): Promise<void> {
-    // Look for "After" text that's visible (not hidden tooltip)
-    const afterLabel = this.page.locator("div").filter({ hasText: /^After$/ }).first();
+    // Scope all locators to the Escalations tab panel so hidden panels don't match first
+    const panel = this.page.locator("#escaltionSettings");
+
+    const afterLabel = panel.locator("div").filter({ hasText: /^After$/ }).first();
     await expect(afterLabel).toBeVisible({ timeout: 5000 });
 
-    const selectActionLabel = this.page.locator("div").filter({ hasText: /^Select Action$/ }).first();
+    const selectActionLabel = panel.locator("div").filter({ hasText: /^Select Action$/ }).first();
     await expect(selectActionLabel).toBeVisible({ timeout: 5000 });
 
-    // "To" appears multiple times, use specific filter
-    const toLabel = this.page.locator("div").filter({ hasText: /^To$/ }).first();
+    const toLabel = panel.locator("div").filter({ hasText: /^To$/ }).first();
     await expect(toLabel).toBeVisible({ timeout: 5000 });
   }
 }

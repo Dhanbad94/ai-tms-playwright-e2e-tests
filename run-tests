@@ -70,7 +70,7 @@ done
 
 # Handle environment mapping
 if [[ "$ENV" == "staging" ]]; then
-  BASE_URL="https://staging.trackmyshuttle.com/"
+  BASE_URL="https://php-staging.trackmyshuttle.com/"
 elif [[ "$ENV" == "preproduction" ]]; then
   BASE_URL="https://preproduction.trackmyshuttle.com/"
 elif [[ "$ENV" == "prod" || "$ENV" == "production" ]]; then
@@ -115,7 +115,7 @@ if [[ -n "$FILE_FILTER" ]]; then
 fi
 
 if [[ "$RUN_ALL" == true ]]; then
-  echo "Running all test cases with: -u all -e dev --bc"
+  echo "Running all test cases with: -u all -e staging --bc"
 fi
 
 echo "Running: $CMD"

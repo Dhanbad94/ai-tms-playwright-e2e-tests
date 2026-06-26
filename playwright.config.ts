@@ -3,6 +3,13 @@ dotenv.config({ path: ".env.local" });
 
 import { defineConfig, devices } from "@playwright/test";
 import { TIMEOUTS, VIEWPORTS } from "./constants";
+import { getBaseUrl } from "./tests/ASAPSettings/fixtures/test-data";
+
+// Active environment (staging | preproduction | production), defaults to staging
+const ENV = (process.env.ENV || "staging").toLowerCase();
+
+// Per-environment auth state so switching ENV never reuses another env's session
+const authStateFile = `playwright/.auth/${ENV}.json`;
 
 /**
  * Playwright Configuration for TMS E2E Tests
@@ -28,13 +35,15 @@ export default defineConfig({
   forbidOnly: isCI,
 
   // Retry configuration
-  retries: isCI ? 2 : 1,
+  retries: isCI ? 1 : 1,
 
   // Worker configuration - more workers locally, fewer in CI for stability
-  workers: isCI ? 2 : 4,
+  workers: isCI ? 4 : 4,
 
-  // Global timeout
-  timeout: TIMEOUTS.PAGE_LOAD,
+  // Per-test timeout. Kept ABOVE navigationTimeout (NAVIGATION) so a single
+  // slow navigation under full-suite parallel load on staging leaves headroom
+  // for the rest of the test/hook instead of dying mid-navigation at 30s.
+  timeout: TIMEOUTS.TEST_TIMEOUT,
 
   // Expect timeout
   expect: {
@@ -69,8 +78,8 @@ export default defineConfig({
 
   // Global settings for all tests
   use: {
-    // Base URL from environment
-    baseURL: process.env.BASE_URL || "https://staging.trackmyshuttle.com",
+    // Base URL derived from ENV (overridable via BASE_URL for CI)
+    baseURL: process.env.BASE_URL || getBaseUrl(),
 
     // Trace, screenshot, and video settings
     trace: "retain-on-failure",
@@ -115,8 +124,8 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        // Use stored auth state for authenticated tests
-        storageState: "playwright/.auth/user.json",
+        // Use stored auth state for authenticated tests (namespaced per env)
+        storageState: authStateFile,
       },
       dependencies: ["setup"],
     },

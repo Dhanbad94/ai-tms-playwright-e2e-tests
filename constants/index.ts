@@ -10,12 +10,21 @@
 export const TIMEOUTS = {
   /** Default action timeout (clicks, fills, etc.) */
   ACTION: 10000,
-  /** Navigation timeout */
-  NAVIGATION: 30000,
+  /** Navigation timeout — generous so a slow /setting TTFB on staging under
+   * load still completes instead of timing out (kept below TEST_TIMEOUT). */
+  NAVIGATION: 45000,
   /** Assertion/expect timeout */
   EXPECT: 10000,
   /** Page load timeout */
   PAGE_LOAD: 30000,
+  /**
+   * Per-test (and beforeEach hook) budget. Must stay comfortably ABOVE
+   * NAVIGATION so a single slow navigation under full-suite parallel load on
+   * staging doesn't consume the whole test budget — otherwise the hook times
+   * out mid-navigation at exactly the navigation timeout, and the retry can't
+   * recover. Headroom = login/goto + waitForURL + the test's own steps.
+   */
+  TEST_TIMEOUT: 90000,
   /** Short wait for animations */
   SHORT: 500,
   /** Medium wait for async operations */

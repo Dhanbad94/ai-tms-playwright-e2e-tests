@@ -17,7 +17,10 @@ import fs from 'fs';
  * - Cleaner test code (no login boilerplate)
  */
 
-const authFile = 'playwright/.auth/user.json';
+// Namespace auth state per environment so a staging session is never reused
+// against preproduction/production (and vice versa).
+const ENV = (process.env.ENV || 'staging').toLowerCase();
+const authFile = `playwright/.auth/${ENV}.json`;
 
 setup('authenticate', async ({ page }) => {
   // Ensure the auth directory exists
@@ -48,6 +51,17 @@ setup('authenticate', async ({ page }) => {
   // Fill in credentials
   await page.locator('#login_email').fill(TEST_DATA.loginEmail);
   await page.locator('#login_pass').fill(TEST_DATA.loginPassword);
+
+  // Enable "Remember me" so the saved session is long-lived rather than
+  // session-only. This keeps the reused storageState valid across long test
+  // runs (otherwise the session expires mid-run and later tests get redirected
+  // to /login). Best-effort: don't fail setup if the control isn't present.
+  try {
+    const rememberMe = page.getByRole('checkbox', { name: /remember me/i });
+    await rememberMe.check({ timeout: 5000 });
+  } catch {
+    await page.locator('#remember_me').check({ force: true }).catch(() => {});
+  }
 
   // Click login button
   await page.getByRole('button', { name: 'GO' }).click();

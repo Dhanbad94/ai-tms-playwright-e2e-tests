@@ -3,6 +3,8 @@ import { LoginPage } from "../../pages/login_page";
 import { DashboardPage } from "../../pages/dashboard_page";
 import { ProfilePage } from "../../pages/profile_page";
 import { TEST_DATA } from "../../utils/test-data";
+import { TIMEOUTS } from "../../constants";
+import { autoDismissCookieBanner } from "../../helpers/dismissCookieBanner";
 
 // Helper function to safely take screenshots
 async function safeScreenshot(
@@ -213,6 +215,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
     profilePage = new ProfilePage(page);
+    await autoDismissCookieBanner(page);
   });
 
   test("Operator: Login, verify menus, and logout @smoke @operator", async ({
@@ -234,9 +237,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.rememberMeCheckbox.check();
       await loginPage.loginButton.click();
 
-      await page.waitForURL((url) => !url.toString().includes("/login"), {
-        timeout: 15000,
-      });
+      await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       expect(page.url()).toContain("/dashboard");
     });
@@ -296,9 +297,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.rememberMeCheckbox.check();
       await loginPage.loginButton.click();
 
-      await page.waitForURL((url) => !url.toString().includes("/login"), {
-        timeout: 15000,
-      });
+      await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       expect(page.url()).toContain("/dashboard");
     });
@@ -314,10 +313,10 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         expect(menuData.count).toBeGreaterThanOrEqual(7);
         expect(menuData.menus).toContain("Dispatch");
         expect(menuData.menus).toContain("Shuttles");
-        expect(menuData.menus).toContain("Replay");
         expect(menuData.menus).toContain("Stops");
-        expect(menuData.menus).toContain("Analytics");
         expect(menuData.menus).toContain("Alerts");
+        expect(menuData.menus).toContain("Replay");
+        expect(menuData.menus).toContain("Analytics");
         expect(menuData.menus).toContain("Reports");
       }
     });
@@ -338,7 +337,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
     page,
   }) => {
     // Set shorter timeout for this test
-    test.setTimeout(35000); // 35 seconds max
+    test.setTimeout(120000); // 2 full login cycles need a generous budget
 
     let operatorMenuData: { count: number; menus: string[] };
     let managerMenuData: { count: number; menus: string[] };
@@ -361,7 +360,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         await loginPage.emailInput.fill(operatorCreds.email);
         await loginPage.passwordInput.fill(operatorCreds.password);
         await loginPage.loginButton.click();
-        await page.waitForURL("**/dashboard", { timeout: 15000 });
+        await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
         // FIXED: Use simple wait instead of page object method
         await waitForDashboardSimple(page);
@@ -403,7 +402,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         await loginPage.emailInput.fill(managerCreds.email);
         await loginPage.passwordInput.fill(managerCreds.password);
         await loginPage.loginButton.click();
-        await page.waitForURL("**/dashboard", { timeout: 15000 });
+        await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
         // FIXED: Use simple wait instead of page object method
         await waitForDashboardSimple(page);
@@ -477,7 +476,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
 
           const startTime = Date.now();
           await loginPage.loginButton.click();
-          await page.waitForURL("**/dashboard", { timeout: 10000 });
+          await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
           // Minimal wait for performance test
           await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
@@ -546,7 +545,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
           await loginPage.loginButton.click();
 
           // Wait for dashboard
-          await page.waitForURL("**/dashboard", { timeout: 20000 });
+          await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
           // FIXED: Use simple wait instead of page object method
           await waitForDashboardSimple(page);
@@ -628,7 +627,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         await loginPage.loginButton.click();
 
         // Wait for dashboard with shorter timeout
-        await page.waitForURL("**/dashboard", { timeout: 10000 });
+        await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
         // Minimal dashboard wait
         await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
@@ -701,9 +700,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.rememberMeCheckbox.check();
       await loginPage.loginButton.click();
 
-      await page.waitForURL((url) => !url.toString().includes("/login"), {
-        timeout: 15000,
-      });
+      await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       expect(page.url()).toContain("/dashboard");
     });
@@ -750,9 +747,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.rememberMeCheckbox.check();
       await loginPage.loginButton.click();
 
-      await page.waitForURL((url) => !url.toString().includes("/login"), {
-        timeout: 15000,
-      });
+      await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       expect(page.url()).toContain("/dashboard");
     });
@@ -792,6 +787,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
   test("Profile: Role comparison test @smoke @profile @rbac", async ({
     page,
   }) => {
+    test.setTimeout(120000); // two full login + profile-access cycles
     const operatorCreds = getCredentials("OPERATOR");
     const managerCreds = getCredentials("MANAGER");
 
@@ -811,7 +807,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.emailInput.fill(operatorCreds.email);
       await loginPage.passwordInput.fill(operatorCreds.password);
       await loginPage.loginButton.click();
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
+      await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       // Access profile and get data - NOW THIS METHOD EXISTS
       await profilePage.navigateToProfileAndVerify();
@@ -832,7 +828,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.emailInput.fill(managerCreds.email);
       await loginPage.passwordInput.fill(managerCreds.password);
       await loginPage.loginButton.click();
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
+      await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       // Access profile and get data - NOW THIS METHOD EXISTS
       await profilePage.navigateToProfileAndVerify();

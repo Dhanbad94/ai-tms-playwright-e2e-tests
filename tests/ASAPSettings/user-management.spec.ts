@@ -17,8 +17,6 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
   const baseUrl = getBaseUrl();
   const managerCreds = getCredentials("MANAGER");
 
-  // Clear auth state since these tests perform their own login
-  test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeEach(async ({ page }) => {
     test.skip(
@@ -30,10 +28,6 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
     settingsPage = new SettingsBasePage(page);
     userManagementPage = new UserManagementPage(page);
 
-    // Login as Manager
-    await page.goto(`${baseUrl}/login`);
-    await loginPage.login(managerCreds.email, managerCreds.password);
-    await page.waitForURL("**/dashboard", { timeout: TIMEOUTS.navigation });
 
     // Navigate to Settings > User Management
     await settingsPage.navigateToSettings(baseUrl);

@@ -9,8 +9,8 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
 | [playwright.yml](#playwrightyml) | Push to main, PR, Manual | Runs Playwright tests on code changes | On push/PR to main |
 | [scheduled-staging.yml](#scheduled-stagingyml) | Scheduled, Manual | Automated testing on staging environment | Daily smoke (6 AM UTC), Regression (Tue/Thu 8 AM UTC) |
 | [scheduled-full.yml](#scheduled-fullyml) | Scheduled, Manual | Full multi-browser test suite | Saturday 5 AM UTC |
-| [scheduled-production.yml](#scheduled-productionyml) | Scheduled, Manual | Production health checks (smoke/regression only) | Friday 10 AM UTC, Sunday 6 AM UTC |
-| [scheduled-preprod.yml](#scheduled-prepprepd.ymlyml) | Scheduled, Manual | Pre-production validation | Custom schedule |
+| [scheduled-production.yml](#scheduled-productionyml) | Scheduled, Manual | Production health checks (read-only @prod only) | Daily 5 AM UTC (overnight ET) |
+| [scheduled-preprod.yml](#scheduled-prepprepd.ymlyml) | Scheduled, Manual | Pre-production validation | Nightly Mon–Fri 7 AM UTC (overnight ET) |
 | [update-version.yml](#update-versionyml) | Manual dispatch | Automates version bumping in package files | On demand |
 
 ---
@@ -68,11 +68,10 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
 ### scheduled-production.yml
 **Purpose**: Production health checks (read-only, non-destructive tests only)
 - **Schedule**:
-  - **Smoke tests**: Friday at 10:00 AM UTC
-  - **Regression tests**: Sunday at 6:00 AM UTC
+  - **Daily** at 05:00 UTC (overnight ET: 1 AM EDT / 12 AM EST) — read-only `@prod` health check
 - **⚠️ Safety Features**:
-  - Requires manual confirmation (`CONFIRM` string) to run
-  - Only smoke and read-only tests allowed
+  - Manual runs require confirmation (`CONFIRM` string)
+  - Execution is always restricted to read-only `@prod`-tagged tests (`--grep @prod`)
   - Non-destructive operations only
   - Triggers critical alerts on failure
   - Tests against production environment
@@ -85,7 +84,7 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
 
 ### scheduled-preprod.yml
 **Purpose**: Pre-production environment validation
-- **Schedule**: Custom (check workflow file for cron expression)
+- **Schedule**: Nightly Monday–Friday at 07:00 UTC (overnight ET: 3 AM EDT / 2 AM EST) — full suite
 - **Supports**: All test types and suites
 - **Use case**: Validate changes before production deployment
 

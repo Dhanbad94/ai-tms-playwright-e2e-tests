@@ -1,6 +1,6 @@
 {
   "staging": {
-    "url": "https://staging.trackmyshuttle.com"
+    "url": "https://php-staging.trackmyshuttle.com"
   },
   "preproduction": {
     "url": "https://preproduction.trackmyshuttle.com"

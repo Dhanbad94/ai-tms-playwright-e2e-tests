@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { getBaseUrl } from "../tests/ASAPSettings/fixtures/test-data";
 
 export class ActivateAccountPage {
   readonly page: Page;
@@ -54,7 +55,7 @@ export class ActivateAccountPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto("https://staging.trackmyshuttle.com/activate");
+    await this.page.goto(`${getBaseUrl()}/activate`);
     await this.waitForPageLoad();
   }
 

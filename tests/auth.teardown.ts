@@ -9,7 +9,8 @@ import path from 'path';
  * It ensures no sensitive auth data persists between test runs.
  */
 
-const authFile = 'playwright/.auth/user.json';
+const ENV = (process.env.ENV || 'staging').toLowerCase();
+const authFile = `playwright/.auth/${ENV}.json`;
 
 teardown('cleanup auth state', async () => {
   // Clean up the auth file if it exists

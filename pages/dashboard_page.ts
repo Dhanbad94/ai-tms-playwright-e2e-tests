@@ -207,8 +207,13 @@ export class DashboardPage {
    */
   async waitForDashboardLoad() {
     try {
-      // Wait for basic DOM content
-      await this.page.waitForLoadState("domcontentloaded", { timeout: 10000 });
+      // Wait for basic DOM content. The dashboard runs Google Maps (continuous
+      // network activity), so the load-state can fail to settle cleanly — that's
+      // fine: the element-presence race below is the real readiness signal, so
+      // don't let a load-state timeout throw (it only produced a noisy warning).
+      await this.page
+        .waitForLoadState("domcontentloaded", { timeout: 10000 })
+        .catch(() => {});
 
       // Wait for any of the core elements to be visible
       await Promise.race([
