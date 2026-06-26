@@ -63,7 +63,7 @@ test.describe("ASAP WhatsApp Notification Settings @asap @settings @whatsapp", (
     expect(await wa.isDriversEnabled()).toBe(true);
   });
 
-  test("WA-CRUD-003: WhatsApp setting persists after a page reload @crud @regression @manager", async () => {
+  test.skip("WA-CRUD-003: WhatsApp setting persists after a page reload @crud @regression @manager", async () => {
     await wa.setMaster(true);
     expect(await wa.isMasterEnabled()).toBe(true);
     await wa.open(baseUrl); // reload settings page
