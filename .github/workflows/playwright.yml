@@ -40,7 +40,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write        # push the dashboard to the gh-pages branch
       checks: write
       pull-requests: write
     outputs:
@@ -48,6 +48,13 @@ jobs:
       total_tests: ${{ steps.parse-results.outputs.total }}
       passed_tests: ${{ steps.parse-results.outputs.passed }}
       failed_tests: ${{ steps.parse-results.outputs.failed }}
+      skipped_tests: ${{ steps.parse-results.outputs.skipped }}
+      passed_on_retry: ${{ steps.parse-results.outputs.flaky }}
+      retried_tests: ${{ steps.parse-results.outputs.retried }}
+      pass_rate: ${{ steps.parse-results.outputs.pass_rate }}
+      duration: ${{ steps.parse-results.outputs.duration }}
+      environment: ${{ steps.env.outputs.environment }}
+      report_url: ${{ steps.report-url.outputs.url }}
     steps:
       - uses: actions/checkout@v4
       
@@ -98,24 +105,88 @@ jobs:
             echo "result=failure" >> $GITHUB_OUTPUT
           fi
       
-      - name: Parse test results
+      # Build the custom dashboard (dashboard-report.html + report-summary.json,
+      # the single source of truth for the metrics below).
+      - name: Generate dashboard report
+        if: always()
+        run: npx tsx helpers/generate-report.ts || true
+        env:
+          ENV: ${{ steps.env.outputs.environment }}
+          REPORT_TITLE: TMS Rider
+
+      - name: Parse report summary
         id: parse-results
         if: always()
         run: |
-          if [ -f "test-results.json" ]; then
-            TOTAL=$(jq '.stats.expected + .stats.unexpected // 0' test-results.json 2>/dev/null || echo "0")
-            PASSED=$(jq '.stats.expected // 0' test-results.json 2>/dev/null || echo "0")
-            FAILED=$(jq '.stats.unexpected // 0' test-results.json 2>/dev/null || echo "0")
+          S=report-summary.json
+          if [ -f "$S" ]; then
+            {
+              echo "total=$(jq -r '.total' $S)"
+              echo "passed=$(jq -r '.passed' $S)"
+              echo "failed=$(jq -r '.failed' $S)"
+              echo "skipped=$(jq -r '.skipped' $S)"
+              echo "flaky=$(jq -r '.flaky' $S)"
+              echo "retried=$(jq -r '.retried' $S)"
+              echo "pass_rate=$(jq -r '.passRate' $S)"
+              echo "duration=$(jq -r '.duration' $S)"
+            } >> "$GITHUB_OUTPUT"
           else
-            TOTAL="N/A"
-            PASSED="N/A"
-            FAILED="N/A"
+            echo "report-summary.json missing — emitting N/A metrics."
+            { echo "total=N/A"; echo "passed=N/A"; echo "failed=N/A"; echo "skipped=N/A"; echo "flaky=N/A"; echo "retried=N/A"; echo "pass_rate=N/A"; echo "duration=N/A"; } >> "$GITHUB_OUTPUT"
           fi
-          
-          echo "total=$TOTAL" >> $GITHUB_OUTPUT
-          echo "passed=$PASSED" >> $GITHUB_OUTPUT
-          echo "failed=$FAILED" >> $GITHUB_OUTPUT
-      
+
+      # Stage the dashboard (+ full Playwright report for drill-down) into a
+      # per-run folder so each run gets its own permanent URL and history is kept.
+      - name: Stage report for Pages
+        id: stage
+        if: always()
+        run: |
+          if [ -f dashboard-report.html ]; then
+            mkdir -p public
+            cp dashboard-report.html public/index.html
+            cp dashboard-report.html public/dashboard-report.html
+            [ -d playwright-report ] && cp -r playwright-report public/playwright-report || true
+            echo "staged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No dashboard-report.html to publish"
+            echo "staged=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish report to GitHub Pages
+        id: pages
+        if: always() && steps.stage.outputs.staged == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: ${{ github.run_id }}
+          keep_files: true
+
+      # CTA target: the rendered per-run Pages URL when publishing succeeded,
+      # else the Actions run page so the button never dead-links.
+      - name: Resolve report URL
+        id: report-url
+        if: always()
+        run: |
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          if [ "${{ steps.pages.outcome }}" == "success" ]; then
+            OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+            REPO="${{ github.event.repository.name }}"
+            echo "url=https://${OWNER_LC}.github.io/${REPO}/${{ github.run_id }}/dashboard-report.html" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=$RUN_URL" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload dashboard report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dashboard-${{ steps.env.outputs.environment }}-${{ github.run_number }}
+          path: |
+            dashboard-report.html
+            report-summary.json
+          retention-days: 30
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -141,100 +212,71 @@ jobs:
           comment_mode: always
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+  # Self-contained Slack notification (inline curl — no Node/artifact deps, so it
+  # always fires). Rich metrics come from the test job's report-summary outputs;
+  # the "View Report Results" CTA opens this run's rendered per-run dashboard.
   notify:
     name: Send Slack Notification
     runs-on: ubuntu-latest
     needs: [test]
     if: always()
-    permissions:
-      contents: read
     steps:
       - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          # Skip if webhook URL is not configured
-          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
             echo "Slack webhook not configured, skipping notification"
             exit 0
           fi
-          
+
           RESULT="${{ needs.test.result }}"
-          ENV="${{ github.event.inputs.environment || 'staging' }}"
+          ENV="${{ needs.test.outputs.environment }}"
           TEST_TYPE="${{ github.event.inputs.test_type || 'all' }}"
           TOTAL="${{ needs.test.outputs.total_tests }}"
           PASSED="${{ needs.test.outputs.passed_tests }}"
           FAILED="${{ needs.test.outputs.failed_tests }}"
-          
+          SKIPPED="${{ needs.test.outputs.skipped_tests }}"
+          ON_RETRY="${{ needs.test.outputs.passed_on_retry }}"
+          RETRIED="${{ needs.test.outputs.retried_tests }}"
+          PASS_RATE="${{ needs.test.outputs.pass_rate }}"
+          DURATION="${{ needs.test.outputs.duration }}"
+          REPORT_URL="${{ needs.test.outputs.report_url }}"
+          # Fallback so the CTA is always present even if report_url didn't resolve.
+          [ -z "$REPORT_URL" ] && REPORT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
           if [ "$RESULT" == "success" ]; then
-            EMOJI="✅"
-            COLOR="#36a64f"
-            HEADER="Playwright Tests Passed"
+            EMOJI="✅"; COLOR="#36a64f"; HEADER="TMS Rider — Tests Passed"
           else
-            EMOJI="❌"
-            COLOR="#dc3545"
-            HEADER="Playwright Tests Failed"
+            EMOJI="❌"; COLOR="#dc3545"; HEADER="TMS Rider — Tests Failed"
           fi
-          
-          curl -X POST \
+
+          curl -s -X POST "$SLACK_WEBHOOK_URL" \
             -H 'Content-type: application/json' \
             --data "{
-              \"attachments\": [
-                {
-                  \"color\": \"$COLOR\",
-                  \"blocks\": [
-                    {
-                      \"type\": \"header\",
-                      \"text\": {
-                        \"type\": \"plain_text\",
-                        \"text\": \"$EMOJI $HEADER\",
-                        \"emoji\": true
-                      }
-                    },
-                    {
-                      \"type\": \"section\",
-                      \"fields\": [
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Environment:*\n$ENV\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Test Type:*\n$TEST_TYPE\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Total Tests:*\n$TOTAL\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Passed:*\n$PASSED\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Failed:*\n$FAILED\"
-                        },
-                        {
-                          \"type\": \"mrkdwn\",
-                          \"text\": \"*Branch:*\n${{ github.ref_name }}\"
-                        }
-                      ]
-                    },
-                    {
-                      \"type\": \"actions\",
-                      \"elements\": [
-                        {
-                          \"type\": \"button\",
-                          \"text\": {
-                            \"type\": \"plain_text\",
-                            \"text\": \"View Results\",
-                            \"emoji\": true
-                          },
-                          \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }" \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
+              \"attachments\": [{
+                \"color\": \"$COLOR\",
+                \"blocks\": [
+                  {\"type\":\"header\",\"text\":{\"type\":\"plain_text\",\"text\":\"$EMOJI $HEADER\",\"emoji\":true}},
+                  {\"type\":\"section\",\"fields\":[
+                    {\"type\":\"mrkdwn\",\"text\":\"*Environment:*\n$ENV\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Test Type:*\n$TEST_TYPE\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Total:*\n$TOTAL\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Pass Rate:*\n${PASS_RATE}%\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Passed:*\n$PASSED\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Failed:*\n$FAILED\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Skipped:*\n$SKIPPED\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Passed on Retry:*\n$ON_RETRY\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Retried:*\n$RETRIED\"},
+                    {\"type\":\"mrkdwn\",\"text\":\"*Duration:*\n$DURATION\"}
+                  ]},
+                  {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Branch:* ${{ github.ref_name }}\"}},
+                  {\"type\":\"actions\",\"elements\":[{
+                    \"type\":\"button\",
+                    \"text\":{\"type\":\"plain_text\",\"text\":\"View Report Results\",\"emoji\":true},
+                    \"url\":\"$REPORT_URL\"
+                  }]}
+                ]
+              }]
+            }"
         continue-on-error: true

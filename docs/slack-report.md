@@ -31,46 +31,34 @@ The CTA degrades gracefully: `REPORT_URL` → else `RUN_URL` → else the button
 
 ## CI wiring
 
-The CTA is live in **every** scheduled workflow. Each run's test job builds the
-dashboard (`helpers/generate-report.ts`) and uploads `dashboard-report.html` +
-`report-summary.json` as an artifact; the notify job posts to Slack with a
-**View Report Results** button pointing at **that run's page** (where the
-`dashboard-report.html` artifact lives) — so every message links to its *own*
-run, and there is no shared-hosting dependency.
+The CTA is live in **all five** workflows (`playwright.yml` + the four
+`scheduled-*`). Each run: builds the dashboard → **publishes it to a per-run
+`gh-pages` folder** → posts to Slack with a **View Report Results** button that
+opens *that run's* rendered report.
 
-| Workflow | Approach |
-|---|---|
-| `scheduled-full.yml` | `notify` job runs `helpers/notify-slack.ts` (full Block Kit card); `RUN_URL` → the run. |
-| `scheduled-preprod.yml` | existing rich block, button = **View Report Results** → `REPORT_URL` (the run). |
-| `scheduled-staging.yml` | same as preprod. |
-| `scheduled-production.yml` | same as preprod. |
-
-### Optional: a one-click *rendered* report (GitHub Pages)
-The CTA currently opens the run page (one click to the `dashboard-report.html`
-artifact). For a directly-rendered link, enable **Settings → Pages → Source:
-GitHub Actions**, then add a `publish-report` job that deploys the dashboard and
-set `REPORT_URL` to its `page_url`:
-
-```yaml
-  publish-report:
-    needs: [<test-job>]
-    permissions: { pages: write, id-token: write }
-    concurrency: { group: pages, cancel-in-progress: false }
-    environment: { name: github-pages, url: "${{ steps.deploy.outputs.page_url }}" }
-    outputs: { page_url: "${{ steps.deploy.outputs.page_url }}" }
-    steps:
-      - uses: actions/download-artifact@v4
-        with: { name: <dashboard-artifact> }
-        continue-on-error: true
-      - run: mkdir -p _site && cp dashboard-report.html _site/index.html
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: _site }
-      - id: deploy
-        uses: actions/deploy-pages@v4
+```
+generate-report.ts
+ → Stage:   dashboard-report.html → public/index.html + public/dashboard-report.html (+ playwright-report/ for drill-down)
+ → Publish: peaceiris/actions-gh-pages@v4   publish_dir: ./public   destination_dir: ${{ github.run_id }}   keep_files: true
+ → Resolve: report_url = https://<owner>.github.io/<repo>/<run_id>/dashboard-report.html   (else → Actions run)
+ → Notify:  Slack card, "View Report Results" → report_url
 ```
 
-> Notes: the `environment: github-pages` line shows an IDE warning until Pages is
-> enabled (the environment is auto-created then) — it's a false positive.
-> GitHub Pages serves **one site per repo**, so a Pages CTA opens the *latest*
-> run's dashboard, not a per-run copy — which is why the default wiring links to
-> the run instead.
+Why `peaceiris/actions-gh-pages` (and not `actions/deploy-pages`):
+- **Per-run permanent URLs** (`destination_dir: <run_id>` + `keep_files: true`) — every message links to its own run, no "latest-only" overwrite.
+- **No `github-pages` environment** — it pushes to a `gh-pages` branch with just `contents: write` + `GITHUB_TOKEN`, so there's no environment linter error.
+
+| Workflow | Slack body |
+|---|---|
+| `playwright.yml`, `scheduled-preprod/staging/production` | self-contained **inline curl**, rich 10-field card |
+| `scheduled-full.yml` | `helpers/notify-slack.ts` (multi-browser; reads chromium's `report-summary.json`) |
+
+Both render the same metrics + the per-run **View Report Results** CTA.
+
+### One-time setup
+**Settings → Pages → Source: Deploy from a branch → `gh-pages` / `/ (root)`.**
+The `peaceiris` action creates/pushes the `gh-pages` branch on the first run.
+Until Pages is enabled the CTA falls back to the Actions run page (never
+dead-links). If your org restricts Actions, allowlist `peaceiris/actions-gh-pages`.
+
+`helpers/notify-slack.ts` is retained for local `npm run notify:slack` dry-runs.
