@@ -5,9 +5,29 @@ import { DashboardPage } from "../../pages/dashboard_page";
 import { ActivateAccountPage } from "../../pages/activate_account_page";
 import { ForgotPasswordPage } from "../../pages/forgot_password_page";
 import { TEST_DATA } from "../../utils/test-data";
+import { autoDismissCookieBanner } from "../../helpers/dismissCookieBanner";
 
-// Configure tests to run serially (one after another)
-test.describe.configure({ mode: "serial" });
+// Resolve credentials for the active environment (staging/preproduction/production)
+// instead of hardcoding STAGING_* so login tests are portable across environments.
+function getCredentials(role: "OPERATOR" | "MANAGER") {
+  const currentEnv = (process.env.ENV || "staging").toUpperCase();
+  const envPrefix =
+    currentEnv === "PREPRODUCTION"
+      ? "PREPRODUCTION"
+      : currentEnv === "PRODUCTION"
+      ? "PROD"
+      : "STAGING";
+  return {
+    email: process.env[`${envPrefix}_${role}_EMAIL`] || "",
+    password: process.env[`${envPrefix}_${role}_PASSWORD`] || "",
+  };
+}
+
+// Run tests independently (parallel-safe). Serial mode was previously used, but
+// it cascades: the first failing/flaky test marks every later test as SKIPPED,
+// which hid the entire Activate Account group. These tests are independent
+// (most don't even log in), so a single flake should not skip the rest.
+test.describe.configure({ mode: "parallel" });
 
 test.describe("TrackMyShuttle Login Tests", () => {
   let loginPage: LoginPage;
@@ -17,7 +37,10 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
-    await page.goto(`${TEST_DATA.baseUrl}/login`);
+    await autoDismissCookieBanner(page);
+    // domcontentloaded (not full "load") keeps the hook fast and resilient under
+    // parallel load; the LoginPage element waits confirm readiness afterwards.
+    await page.goto(`${TEST_DATA.baseUrl}/login`, { waitUntil: "domcontentloaded" });
   });
 
   test("should display all login page elements @smoke @system", async () => {
@@ -113,7 +136,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
     await test.step("Navigate from login to activate account page", async () => {
       await loginPage.clickActivateAccount();
 
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
 
       await expect(page).toHaveURL(/activate/);
     });
@@ -124,7 +147,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
       await activateAccountPage.verifyActivateAccountPageElements();
 
       await activateAccountPage.clickBackToLogin();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
       await expect(page).toHaveURL(/login/);
     });
   });
@@ -134,7 +157,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
   }) => {
     await test.step("Click forgot password link", async () => {
       await loginPage.clickForgotPassword();
-      await loginPage.page.waitForLoadState("networkidle");
+      await loginPage.page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
       await expect(loginPage.page).toHaveURL(/recover-account/);
     });
   });
@@ -152,9 +175,9 @@ test.describe("TrackMyShuttle Login Tests", () => {
     });
 
     // Check heading and subtext
-    await expect(forgotPasswordPage.heading).toHaveText("Forgot Password");
+    await expect(forgotPasswordPage.heading).toHaveText(/forgot password/i);
     await expect(forgotPasswordPage.subText).toHaveText(
-      "Enter email address for recovery instructions"
+      /enter email address for recovery instructions/i
     );
 
     // Verify page elements
@@ -170,7 +193,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
     await page.waitForLoadState('domcontentloaded', { timeout: 3000 }).catch(() => {});
     expect(await forgotPasswordPage.getEmailError()).not.toBe("");
     await forgotPasswordPage.clickBackToLogin();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
     await expect(page).toHaveURL(/login/);
 
     // Submit with a valid and existing email from .env.local
@@ -181,13 +204,16 @@ test.describe("TrackMyShuttle Login Tests", () => {
       timeout: 10000,
     });
     await forgotPasswordPage.recoverAccount(email);
-    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-    const validMsg = await forgotPasswordPage.getEmailError();
-    expect(typeof validMsg).toBe("string");
+    // A valid email submits the form (POST) and redirects to the "reset link
+    // sent" confirmation page — there is no inline error span to read here.
+    await expect(page).toHaveURL(/reset-link-sent/, { timeout: 15000 });
+    await expect(
+      page.getByRole("heading", { name: /check your inbox/i })
+    ).toBeVisible({ timeout: 10000 });
 
     // Check back to login navigation
     await forgotPasswordPage.clickBackToLogin();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
     await expect(page).toHaveURL(/login/);
   });
 
@@ -234,21 +260,21 @@ test.describe("TrackMyShuttle Login Tests", () => {
   }) => {
     await test.step("Test navigation between pages", async () => {
       await loginPage.clickActivateAccount();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
       await expect(page).toHaveURL(/activate/);
 
       const activateAccountPage = new ActivateAccountPage(page);
       await activateAccountPage.clickBackToLogin();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
       await expect(page).toHaveURL(/login/);
 
       await loginPage.clickForgotPassword();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
       await expect(page).toHaveURL(/recover-account/);
 
       const forgotPasswordPage = new ForgotPasswordPage(page);
       await forgotPasswordPage.clickBackToLogin();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
       await expect(page).toHaveURL(/login/);
     });
   });
@@ -264,7 +290,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
       await expect(loginPhone).toBeVisible();
 
       await loginPage.clickActivateAccount();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
 
       const activateAccountPage = new ActivateAccountPage(page);
       await expect(activateAccountPage.logo).toBeVisible();
@@ -277,9 +303,8 @@ test.describe("TrackMyShuttle Login Tests", () => {
     page,
   }) => {
     await test.step("Enter valid credentials and login", async () => {
-      // Get credentials from environment
-      const email = process.env.STAGING_OPERATOR_EMAIL || "";
-      const password = process.env.STAGING_OPERATOR_PASSWORD || "";
+      // Get credentials for the active environment
+      const { email, password } = getCredentials("OPERATOR");
 
       // Skip if credentials not provided
       test.skip(
@@ -317,10 +342,10 @@ test.describe("TrackMyShuttle Login Tests", () => {
   test("should login as operator and manager @smoke @system", async ({
     page,
   }) => {
-    const operatorEmail = process.env.STAGING_OPERATOR_EMAIL || "";
-    const operatorPassword = process.env.STAGING_OPERATOR_PASSWORD || "";
-    const managerEmail = process.env.STAGING_MANAGER_EMAIL || "";
-    const managerPassword = process.env.STAGING_MANAGER_PASSWORD || "";
+    const { email: operatorEmail, password: operatorPassword } =
+      getCredentials("OPERATOR");
+    const { email: managerEmail, password: managerPassword } =
+      getCredentials("MANAGER");
 
     test.skip(
       !operatorEmail ||
@@ -360,8 +385,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
   test("should handle session timeout and redirect @system @regression", async ({
     page,
   }) => {
-    const email = process.env.STAGING_OPERATOR_EMAIL || "";
-    const password = process.env.STAGING_OPERATOR_PASSWORD || "";
+    const { email, password } = getCredentials("OPERATOR");
 
     test.skip(
       !email || !password,
@@ -395,6 +419,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
 
     test.beforeEach(async ({ page }) => {
       activateAccountPage = new ActivateAccountPage(page);
+      await autoDismissCookieBanner(page);
       await activateAccountPage.goto();
     });
 
@@ -669,7 +694,7 @@ test.describe("TrackMyShuttle Login Tests", () => {
     test("should navigate back to login page @system", async ({ page }) => {
       await test.step("Test back to login navigation", async () => {
         await activateAccountPage.clickBackToLogin();
-        await page.waitForLoadState("networkidle");
+        await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
 
         await expect(page).toHaveURL(/login/);
 

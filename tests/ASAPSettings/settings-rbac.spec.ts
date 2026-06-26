@@ -82,8 +82,11 @@ test.describe("ASAP Settings RBAC Tests @asap @settings @rbac", () => {
     });
 
     test("RBAC-006: Manager sees Manage link in sidebar @smoke", async ({ page }) => {
-      // Verify Manage link is visible in navigation
-      await expect(page.getByRole("link", { name: "Manage" })).toBeVisible({ timeout: TIMEOUTS.short });
+      // Verify Manage link is visible in navigation.
+      // exact:true so it doesn't also match the "automated.manager@..." email link.
+      await expect(
+        page.getByRole("link", { name: "Manage", exact: true })
+      ).toBeVisible({ timeout: TIMEOUTS.short });
     });
   });
 

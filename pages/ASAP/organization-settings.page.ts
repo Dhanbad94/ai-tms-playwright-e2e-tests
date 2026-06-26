@@ -19,8 +19,22 @@ export class OrganizationSettingsPage {
   readonly trackingId: Locator;
   readonly timezone: Locator;
 
-  // Edit Button
+  // Edit button (three-dot "more" popover trigger) + popover Edit link
   readonly editButton: Locator;
+  readonly editPopoverLink: Locator;
+  readonly displayedOrgName: Locator;
+
+  // Edit Organization modal (#editModalManager)
+  readonly editModal: Locator;
+  readonly editModalTitle: Locator;
+  readonly orgNameInput: Locator;
+  readonly phoneInput: Locator;
+  readonly trackingIdInput: Locator;
+  readonly zipInput: Locator;
+  readonly streetInput: Locator;
+  readonly updateButton: Locator;
+  readonly cancelButton: Locator;
+  readonly successMessage: Locator;
 
   // Map
   readonly mapRegion: Locator;
@@ -43,13 +57,37 @@ export class OrganizationSettingsPage {
     this.trackingId = page.locator('text=/Tracking ID\\s?:\\s?\\w+/').first();
     this.timezone = page.locator('text=/Time Zone\\s?:/').first();
 
-    // Edit button (icon button)
-    this.editButton = page.getByRole("button", { name: "icon" }).first();
+    // Edit affordance: a three-dot "more" button that opens a Bootstrap popover
+    // containing the "Edit" link, which in turn opens the edit-organization modal.
+    this.editButton = page.locator("div.top-bar button.btn.edit-tooltip").first();
+    this.editPopoverLink = page.locator(".popover.in a.manager_edit_org");
+    this.displayedOrgName = page.locator(".hotel--name").first();
+
+    // Edit Organization modal
+    this.editModal = page.locator("#editModalManager");
+    this.editModalTitle = this.editModal
+      .getByText(/Edit Organization Details/i)
+      .first();
+    this.orgNameInput = this.editModal.locator("#org_name");
+    this.phoneInput = this.editModal.locator("#guest_phone");
+    this.trackingIdInput = this.editModal.locator("#tracking_id");
+    this.zipInput = this.editModal.locator("#zip");
+    this.streetInput = this.editModal.locator("#street");
+    this.updateButton = this.editModal.locator("#managerUpdateBtn");
+    this.cancelButton = this.editModal.locator(".btn-close");
+    // Success is primarily signalled by the modal closing + the name updating;
+    // this tolerant locator also matches a success toast if one is shown.
+    this.successMessage = page.locator(
+      '.toast, .alert-success, [class*="toast"], [class*="snackbar"]'
+    ).filter({ hasText: /success|updated|saved/i });
 
     // Map elements
-    this.mapRegion = page.getByRole("region", { name: "Map" });
-    this.mapZoomIn = page.getByRole("button", { name: "Zoom in" });
-    this.mapZoomOut = page.getByRole("button", { name: "Zoom out" });
+    this.mapRegion = page.getByRole("region", { name: "Map" }).first();
+    // Google Maps renders the zoom controls twice (a hidden duplicate + the
+    // rendered one), so scope to the visible button to avoid a strict-mode /
+    // hidden-element match. force-click handles the overlapping-control overlay.
+    this.mapZoomIn = page.locator('button[aria-label="Zoom in"]:visible');
+    this.mapZoomOut = page.locator('button[aria-label="Zoom out"]:visible');
     this.mapTypeSelector = page.getByRole("menubar");
   }
 
@@ -139,33 +177,101 @@ export class OrganizationSettingsPage {
    * Verify map controls are available
    */
   async verifyMapControlsVisible(): Promise<void> {
-    await expect(this.mapZoomIn).toBeVisible({ timeout: 5000 });
-    await expect(this.mapZoomOut).toBeVisible({ timeout: 5000 });
+    // The Google Map initialises asynchronously, so allow generous time for the
+    // zoom controls to render before asserting/clicking them.
+    await expect(this.mapZoomIn).toBeVisible({ timeout: 20000 });
+    await expect(this.mapZoomOut).toBeVisible({ timeout: 20000 });
   }
 
   /**
-   * Click edit organization button
+   * Open the Edit Organization modal.
+   *
+   * The edit affordance is a three-dot "more" button that opens a Bootstrap
+   * popover; the "Edit" link inside the popover opens (and populates) the modal.
    */
-  async clickEditOrganization(): Promise<void> {
+  async openEditModal(): Promise<void> {
     await this.editButton.click();
-    // Wait for edit modal or form to appear
-    await this.page.waitForSelector('.modal, [role="dialog"], form', { timeout: 5000 }).catch(() => {});
+    // Click the Edit link revealed inside the popover.
+    await this.editPopoverLink.click();
+    // The modal opens and is populated from the current organization data.
+    await expect(this.editModal).toBeVisible({ timeout: 10000 });
+    await expect(this.orgNameInput).not.toHaveValue("", { timeout: 10000 });
+  }
+
+  /** Backwards-compatible alias for openEditModal(). */
+  async clickEditOrganization(): Promise<void> {
+    await this.openEditModal();
+  }
+
+  /** Read the organization name currently displayed on the settings page. */
+  async getDisplayedOrgName(): Promise<string> {
+    return (await this.displayedOrgName.innerText()).trim();
   }
 
   /**
-   * Zoom in on map
+   * Set the Organization Name in the edit modal.
+   * The Update button stays disabled until a keyup/change fires, so we trigger
+   * those events after filling.
+   */
+  async setOrgName(name: string): Promise<void> {
+    await this.orgNameInput.fill(name);
+    await this.orgNameInput.dispatchEvent("keyup");
+    await this.orgNameInput.dispatchEvent("change");
+    await expect(this.updateButton).toBeEnabled({ timeout: 5000 });
+  }
+
+  /** Click Update and wait for the modal to close (the success signal). */
+  async clickUpdate(): Promise<void> {
+    await this.updateButton.click();
+    await expect(this.editModal).toBeHidden({ timeout: 10000 });
+  }
+
+  /**
+   * Assert the organization update succeeded. The canonical signal is the modal
+   * closing; if a success toast is rendered it is captured too (best-effort).
+   * Persistence of the new value is verified separately by reloading the page.
+   */
+  async expectUpdateSuccess(): Promise<void> {
+    await expect(this.editModal).toBeHidden({ timeout: 10000 });
+    if (await this.successMessage.count()) {
+      await expect(this.successMessage.first())
+        .toBeVisible({ timeout: 2000 })
+        .catch(() => {});
+    }
+  }
+
+  /** Cancel the edit modal without saving. */
+  async cancelEdit(): Promise<void> {
+    await this.cancelButton.click();
+    await expect(this.editModal).toBeHidden({ timeout: 10000 });
+  }
+
+  /**
+   * Click the "Manage" CTA in the top navigation to open the Settings page.
+   */
+  async clickManageCTA(baseUrl: string): Promise<void> {
+    // exact:true so it doesn't also match the "automated.manager@..." email link.
+    await this.page.getByRole("link", { name: "Manage", exact: true }).click();
+    await this.page.waitForURL("**/setting**", { timeout: 15000 }).catch(async () => {
+      await this.page.goto(`${baseUrl}/setting`, { waitUntil: "domcontentloaded" });
+    });
+  }
+
+  /**
+   * Zoom in on map.
+   * The Google Maps zoom-in/zoom-out buttons are stacked and a map overlay div
+   * sits on top, so Playwright's pointer-interception check fails. force:true
+   * dispatches the click straight to the button (its handler still fires).
    */
   async zoomInMap(): Promise<void> {
-    await this.mapZoomIn.click();
-    // Animation wait removed - element changes are observable
+    await this.mapZoomIn.click({ force: true });
   }
 
   /**
-   * Zoom out on map
+   * Zoom out on map (force:true for the same reason as zoomInMap).
    */
   async zoomOutMap(): Promise<void> {
-    await this.mapZoomOut.click();
-    // Animation wait removed - element changes are observable
+    await this.mapZoomOut.click({ force: true });
   }
 
   /**

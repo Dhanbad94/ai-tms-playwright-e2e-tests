@@ -1,4 +1,4 @@
-import { Environment } from '../types/env';
+import { Environment } from '../types';
 
 /**
  * Returns user credentials from environment variables.

@@ -12,12 +12,14 @@ export class ForgotPasswordPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.locator("#rec_email");
-    this.submitButton = page.locator("#submit-reset-password");
+    // Prefer user-facing locators (role/label/text) per Playwright best practices;
+    // fall back to stable ids/data-attributes only where no accessible handle exists.
+    this.emailInput = page.getByPlaceholder(/email address/i);
+    this.submitButton = page.getByRole("button", { name: /recover account/i });
     this.emailError = page.locator('[data-error="rec_email"]');
-    this.backToLoginLink = page.locator("a.back-to-login");
-    this.heading = page.locator("h3.text-center.pt-4");
-    this.subText = page.locator("p.sub-text");
+    this.backToLoginLink = page.getByRole("link", { name: /back to login/i });
+    this.heading = page.getByRole("heading", { name: /forgot password/i });
+    this.subText = page.getByText(/enter email address for recovery instructions/i);
     this.resetForm = page.locator("#frm_reset_password");
   }
 
@@ -37,9 +39,14 @@ export class ForgotPasswordPage {
   }
 
   /**
-   * Get error message for email field
+   * Get the inline validation error for the email field.
+   * The error span starts empty/hidden and only becomes visible (class
+   * `input-error active`) once client-side validation fails, so wait for it.
+   * Only call this on the recover-account form itself — a valid submit
+   * navigates to /reset-link-sent where this span does not exist.
    */
   async getEmailError(): Promise<string> {
+    await this.emailError.waitFor({ state: "visible", timeout: 10000 });
     return (await this.emailError.textContent())?.trim() || "";
   }
 

@@ -89,7 +89,7 @@ jobs:
 
           # Set base URL
           if [ "$ENV" == "staging" ]; then
-            BASE_URL="https://staging.trackmyshuttle.com"
+            BASE_URL="https://php-staging.trackmyshuttle.com"
             CAN_RUN="${{ needs.check-secrets.outputs.staging_configured }}"
           else
             BASE_URL="https://preproduction.trackmyshuttle.com"
@@ -180,6 +180,25 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
+      # Build the custom dashboard (dashboard-report.html + report-summary.json)
+      # that the Slack "View Report Results" CTA links to.
+      - name: Generate dashboard report
+        if: always()
+        run: npx tsx helpers/generate-report.ts || true
+        env:
+          ENV: ${{ needs.setup.outputs.environment }}
+          REPORT_TITLE: TMS Rider
+
+      - name: Upload dashboard report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dashboard-${{ matrix.browser }}-${{ github.run_number }}
+          path: |
+            dashboard-report.html
+            report-summary.json
+          retention-days: 30
+
       - name: Upload failure artifacts
         uses: actions/upload-artifact@v4
         if: failure()
@@ -222,39 +241,56 @@ jobs:
             echo "✅ All tests passed!"
           fi
 
-  # Notification
+  # Notification — posts the dashboard summary to Slack with a
+  # "View Report Results" CTA linking to this run (its dashboard-report.html
+  # artifact). Enable GitHub Pages + restore a publish job for a rendered link.
   notify:
     name: Notify Results
     runs-on: ubuntu-latest
     needs: [setup, full-suite-tests]
     if: always() && needs.setup.outputs.can_run == 'true'
     steps:
-      - name: Send notification
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
-        run: |
-          RESULT="${{ needs.full-suite-tests.result }}"
-          if [ "$RESULT" == "success" ]; then
-            EMOJI="✅"
-            TEXT="Full Suite Tests Passed"
-          else
-            EMOJI="❌"
-            TEXT="Full Suite Tests Failed"
-          fi
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-          curl -X POST -H 'Content-type: application/json' \
-            --data "{
-              \"text\": \"$EMOJI $TEXT\",
-              \"blocks\": [
-                {
-                  \"type\": \"section\",
-                  \"text\": {
-                    \"type\": \"mrkdwn\",
-                    \"text\": \"$EMOJI *$TEXT*\n\n*Environment:* ${{ needs.setup.outputs.environment }}\n*Browsers:* Multi-browser\n*Run:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Details>\"
-                  }
-                }
-              ]
-            }" \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download chromium dashboard summary
+        uses: actions/download-artifact@v4
+        with:
+          name: dashboard-chromium-${{ github.run_number }}
+        continue-on-error: true
+
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # No REPORT_URL → the notifier uses RUN_URL for the CTA (this run's
+          # page, where dashboard-report.html is an artifact).
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPORT_TITLE: TMS Rider
+          ENV: ${{ needs.setup.outputs.environment }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "SLACK_WEBHOOK_URL not set — skipping Slack notification."
+            exit 0
+          fi
+          if [ -f report-summary.json ]; then
+            npx tsx helpers/notify-slack.ts
+          else
+            echo "report-summary.json missing — sending minimal fallback."
+            RESULT="${{ needs.full-suite-tests.result }}"
+            [ "$RESULT" == "success" ] && EMOJI="✅" && TEXT="Full Suite Tests Passed" || EMOJI="❌" && TEXT="Full Suite Tests Failed"
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"$EMOJI $TEXT — <${RUN_URL}|View Report Results>\"}" \
+              "$SLACK_WEBHOOK_URL"
+          fi
         continue-on-error: true
 
   # Skip notification

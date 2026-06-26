@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { getBaseUrl } from "../tests/ASAPSettings/fixtures/test-data";
 
 export class LoginPage {
   readonly page: Page;
@@ -56,7 +57,7 @@ export class LoginPage {
    */
   async goto() {
     const response = await this.page.goto(
-      "https://staging.trackmyshuttle.com/login",
+      `${getBaseUrl()}/login`,
       {
         waitUntil: "domcontentloaded", // Don't wait for all network requests
         timeout: 30000,
@@ -104,6 +105,12 @@ export class LoginPage {
       }
 
       if (!formFound) {
+        // If we are no longer on the login route, an authenticated session
+        // (Playwright storageState) redirected us to the dashboard. Treat this
+        // as "already logged in" and continue instead of failing.
+        if (!this.page.url().includes("/login")) {
+          return;
+        }
         throw new Error("Login form not found with any selector");
       }
 
@@ -146,6 +153,11 @@ export class LoginPage {
     // Ensure we are on the login page before interacting
     if (!(await this.isOnLoginPage())) {
       await this.goto();
+      // goto() may redirect to the dashboard when an authenticated session
+      // (storageState) is already active. In that case there is nothing to do.
+      if (!(await this.isOnLoginPage())) {
+        return;
+      }
     }
 
     // Wait for email and password inputs to be visible

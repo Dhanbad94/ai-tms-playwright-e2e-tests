@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { getBaseUrl } from "../tests/ASAPSettings/fixtures/test-data";
 
 export class ProfilePage {
   readonly page: Page;
@@ -169,17 +170,14 @@ export class ProfilePage {
    * Navigate to profile page and verify it loaded
    */
   async navigateToProfileAndVerify(): Promise<void> {
-    await this.clickViewProfile();
-    // Wait for profile content to be visible
+    // Navigate directly to the auth-gated /profile route. This is robust across
+    // environments and avoids the org-specific user dropdown (the dropdown label
+    // differs per organization, which made the click-based flow unreliable).
+    await this.page.goto(`${getBaseUrl()}/profile`, {
+      waitUntil: "domcontentloaded",
+    });
     await expect(this.profileDetailsTab).toBeVisible({ timeout: 10000 });
-
-    // Verify we're on profile page
-    const currentUrl = this.page.url();
-    expect(
-      currentUrl.includes("profile") ||
-        currentUrl.includes("user") ||
-        currentUrl.includes("account"),
-    ).toBeTruthy();
+    expect(this.page.url()).toContain("/profile");
   }
 
   /**

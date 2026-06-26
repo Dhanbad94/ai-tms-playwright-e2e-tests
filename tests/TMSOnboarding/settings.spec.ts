@@ -3,6 +3,7 @@ import { LoginPage } from "../../pages/login_page";
 import { DashboardPage } from "../../pages/dashboard_page";
 import { SettingsPage } from "../../pages/settings_page";
 import { TEST_DATA } from "../../utils/test-data";
+import { autoDismissCookieBanner } from "../../helpers/dismissCookieBanner";
 
 // Helper function to get credentials
 function getCredentials(role: "OPERATOR" | "MANAGER") {
@@ -33,6 +34,7 @@ test.describe("Settings Page Tests", () => {
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
     settingsPage = new SettingsPage(page);
+    await autoDismissCookieBanner(page);
   });
 
   test("Performance: Settings load time @performance @settings", async ({

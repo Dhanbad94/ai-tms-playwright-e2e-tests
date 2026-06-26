@@ -16,6 +16,9 @@
     "test:preprod": "cross-env ENV=preproduction npx playwright test",
     "test:prod": "cross-env ENV=production npx playwright test",
     "report": "npx playwright show-report",
+    "report:dashboard": "npx tsx helpers/generate-report.ts",
+    "notify:slack": "npx tsx helpers/notify-slack.ts",
+    "report:notify": "npx tsx helpers/generate-report.ts && npx tsx helpers/notify-slack.ts",
     "codegen": "npx playwright codegen",
     "install:browsers": "npx playwright install --with-deps"
   },
@@ -25,10 +28,12 @@
   "description": "",
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
+    "@playwright/mcp": "^0.0.76",
     "@playwright/test": "^1.54.2",
     "@types/node": "^24.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^17.2.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.9.2"
   }
 }

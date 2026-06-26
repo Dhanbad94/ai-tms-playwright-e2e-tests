@@ -28,7 +28,7 @@ export function getCredentials(role: "MANAGER" | "OPERATOR") {
  * Base URLs by environment
  */
 export const BASE_URLS = {
-  staging: "https://staging.trackmyshuttle.com",
+  staging: "https://php-staging.trackmyshuttle.com",
   preproduction: "https://preproduction.trackmyshuttle.com",
   production: "https://trackmyshuttle.com",
   prod: "https://trackmyshuttle.com",
@@ -59,12 +59,14 @@ export const SETTINGS_TAB_HASHES = {
   userManagement: "#members",
   operationSettings: "#platformSetting",
   operationHours: "#hours-of-operation",
+  serviceAreaSchedule: "#settings_service_area_schedule",
   riderApp: "#guests",
   driverApp: "#driver-setting",
   liveDisplay: "#live_display",
   alerts: "#alerts",
   escalations: "#escaltionSettings",
-  pricingSetup: "#stripe",
+  whatsappNotification: "#settings_whatsapp",
+  stopSchedule: "#settings_stop_schedule",
 } as const;
 
 /**
@@ -75,12 +77,13 @@ export const SETTINGS_TAB_NAMES = [
   "User Management",
   "Operation Settings",
   "Operation Hours",
+  "Service Area Schedule",
   "Rider App",
   "Driver App",
   "Live display",
   "Alerts",
   "Escalations",
-  "Pricing Setup",
+  "WhatsApp Notification",
 ] as const;
 
 /**

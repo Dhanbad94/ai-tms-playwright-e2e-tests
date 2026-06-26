@@ -421,17 +421,7 @@ export class UserManagementPage {
     lastLogin: string;
     status: string;
   }> {
-    const row = this.getUserRowByEmail(email);
-    const cells = await row.getByRole("cell").all();
-
-    return {
-      name: ((await cells[0]?.textContent()) || "").trim(),
-      email: ((await cells[1]?.textContent()) || "").trim(),
-      role: ((await cells[2]?.textContent()) || "").trim(),
-      phone: ((await cells[3]?.textContent()) || "").trim(),
-      lastLogin: ((await cells[4]?.textContent()) || "").trim(),
-      status: ((await cells[5]?.textContent()) || "").trim(),
-    };
+    return this.readUserRow(this.getUserRowByEmail(email));
   }
 
   /**
@@ -446,16 +436,37 @@ export class UserManagementPage {
     lastLogin: string;
     status: string;
   }> {
-    const row = this.getUserRowByName(name);
-    const cells = await row.getByRole("cell").all();
+    return this.readUserRow(this.getUserRowByName(name));
+  }
+
+  /**
+   * Read the six data columns from a user row.
+   *
+   * DataTables re-renders the rows asynchronously after the tab opens, and
+   * Locator.all() does NOT auto-wait — calling it too early returns an empty
+   * cell list (every field comes back ""). So wait for the row and its first
+   * cell to render, and read <td> directly rather than via the ARIA "cell"
+   * role (robust against the DataTables grid markup).
+   */
+  private async readUserRow(row: Locator): Promise<{
+    name: string;
+    email: string;
+    role: string;
+    phone: string;
+    lastLogin: string;
+    status: string;
+  }> {
+    await row.first().waitFor({ state: "visible", timeout: 10000 });
+    const cells = row.first().locator("td");
+    await cells.first().waitFor({ state: "visible", timeout: 10000 });
 
     return {
-      name: ((await cells[0]?.textContent()) || "").trim(),
-      email: ((await cells[1]?.textContent()) || "").trim(),
-      role: ((await cells[2]?.textContent()) || "").trim(),
-      phone: ((await cells[3]?.textContent()) || "").trim(),
-      lastLogin: ((await cells[4]?.textContent()) || "").trim(),
-      status: ((await cells[5]?.textContent()) || "").trim(),
+      name: ((await cells.nth(0).textContent()) || "").trim(),
+      email: ((await cells.nth(1).textContent()) || "").trim(),
+      role: ((await cells.nth(2).textContent()) || "").trim(),
+      phone: ((await cells.nth(3).textContent()) || "").trim(),
+      lastLogin: ((await cells.nth(4).textContent()) || "").trim(),
+      status: ((await cells.nth(5).textContent()) || "").trim(),
     };
   }
 

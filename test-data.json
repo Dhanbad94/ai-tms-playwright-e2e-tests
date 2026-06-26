@@ -1,6 +1,6 @@
 {
   "staging": {
-    "baseURL": "https://staging.trackmyshuttle.com/",
+    "baseURL": "https://php-staging.trackmyshuttle.com/",
     "user": "staging_user@example.com",
     "password": "staging_pass"
   },

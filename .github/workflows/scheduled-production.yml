@@ -1,21 +1,18 @@
 name: Scheduled Tests - Production
 
 # Schedule:
-# - Smoke tests Friday at 10:00 AM UTC (Production health check)
-# - Regression tests Sunday at 6:00 AM UTC (Weekend validation)
+# - Daily read-only @prod health check at 05:00 UTC (overnight ET: 1 AM EDT / 12 AM EST)
 
 # ⚠️ PRODUCTION SAFETY NOTES:
-# - Only smoke and read-only tests should run
+# - Only read-only @prod-tagged tests run (enforced via --grep @prod below)
 # - Avoid CRUD operations that modify production data
 # - Tests should be non-destructive
 # - Failures trigger critical alerts
 
 on:
   schedule:
-    # Friday at 10:00 AM UTC - Smoke tests
-    - cron: '0 10 * * 5'
-    # Sunday at 6:00 AM UTC - Regression tests
-    - cron: '0 6 * * 0'
+    # Daily at 05:00 UTC (overnight ET) - read-only @prod health check
+    - cron: '0 5 * * *'
 
   # Allow manual trigger
   workflow_dispatch:
@@ -43,6 +40,12 @@ on:
         required: true
         default: ''
         type: string
+
+# Prevent a manual run or an overrun from colliding with the scheduled run
+# (avoids same-account login session conflicts). Queue rather than cancel prod.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 env:
   ENV: production
@@ -111,6 +114,10 @@ jobs:
       total_tests: ${{ steps.test-result.outputs.total }}
       passed_tests: ${{ steps.test-result.outputs.passed }}
       failed_tests: ${{ steps.test-result.outputs.failed }}
+      skipped_tests: ${{ steps.test-result.outputs.skipped }}
+      passed_on_retry: ${{ steps.test-result.outputs.flaky }}
+      retried_tests: ${{ steps.test-result.outputs.retried }}
+      pass_rate: ${{ steps.test-result.outputs.passRate }}
       duration: ${{ steps.test-result.outputs.duration }}
 
     steps:
@@ -131,10 +138,10 @@ jobs:
 
       - name: Create .env.local from secrets
         run: |
-          echo "STAGING_MANAGER_EMAIL=${{ secrets.PROD_MANAGER_EMAIL }}" > .env.local
-          echo "STAGING_MANAGER_PASSWORD=${{ secrets.PROD_MANAGER_PASSWORD }}" >> .env.local
-          echo "STAGING_OPERATOR_EMAIL=${{ secrets.PROD_OPERATOR_EMAIL }}" >> .env.local
-          echo "STAGING_OPERATOR_PASSWORD=${{ secrets.PROD_OPERATOR_PASSWORD }}" >> .env.local
+          echo "PROD_MANAGER_EMAIL=${{ secrets.PROD_MANAGER_EMAIL }}" > .env.local
+          echo "PROD_MANAGER_PASSWORD=${{ secrets.PROD_MANAGER_PASSWORD }}" >> .env.local
+          echo "PROD_OPERATOR_EMAIL=${{ secrets.PROD_OPERATOR_EMAIL }}" >> .env.local
+          echo "PROD_OPERATOR_PASSWORD=${{ secrets.PROD_OPERATOR_PASSWORD }}" >> .env.local
 
       - name: Determine test configuration
         id: test-config
@@ -143,13 +150,9 @@ jobs:
             TEST_TYPE="${{ github.event.inputs.test_type }}"
             TEST_SUITE="${{ github.event.inputs.test_suite }}"
           else
-            # Determine based on schedule
-            DAY=$(date -u +%u)
-            if [ "$DAY" == "5" ]; then
-              TEST_TYPE="smoke"
-            else
-              TEST_TYPE="regression"
-            fi
+            # Scheduled daily run: read-only production health check.
+            # (Execution is always restricted to @prod tests; this is just a label.)
+            TEST_TYPE="health-check"
             TEST_SUITE="all"
           fi
 
@@ -167,15 +170,15 @@ jobs:
 
           CMD="npx playwright test --project=chromium"
 
-          if [ "$TEST_TYPE" != "all" ]; then
-            CMD="$CMD --grep @$TEST_TYPE"
-          fi
+          # PRODUCTION SAFETY: only ever run read-only @prod-tagged tests, regardless
+          # of the requested test type, so no CRUD/data-mutating test touches prod.
+          CMD="$CMD --grep @prod"
 
           if [ "$TEST_SUITE" != "all" ]; then
             CMD="$CMD tests/$TEST_SUITE/"
           fi
 
-          echo "🚨 Running on PRODUCTION: $CMD"
+          echo "🚨 Running on PRODUCTION (read-only @prod only): $CMD"
           START_TIME=$(date +%s)
 
           set +e
@@ -194,34 +197,33 @@ jobs:
           ENV: production
           BASE_URL: https://trackmyshuttle.com
 
+      - name: Generate dashboard report
+        if: always()
+        run: npx tsx helpers/generate-report.ts || true
+
       - name: Parse test results
         id: test-result
         if: always()
         run: |
-          if [ -f "test-results.json" ]; then
-            TOTAL=$(jq '.stats.expected + .stats.unexpected + .stats.flaky // 0' test-results.json 2>/dev/null || echo "0")
-            PASSED=$(jq '.stats.expected // 0' test-results.json 2>/dev/null || echo "0")
-            FAILED=$(jq '.stats.unexpected // 0' test-results.json 2>/dev/null || echo "0")
-            DURATION=$(jq '.stats.duration // 0' test-results.json 2>/dev/null || echo "0")
-            DURATION_SEC=$((DURATION / 1000))
+          if [ -f "report-summary.json" ]; then
+            for k in total passed failed skipped flaky retried passRate duration; do
+              echo "$k=$(jq -r ".$k" report-summary.json)" >> "$GITHUB_OUTPUT"
+            done
           else
-            TOTAL="N/A"
-            PASSED="N/A"
-            FAILED="N/A"
-            DURATION_SEC="${{ steps.run-tests.outputs.duration }}"
+            for k in total passed failed skipped flaky retried passRate duration; do
+              echo "$k=N/A" >> "$GITHUB_OUTPUT"
+            done
           fi
-
-          echo "total=$TOTAL" >> $GITHUB_OUTPUT
-          echo "passed=$PASSED" >> $GITHUB_OUTPUT
-          echo "failed=$FAILED" >> $GITHUB_OUTPUT
-          echo "duration=${DURATION_SEC}s" >> $GITHUB_OUTPUT
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: production-report-${{ steps.test-config.outputs.test_type }}-${{ github.run_number }}
-          path: playwright-report/
+          path: |
+            playwright-report/
+            dashboard-report.html
+            report-summary.json
           retention-days: 30
 
       - name: Upload failure artifacts
@@ -244,10 +246,16 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           RESULT="${{ needs.production-tests.result }}"
+          # CTA target: this run's page (the dashboard-report.html artifact lives there).
+          REPORT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           TEST_TYPE="${{ needs.production-tests.outputs.test_type }}"
           TOTAL="${{ needs.production-tests.outputs.total_tests }}"
           PASSED="${{ needs.production-tests.outputs.passed_tests }}"
           FAILED="${{ needs.production-tests.outputs.failed_tests }}"
+          SKIPPED="${{ needs.production-tests.outputs.skipped_tests }}"
+          ON_RETRY="${{ needs.production-tests.outputs.passed_on_retry }}"
+          RETRIED="${{ needs.production-tests.outputs.retried_tests }}"
+          PASS_RATE="${{ needs.production-tests.outputs.pass_rate }}"
           DURATION="${{ needs.production-tests.outputs.duration }}"
 
           if [ "$RESULT" == "success" ]; then
@@ -293,11 +301,27 @@ jobs:
                         },
                         {
                           \"type\": \"mrkdwn\",
+                          \"text\": \"*Pass Rate:*\n${PASS_RATE}%\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
                           \"text\": \"*Passed:*\n${PASSED}\"
                         },
                         {
                           \"type\": \"mrkdwn\",
                           \"text\": \"*Failed:*\n${FAILED}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Skipped:*\n${SKIPPED}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Passed on Retry:*\n${ON_RETRY}\"
+                        },
+                        {
+                          \"type\": \"mrkdwn\",
+                          \"text\": \"*Retried:*\n${RETRIED}\"
                         },
                         {
                           \"type\": \"mrkdwn\",
@@ -319,10 +343,10 @@ jobs:
                           \"type\": \"button\",
                           \"text\": {
                             \"type\": \"plain_text\",
-                            \"text\": \"View Results\",
+                            \"text\": \"View Report Results\",
                             \"emoji\": true
                           },
-                          \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                          \"url\": \"$REPORT_URL\"
                         }
                       ]
                     }

@@ -4,7 +4,7 @@ export default function setLaunchURL(env: string, customer: string): string {
   let launchURL: string;
   switch (env) {
     case 'staging':
-      launchURL = 'https://staging.trackmyshuttle.com/';
+      launchURL = 'https://php-staging.trackmyshuttle.com/';
       break;
     case 'preproduction':
       launchURL = 'https://preproduction.trackmyshuttle.com/';
