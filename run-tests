@@ -6,16 +6,23 @@ ENV="staging"
 FILE_FILTER=""
 BROWSERS=()
 RUN_ALL=false
+TAG=""
 
 show_help() {
-  echo "Usage: $0 -e <env> -f <file-filter> [--bc] [--bf] [--bs] [-u]"
+  echo "Usage: $0 -e <env> -f <file-filter> -t <tag> [--bc] [--bf] [--bs] [-u]"
   echo "  -e, --env           Environment: staging, preproduction, prod, production"
   echo "  -f, --file          Feature/file filter (e.g., login, dashboard)"
+  echo "  -t, --tag           Run only tests with this tag (e.g., smoke, regression, prod)"
   echo "  --bc                Include Chromium"
   echo "  --bf                Include Firefox"
   echo "  --bs                Include Webkit"
   echo "  -u, --update-all    Execute all test cases (equivalent to: all -e dev --bc)"
   echo "  -h, --help          Show this help message"
+  echo
+  echo "Examples:"
+  echo "  $0 -e prod -t prod --bc          # read-only @prod health check on production"
+  echo "  $0 -e staging -t smoke --bc      # @smoke tests on staging"
+  echo "  $0 -u all -t regression          # all @regression tests (chromium)"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -28,6 +35,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -f|--file)
       FILE_FILTER="$2"
+      shift; shift
+      ;;
+    -t|--tag)
+      TAG="$2"
       shift; shift
       ;;
     --bc)
@@ -112,6 +123,12 @@ if [[ -n "$FILE_FILTER" ]]; then
     # Fallback to file pattern matching
     CMD+=" tests/**/*$FILE_FILTER*.spec.ts"
   fi
+fi
+
+# Tag filter: run only tests carrying @<tag> (e.g. smoke, regression, prod)
+if [[ -n "$TAG" ]]; then
+  TAG="${TAG#@}"          # accept either "-t smoke" or "-t @smoke"
+  CMD+=" --grep @$TAG"
 fi
 
 if [[ "$RUN_ALL" == true ]]; then
