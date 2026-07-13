@@ -13,7 +13,6 @@ on:
         type: choice
         options:
           - staging
-          - preproduction
           - production
       test_type:
         description: 'Test type to run'
@@ -79,16 +78,14 @@ jobs:
       
       - name: Run Playwright tests
         env:
+          # BASE_URL is derived from ENV by the Playwright config (getBaseUrl) —
+          # no BASE_URL_* secret needed.
           ENV: ${{ steps.env.outputs.environment }}
-          BASE_URL: ${{ secrets[format('BASE_URL_{0}', steps.env.outputs.environment)] }}
           STAGING_MANAGER_EMAIL: ${{ secrets.STAGING_MANAGER_EMAIL }}
           STAGING_MANAGER_PASSWORD: ${{ secrets.STAGING_MANAGER_PASSWORD }}
           STAGING_OPERATOR_EMAIL: ${{ secrets.STAGING_OPERATOR_EMAIL }}
           STAGING_OPERATOR_PASSWORD: ${{ secrets.STAGING_OPERATOR_PASSWORD }}
-          PREPRODUCTION_MANAGER_EMAIL: ${{ secrets.PREPRODUCTION_MANAGER_EMAIL }}
-          PREPRODUCTION_MANAGER_PASSWORD: ${{ secrets.PREPRODUCTION_MANAGER_PASSWORD }}
-          PREPRODUCTION_OPERATOR_EMAIL: ${{ secrets.PREPRODUCTION_OPERATOR_EMAIL }}
-          PREPRODUCTION_OPERATOR_PASSWORD: ${{ secrets.PREPRODUCTION_OPERATOR_PASSWORD }}
+          # Preproduction is covered by scheduled-preprod.yml (its own creds).
           PROD_MANAGER_EMAIL: ${{ secrets.PROD_MANAGER_EMAIL }}
           PROD_MANAGER_PASSWORD: ${{ secrets.PROD_MANAGER_PASSWORD }}
           PROD_OPERATOR_EMAIL: ${{ secrets.PROD_OPERATOR_EMAIL }}
@@ -112,7 +109,7 @@ jobs:
         run: npx tsx helpers/generate-report.ts || true
         env:
           ENV: ${{ steps.env.outputs.environment }}
-          REPORT_TITLE: TMS Rider
+          REPORT_TITLE: TMS Operator Web App
 
       - name: Parse report summary
         id: parse-results
@@ -246,9 +243,9 @@ jobs:
           [ -z "$REPORT_URL" ] && REPORT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           if [ "$RESULT" == "success" ]; then
-            EMOJI="✅"; COLOR="#36a64f"; HEADER="TMS Rider — Tests Passed"
+            EMOJI="✅"; COLOR="#36a64f"; HEADER="TMS Operator Web App — Tests Passed"
           else
-            EMOJI="❌"; COLOR="#dc3545"; HEADER="TMS Rider — Tests Failed"
+            EMOJI="❌"; COLOR="#dc3545"; HEADER="TMS Operator Web App — Tests Failed"
           fi
 
           curl -s -X POST "$SLACK_WEBHOOK_URL" \

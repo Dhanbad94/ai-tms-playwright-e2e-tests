@@ -1,11 +1,11 @@
 name: Scheduled Tests - Preproduction
 
 # Schedule:
-# - Full suite nightly Mon-Fri at 07:00 UTC (overnight ET: 3 AM EDT / 2 AM EST)
+# - Read-only @prod health check Mon-Fri at 07:00 UTC (same set as Production)
 
 on:
   schedule:
-    # Mon-Fri at 07:00 UTC (overnight ET) - full pre-release validation suite
+    # Mon-Fri at 07:00 UTC (overnight ET) - read-only @prod health check
     - cron: '0 7 * * 1-5'
 
   # Allow manual trigger
@@ -118,8 +118,8 @@ jobs:
             TEST_TYPE="${{ github.event.inputs.test_type }}"
             TEST_SUITE="${{ github.event.inputs.test_suite }}"
           else
-            # Scheduled run - full suite
-            TEST_TYPE="all"
+            # Scheduled run — read-only @prod health check (same set as Production)
+            TEST_TYPE="prod"
             TEST_SUITE="all"
           fi
 

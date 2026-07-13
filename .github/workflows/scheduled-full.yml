@@ -22,11 +22,11 @@ on:
       browsers:
         description: 'Browsers to test'
         required: true
-        default: 'all'
+        default: 'chromium'
         type: choice
         options:
-          - all
           - chromium
+          - all
           - firefox
           - webkit
       test_suite:
@@ -84,7 +84,9 @@ jobs:
             BROWSERS="${{ github.event.inputs.browsers }}"
           else
             ENV="staging"
-            BROWSERS="all"
+            # Scheduled full suite runs on Chromium only (not firefox/webkit).
+            # Manual workflow_dispatch can still select all/firefox/webkit.
+            BROWSERS="chromium"
           fi
 
           # Set base URL

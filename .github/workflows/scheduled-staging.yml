@@ -1,15 +1,12 @@
 name: Scheduled Tests - Staging
 
 # Schedule:
-# - Daily smoke tests Mon-Fri at 6:00 AM UTC
-# - Regression tests Tue, Thu at 8:00 AM UTC
+# - Full suite (all ~140 tests) Mon-Fri at 6:00 AM UTC
 
 on:
   schedule:
-    # Daily smoke tests Monday-Friday at 6:00 AM UTC
+    # Full suite Monday-Friday at 6:00 AM UTC
     - cron: '0 6 * * 1-5'
-    # Regression tests Tuesday and Thursday at 8:00 AM UTC
-    - cron: '0 8 * * 2,4'
 
   # Allow manual trigger
   workflow_dispatch:
@@ -17,13 +14,13 @@ on:
       test_type:
         description: 'Test type to run'
         required: true
-        default: 'smoke'
+        default: 'all'
         type: choice
         options:
+          - all
           - smoke
           - regression
           - critical
-          - all
       test_suite:
         description: 'Test suite to run'
         required: false
@@ -119,15 +116,8 @@ jobs:
             TEST_TYPE="${{ github.event.inputs.test_type }}"
             TEST_SUITE="${{ github.event.inputs.test_suite }}"
           else
-            # Determine based on cron schedule
-            HOUR=$(date -u +%H)
-            DAY=$(date -u +%u)
-
-            if [ "$HOUR" == "08" ] && ([ "$DAY" == "2" ] || [ "$DAY" == "4" ]); then
-              TEST_TYPE="regression"
-            else
-              TEST_TYPE="smoke"
-            fi
+            # Scheduled run — full suite (all ~140 tests)
+            TEST_TYPE="all"
             TEST_SUITE="all"
           fi
 
