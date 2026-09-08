@@ -112,7 +112,7 @@ jobs:
         run: npx tsx helpers/generate-report.ts || true
         env:
           ENV: ${{ steps.env.outputs.environment }}
-          REPORT_TITLE: TMS Rider
+          REPORT_TITLE: TMS Operator
 
       - name: Parse report summary
         id: parse-results
@@ -246,9 +246,9 @@ jobs:
           [ -z "$REPORT_URL" ] && REPORT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           if [ "$RESULT" == "success" ]; then
-            EMOJI="✅"; COLOR="#36a64f"; HEADER="TMS Rider — Tests Passed"
+            EMOJI="✅"; COLOR="#36a64f"; HEADER="TMS Operator — Tests Passed"
           else
-            EMOJI="❌"; COLOR="#dc3545"; HEADER="TMS Rider — Tests Failed"
+            EMOJI="❌"; COLOR="#dc3545"; HEADER="TMS Operator — Tests Failed"
           fi
 
           curl -s -X POST "$SLACK_WEBHOOK_URL" \

@@ -25,7 +25,7 @@ Environment variables:
 | `SLACK_WEBHOOK_URL` | Incoming-webhook URL. **Unset → dry-run** (writes `slack-payload.json`, prints it). |
 | `REPORT_URL` | Public URL of the published `dashboard-report.html` (the CTA target). |
 | `RUN_URL` | CI run URL. Used as the CTA fallback when `REPORT_URL` is unset, and as a secondary "CI Run" button. |
-| `REPORT_TITLE` | Branding for the dashboard header + Slack header (default `TMS Rider`). |
+| `REPORT_TITLE` | Branding for the dashboard header + Slack header (default `TMS Operator`). |
 
 The CTA degrades gracefully: `REPORT_URL` → else `RUN_URL` → else the button is omitted (with a warning).
 

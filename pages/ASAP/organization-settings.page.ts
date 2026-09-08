@@ -21,7 +21,6 @@ export class OrganizationSettingsPage {
 
   // Edit button (three-dot "more" popover trigger) + popover Edit link
   readonly editButton: Locator;
-  readonly editPopoverLink: Locator;
   readonly displayedOrgName: Locator;
 
   // Edit Organization modal (#editModalManager)
@@ -57,16 +56,16 @@ export class OrganizationSettingsPage {
     this.trackingId = page.locator('text=/Tracking ID\\s?:\\s?\\w+/').first();
     this.timezone = page.locator('text=/Time Zone\\s?:/').first();
 
-    // Edit affordance: a three-dot "more" button that opens a Bootstrap popover
-    // containing the "Edit" link, which in turn opens the edit-organization modal.
+    // Edit affordance: the pencil (edit-tooltip) button in the org top-bar
+    // opens the edit-organization modal directly. (It previously revealed a
+    // Bootstrap popover with an "Edit" link — that intermediate step is gone.)
     this.editButton = page.locator("div.top-bar button.btn.edit-tooltip").first();
-    this.editPopoverLink = page.locator(".popover.in a.manager_edit_org");
     this.displayedOrgName = page.locator(".hotel--name").first();
 
     // Edit Organization modal
     this.editModal = page.locator("#editModalManager");
     this.editModalTitle = this.editModal
-      .getByText(/Edit Organization Details/i)
+      .getByText(/Edit Details/i)
       .first();
     this.orgNameInput = this.editModal.locator("#org_name");
     this.phoneInput = this.editModal.locator("#guest_phone");
@@ -190,12 +189,14 @@ export class OrganizationSettingsPage {
    * popover; the "Edit" link inside the popover opens (and populates) the modal.
    */
   async openEditModal(): Promise<void> {
+    // The pencil (edit-tooltip) button opens the edit-organization modal
+    // directly. A real user click is required (the handler ignores synthetic
+    // clicks) — Playwright's click() provides one.
     await this.editButton.click();
-    // Click the Edit link revealed inside the popover.
-    await this.editPopoverLink.click();
-    // The modal opens and is populated from the current organization data.
     await expect(this.editModal).toBeVisible({ timeout: 10000 });
-    await expect(this.orgNameInput).not.toHaveValue("", { timeout: 10000 });
+    // The form is populated asynchronously (AJAX) after the modal opens; on a
+    // cold first run this can lag, so allow generous time for the name to fill.
+    await expect(this.orgNameInput).not.toHaveValue("", { timeout: 20000 });
   }
 
   /** Backwards-compatible alias for openEditModal(). */
