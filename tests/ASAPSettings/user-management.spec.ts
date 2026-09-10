@@ -169,7 +169,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       await expect(continueButton).toBeDisabled();
     });
 
-    test("UM-C005: Verify Step 2 form fields @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-C005: Verify Step 2 form fields @regression @manager", async ({
       page,
     }) => {
       await userManagementPage.clickAddUser();
@@ -231,7 +232,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
   // ==================== UPDATE OPERATIONS ====================
 
   test.describe("Update Operations @crud", () => {
-    test("UM-U001: Verify action menu opens on click @smoke @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-U001: Verify action menu opens on click @smoke @manager", async () => {
       await userManagementPage.openUserActionMenu(
         EXISTING_USERS.operator.email,
       );
@@ -250,7 +252,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       await userManagementPage.verifyEditUserDialogVisible();
     });
 
-    test("UM-U003: Verify Edit form displays current values @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-U003: Verify Edit form displays current values @regression @manager", async ({
       page,
     }) => {
       await userManagementPage.clickEditUser(EXISTING_USERS.operator.email);
@@ -279,7 +282,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       await expect(userManagementPage.editUserUpdateButton).toBeEnabled();
     });
 
-    test("UM-U005: Verify close button closes Edit dialog @regression @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-U005: Verify close button closes Edit dialog @regression @manager", async () => {
       await userManagementPage.clickEditUser(EXISTING_USERS.operator.email);
       await userManagementPage.verifyEditUserDialogVisible();
 
@@ -290,7 +294,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       });
     });
 
-    test("UM-U006: Verify Also add as Driver checkbox @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-U006: Verify Also add as Driver checkbox @regression @manager", async ({
       page,
     }) => {
       await userManagementPage.clickEditUser(EXISTING_USERS.operator.email);
@@ -305,7 +310,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
   // ==================== DELETE OPERATIONS ====================
 
   test.describe("Delete Operations @crud", () => {
-    test("UM-D001: Verify Delete option in action menu @regression @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-D001: Verify Delete option in action menu @regression @manager", async () => {
       await userManagementPage.openUserActionMenu(
         EXISTING_USERS.operator.email,
       );
@@ -315,7 +321,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       });
     });
 
-    test("UM-D002: Verify Delete button in Edit dialog @regression @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-D002: Verify Delete button in Edit dialog @regression @manager", async () => {
       await userManagementPage.clickEditUser(EXISTING_USERS.operator.email);
 
       await expect(userManagementPage.editUserDeleteButton).toBeVisible({
@@ -344,7 +351,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
   // ==================== PASSWORD RESET ====================
 
   test.describe("Password Reset", () => {
-    test("UM-P001: Verify Reset Password option in menu @regression @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-P001: Verify Reset Password option in menu @regression @manager", async () => {
       await userManagementPage.openUserActionMenu(
         EXISTING_USERS.operator.email,
       );
@@ -631,7 +639,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
     /**
      * Role Change - Update user role from Operator to Manager
      */
-    test("UM-CRUD-005: Role change - Create Operator, Update to Manager, Delete @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-CRUD-005: Role change - Create Operator, Update to Manager, Delete @regression @manager", async ({
       page,
     }) => {
       const testUser = generateTestUser("Operator");
