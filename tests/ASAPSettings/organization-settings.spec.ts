@@ -79,10 +79,9 @@ test.describe("ASAP Organization Settings Tests @asap @settings", () => {
     await orgSettingsPage.verifyMapTypeSelected("Map");
   });
 
-  test("OS-010: Verify edit organization button exists @regression @manager", async ({ page }) => {
-    // Edit button should be visible (icon button)
-    const editButton = page.getByRole("button", { name: "icon" }).first();
-    await expect(editButton).toBeVisible({ timeout: TIMEOUTS.short });
+  test("OS-010: Verify edit organization button exists @regression @manager", async () => {
+    // The edit affordance is the pencil (edit-tooltip) button in the org top-bar.
+    await expect(orgSettingsPage.editButton).toBeVisible({ timeout: TIMEOUTS.short });
   });
 
   // ---------- Organization Edit / Update (Org Name round-trip) ----------

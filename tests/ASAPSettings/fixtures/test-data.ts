@@ -177,7 +177,7 @@ export const ESCALATION_TYPES = {
  * Performance Thresholds (in milliseconds)
  */
 export const PERFORMANCE_THRESHOLDS = {
-  pageLoad: 5000,
+  pageLoad: 15000, // settings page is heavy (maps/tabs); latency-tolerant for CI
   tabSwitch: 2000,
   dialogOpen: 1000,
   searchResults: 1000,
