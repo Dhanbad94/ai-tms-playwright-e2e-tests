@@ -14,9 +14,9 @@
   .card .label{font-size:12px;text-transform:uppercase;color:#666;margin-top:4px}
   .card.total .number{color:#1a73e8}.card.passed .number{color:#0d9e0d}.card.failed .number{color:#d93025}
   .card.skipped .number{color:#f9a825}.card.flaky .number{color:#e65100}.card.retried .number{color:#ff6d00}
-  .card.duration .number{color:#5f6368;font-size:24px}.card.rate .number{color:#f9a825}
+  .card.duration .number{color:#5f6368;font-size:24px}.card.rate .number{color:#0d9e0d}
   .progress-bar{height:6px;background:#e0e0e0;border-radius:3px;margin:20px 40px;overflow:hidden}
-  .progress-bar .fill{height:100%;background:#f9a825;border-radius:3px}
+  .progress-bar .fill{height:100%;background:#0d9e0d;border-radius:3px}
   table{width:calc(100% - 80px);margin:10px 40px 40px;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
   th{background:#f8f9fa;padding:12px 16px;text-align:left;font-size:12px;text-transform:uppercase;color:#666;border-bottom:2px solid #e0e0e0}
   td{padding:10px 16px;border-bottom:1px solid #f0f0f0;font-size:13px}
@@ -30,134 +30,131 @@
 <body>
   <div class="header">
     <h1>🚐 TMS Rider — Test Dashboard</h1>
-    <div class="subtitle">Run: Sep 10, 2026, 11:58 AM | Environment: staging | Duration: 8m 17s</div>
+    <div class="subtitle">Run: Sep 10, 2026, 12:11 PM | Environment: staging | Duration: 6m 11s</div>
   </div>
   <div class="summary">
     <div class="card total"><div class="number">140</div><div class="label">Total Tests</div></div>
-    <div class="card passed"><div class="number">82</div><div class="label">Passed</div></div>
-    <div class="card failed"><div class="number">18</div><div class="label">Failed</div></div>
+    <div class="card passed"><div class="number">94</div><div class="label">Passed</div></div>
+    <div class="card failed"><div class="number">9</div><div class="label">Failed</div></div>
     <div class="card skipped"><div class="number">37</div><div class="label">Skipped</div></div>
-    <div class="card flaky"><div class="number">3</div><div class="label">Passed on Retry</div></div>
-    <div class="card retried"><div class="number">21</div><div class="label">Retried</div></div>
-    <div class="card rate"><div class="number">83%</div><div class="label">Pass Rate</div></div>
-    <div class="card duration"><div class="number">8m 17s</div><div class="label">Duration</div></div>
+    <div class="card flaky"><div class="number">0</div><div class="label">Passed on Retry</div></div>
+    <div class="card retried"><div class="number">9</div><div class="label">Retried</div></div>
+    <div class="card rate"><div class="number">91%</div><div class="label">Pass Rate</div></div>
+    <div class="card duration"><div class="number">6m 11s</div><div class="label">Duration</div></div>
   </div>
-  <div class="progress-bar"><div class="fill" style="width:83%"></div></div>
+  <div class="progress-bar"><div class="fill" style="width:91%"></div></div>
   <table>
     <thead><tr><th width="30"></th><th>Test Name</th><th width="90">Status</th><th width="80">Duration</th><th width="60">Retry</th></tr></thead>
     <tbody>
       <tr class="file-header"><td colspan="5"><strong>📄 auth.teardown.ts</strong>
-        <span class="file-stats">1P / 0F / 0S / 0⚠ — 3ms</span></td></tr>
+        <span class="file-stats">1P / 0F / 0S / 0⚠ — 2ms</span></td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>cleanup auth state</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3ms</td>
+        <td>2ms</td>
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 auth.setup.ts</strong>
-        <span class="file-stats">1P / 0F / 0S / 0⚠ — 3.8s</span></td></tr>
+        <span class="file-stats">1P / 0F / 0S / 0⚠ — 4.9s</span></td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>authenticate</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.8s</td>
+        <td>4.9s</td>
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 organization-settings.spec.ts</strong>
-        <span class="file-stats">12P / 1F / 1S / 0⚠ — 4m 51s</span></td></tr>
+        <span class="file-stats">13P / 0F / 1S / 0⚠ — 4m 8s</span></td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-001: Verify Organization Settings page loads @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>19.0s</td>
+        <td>11.3s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-002: Verify organization name display @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>13.7s</td>
+        <td>8.7s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-004: Verify tracking ID display @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>19.9s</td>
+        <td>13.2s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-005: Verify timezone display @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>9.9s</td>
+        <td>18.7s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-007: Verify map is visible @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>10.7s</td>
+        <td>18.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-008: Verify map zoom controls @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>18.4s</td>
+        <td>11.2s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-009: Verify map type switch (Map/Satellite) @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>24.6s</td>
+        <td>14.8s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>OS-010: Verify edit organization button exists @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>4.7s</td>
+        <td>15.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>ORG-EDIT-001: Edit opens the Edit Organization modal pre-filled @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>25.4s</td>
+        <td>19.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>ORG-EDIT-002: Edit & update Organization Name succeeds and persists @crud @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>57.6s</td>
+        <td>57.0s</td>
         <td>—</td>
       </tr>
-      <tr class="failed">
-        <td>❌</td>
+      <tr class="passed">
+        <td>✅</td>
         <td>ORG-EDIT-003: Clearing the required Organization Name does not save @negative @manager</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>53.8s</td>
-        <td>🔄 1</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>23.7s</td>
+        <td>—</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
-
-Expected: [32m"Automated OD ASA</td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>ORG-EDIT-004: Cancel closes the edit modal without saving @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>13.7s</td>
+        <td>17.7s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>NAV-MANAGE-001: Manage CTA opens Settings with Organization active @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>20.1s</td>
+        <td>18.2s</td>
         <td>—</td>
       </tr>
       <tr class="skipped">
@@ -168,180 +165,182 @@ Expected: [32m"Automated OD ASA</td></tr>
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 settings-navigation.spec.ts</strong>
-        <span class="file-stats">15P / 0F / 0S / 0⚠ — 3m 1s</span></td></tr>
+        <span class="file-stats">15P / 0F / 0S / 0⚠ — 2m 36s</span></td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>SN-001: Verify all 11 settings left-panel tabs are visible @smoke @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>14.9s</td>
+        <td>12.4s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV-002: Organization is the active tab by default @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>6.8s</td>
+        <td>12.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Organization" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>7.9s</td>
+        <td>8.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "User Management" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>11.7s</td>
+        <td>9.1s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Operation Settings" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>9.2s</td>
+        <td>6.1s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Operation Hours" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>8.8s</td>
+        <td>12.7s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Service Area Schedule" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>10.7s</td>
+        <td>4.8s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Rider App" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>8.0s</td>
+        <td>12.2s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Driver App" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>8.0s</td>
+        <td>9.7s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Live display" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>8.5s</td>
+        <td>19.1s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Alerts" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>19.3s</td>
+        <td>6.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "Escalations" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>19.4s</td>
+        <td>9.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SET-NAV: Navigate to "WhatsApp Notification" tab @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>13.2s</td>
+        <td>8.9s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SN-005: Verify settings page loads within threshold @performance</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>18.2s</td>
+        <td>11.4s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>SN-006: Verify URL hash persistence on page refresh @regression @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>16.5s</td>
+        <td>14.3s</td>
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 settings-rbac.spec.ts</strong>
-        <span class="file-stats">8P / 1F / 0S / 0⚠ — 4m 19s</span></td></tr>
+        <span class="file-stats">6P / 3F / 0S / 0⚠ — 6m 13s</span></td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>RBAC-002: Manager can access User Management tab @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>20.2s</td>
+        <td>19.4s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>RBAC-003: Manager can see Add User button @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>15.0s</td>
+        <td>15.8s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>RBAC-004: Manager can open Edit User dialog @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>24.4s</td>
+        <td>28.3s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>RBAC-005: Manager can see Delete option @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>18.4s</td>
+        <td>17.3s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>RBAC-006: Manager sees Manage link in sidebar @smoke</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>15.1s</td>
+        <td>16.2s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>RBAC-008: Operator cannot see Stops menu @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>10.8s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>RBAC-009: Operator cannot see Analytics menu @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>11.9s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>RBAC-010: Operator cannot see Manage/Settings link @smoke</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>15.0s</td>
+        <td>15.1s</td>
         <td>—</td>
       </tr>
       <tr class="failed">
         <td>❌</td>
-        <td>RBAC-011: Operator direct navigation to settings redirects @regression</td>
+        <td>RBAC-009: Operator cannot see Analytics menu @regression</td>
         <td><span class="status-cell failed">FAILED</span></td>
-        <td>2m 8s</td>
+        <td>1m 9s</td>
         <td>🔄 1</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: page.goto: Timeout 45000ms exceeded.
-Call log:
-[2m  - navigating to "https://php-staging.trackmyshuttle.com/login", waiting until "load</td></tr>
+      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: page.waitForURL: Timeout 20000ms exceeded.
+=========================== logs ===========================
+waiting for navigation to "**/da</td></tr>
+      <tr class="failed">
+        <td>❌</td>
+        <td>RBAC-010: Operator cannot see Manage/Settings link @smoke</td>
+        <td><span class="status-cell failed">FAILED</span></td>
+        <td>1m 36s</td>
+        <td>🔄 1</td>
+      </tr>
+      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: Login form not found with any selector</td></tr>
+      <tr class="failed">
+        <td>❌</td>
+        <td>RBAC-011: Operator direct navigation to settings redirects @regression</td>
+        <td><span class="status-cell failed">FAILED</span></td>
+        <td>1m 35s</td>
+        <td>🔄 1</td>
+      </tr>
+      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: Login form not found with any selector</td></tr>
       <tr class="file-header"><td colspan="5"><strong>📄 user-management.spec.ts</strong>
         <span class="file-stats">0P / 0F / 34S / 0⚠ — 0ms</span></td></tr>
       <tr class="skipped">
@@ -583,36 +582,45 @@ Call log:
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 whatsapp-settings.spec.ts</strong>
-        <span class="file-stats">2P / 2F / 2S / 0⚠ — 4m 41s</span></td></tr>
-      <tr class="passed">
-        <td>✅</td>
+        <span class="file-stats">0P / 4F / 2S / 0⚠ — 4m 47s</span></td></tr>
+      <tr class="failed">
+        <td>❌</td>
         <td>WA-NAV-001: WhatsApp tab loads with all three toggles @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>8.8s</td>
-        <td>—</td>
+        <td><span class="status-cell failed">FAILED</span></td>
+        <td>1m 20s</td>
+        <td>🔄 1</td>
       </tr>
+      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('tablist') to be visible[22m
+</td></tr>
       <tr class="failed">
         <td>❌</td>
         <td>WA-READ-001: Rider & Driver toggles are gated by the master toggle @regression @manager</td>
         <td><span class="status-cell failed">FAILED</span></td>
-        <td>2m 3s</td>
+        <td>1m 12s</td>
         <td>🔄 1</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: page.goto: Timeout 45000ms exceeded.
+      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
 Call log:
-[2m  - navigating to "https://php-staging.trackmyshuttle.com/setting", waiting until "do</td></tr>
-      <tr class="passed">
-        <td>✅</td>
+[2m  - waiting for getByRole('tablist') to be visible[22m
+</td></tr>
+      <tr class="failed">
+        <td>❌</td>
         <td>WA-CRUD-001: Enabling WhatsApp enables the rider & driver toggles @crud @manager</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>11.5s</td>
-        <td>—</td>
+        <td><span class="status-cell failed">FAILED</span></td>
+        <td>1m 12s</td>
+        <td>🔄 1</td>
       </tr>
+      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('tablist') to be visible[22m
+</td></tr>
       <tr class="failed">
         <td>❌</td>
         <td>WA-CRUD-002: Toggle rider & driver notifications on, then verify @crud @manager</td>
         <td><span class="status-cell failed">FAILED</span></td>
-        <td>2m 18s</td>
+        <td>1m 3s</td>
         <td>🔄 1</td>
       </tr>
       <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.waitFor: Timeout 20000ms exceeded.
@@ -634,12 +642,12 @@ Call log:
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 dashboard.spec.ts</strong>
-        <span class="file-stats">4P / 5F / 0S / 0⚠ — 5m 10s</span></td></tr>
+        <span class="file-stats">7P / 2F / 0S / 0⚠ — 2m 44s</span></td></tr>
       <tr class="failed">
         <td>❌</td>
         <td>Operator: Login, verify menus, and logout @smoke @operator</td>
         <td><span class="status-cell failed">FAILED</span></td>
-        <td>1m 51s</td>
+        <td>22.1s</td>
         <td>🔄 1</td>
       </tr>
       <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: [31mTimed out 10000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m
@@ -650,7 +658,7 @@ Ex</td></tr>
         <td>❌</td>
         <td>Manager: Login, verify menus, and logout @smoke @manager</td>
         <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.4s</td>
+        <td>21.9s</td>
         <td>🔄 1</td>
       </tr>
       <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: [31mTimed out 10000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m
@@ -668,446 +676,405 @@ Ex</td></tr>
         <td>✅</td>
         <td>Performance: Dashboard load time measurement @performance</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>21.5s</td>
+        <td>17.6s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>Menu Navigation: Test all accessible menus with 5 second intervals @navigation</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>31.0s</td>
+        <td>25.2s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>Manager Menu Navigation: Simplified test @navigation @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>15.7s</td>
+        <td>17.0s</td>
         <td>—</td>
       </tr>
-      <tr class="failed">
-        <td>❌</td>
+      <tr class="passed">
+        <td>✅</td>
         <td>Operator: Profile access and functionality @smoke @operator @profile</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>32.5s</td>
-        <td>🔄 1</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>12.7s</td>
+        <td>—</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: [31mTimed out 10000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m
-
-Locator: locator('#login_email')
-Ex</td></tr>
-      <tr class="failed">
-        <td>❌</td>
+      <tr class="passed">
+        <td>✅</td>
         <td>Manager: Profile access and functionality @smoke @manager @profile</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>32.5s</td>
-        <td>🔄 1</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>16.6s</td>
+        <td>—</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: [31mTimed out 10000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m
-
-Locator: locator('#login_email')
-Ex</td></tr>
-      <tr class="failed">
-        <td>❌</td>
+      <tr class="passed">
+        <td>✅</td>
         <td>Profile: Role comparison test @smoke @profile @rbac</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.1s</td>
-        <td>🔄 1</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>9.7s</td>
+        <td>—</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.fill: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for locator('#login_email')[22m
-</td></tr>
       <tr class="file-header"><td colspan="5"><strong>📄 login.spec.ts</strong>
-        <span class="file-stats">20P / 9F / 0S / 3⚠ — 6m 14s</span></td></tr>
-      <tr class="failed">
-        <td>❌</td>
+        <span class="file-stats">32P / 0F / 0S / 0⚠ — 2m 7s</span></td></tr>
+      <tr class="passed">
+        <td>✅</td>
         <td>should display all login page elements @smoke @system</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.1s</td>
-        <td>🔄 1</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>1.9s</td>
+        <td>—</td>
       </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for locator('#frm_login') to be visible[22m
-</td></tr>
-      <tr class="failed">
-        <td>❌</td>
+      <tr class="passed">
+        <td>✅</td>
         <td>should handle empty credentials @smoke @regression</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>23.0s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: Login form not found with any selector</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should handle invalid email format @regression</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>23.1s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: Login form not found with any selector</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should toggle password visibility @system</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.2s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.fill: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for locator('#login_pass')[22m
-</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should remember me checkbox functionality @system @regression</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.2s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.isChecked: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('checkbox', { name: 'Remember me' })[22m
-</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should navigate to activate account page and verify elements @smoke @system</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.6s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.click: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('link', { name: 'Activate Account' })[22m
-</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should navigate to forgot password page @smoke @system</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.6s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.click: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('link', { name: 'Forgot Password?' })[22m
-</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should display and submit forgot password page</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.4s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for getByPlaceholder(/email address/i) to be visible[22m
-</td></tr>
-      <tr class="failed">
-        <td>❌</td>
-        <td>should display phone number correctly @system</td>
-        <td><span class="status-cell failed">FAILED</span></td>
-        <td>22.3s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="error-row"><td></td><td colspan="4" class="error-msg">Error: [31mTimed out 10000ms waiting for [39m[2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m
-
-Locator: getByRole('link', { name: </td></tr>
-      <tr class="flaky">
-        <td>⚠️</td>
-        <td>should have correct form action and method @system @regression</td>
-        <td><span class="status-cell flaky">FLAKY</span></td>
-        <td>13.7s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="flaky">
-        <td>⚠️</td>
-        <td>should load login page within acceptable time @system</td>
-        <td><span class="status-cell flaky">FLAKY</span></td>
-        <td>17.1s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="flaky">
-        <td>⚠️</td>
-        <td>should validate cross-page navigation flow @system @integration</td>
-        <td><span class="status-cell flaky">FLAKY</span></td>
-        <td>20.3s</td>
-        <td>🔄 1</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should maintain consistent UI elements across pages @system</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>5.0s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should login with valid credentials @smoke @system @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>23.3s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should login as operator and manager @smoke @system</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>19.6s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should handle session timeout and redirect @system @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>13.8s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should display all activate account page elements @smoke @system</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>7.4s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should have correct form attributes @system</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>2.1s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should require terms acceptance to enable activate button @system @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.5s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should handle empty form submission @smoke @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.3s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should validate email format @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.5s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should validate phone number format @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.2s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should validate activation code format @regression</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>4.4s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>should toggle password visibility @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>2.8s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should validate password requirements @regression</td>
+        <td>should handle invalid email format @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>4.2s</td>
+        <td>3.3s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should validate first name field @regression</td>
+        <td>should toggle password visibility @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.5s</td>
+        <td>1.7s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should validate last name field @regression</td>
+        <td>should remember me checkbox functionality @system @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.5s</td>
+        <td>1.4s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should handle country code selection @system</td>
+        <td>should navigate to activate account page and verify elements @smoke @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>2.9s</td>
+        <td>4.1s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should clear form fields @system</td>
+        <td>should navigate to forgot password page @smoke @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>4.4s</td>
+        <td>2.3s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should navigate back to login page @system</td>
+        <td>should display and submit forgot password page</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.8s</td>
+        <td>5.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should verify privacy policy link @system</td>
+        <td>should display phone number correctly @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>2.7s</td>
+        <td>1.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>should handle maximum character limits @regression</td>
+        <td>should have correct form action and method @system @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.0s</td>
-        <td>—</td>
-      </tr>
-      <tr class="file-header"><td colspan="5"><strong>📄 profile.spec.ts</strong>
-        <span class="file-stats">18P / 0F / 0S / 0⚠ — 2m 56s</span></td></tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-NAV-001: Profile page loads at /profile @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>31.3s</td>
+        <td>1.2s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-NAV-002: Profile page displays the Profile heading @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>32.5s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-NAV-003: Profile page has Profile Details and Change Password tabs @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>34.4s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-VIEW-001: Profile Details tab is active by default @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>36.0s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-VIEW-002: Profile Details shows a non-empty Name @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>2.2s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-VIEW-003: Profile Details shows a valid email address @smoke @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>2.5s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-VIEW-004: Profile Details email matches the logged-in manager email @regression @manager @prod</td>
-        <td><span class="status-cell passed">PASSED</span></td>
-        <td>2.2s</td>
-        <td>—</td>
-      </tr>
-      <tr class="passed">
-        <td>✅</td>
-        <td>PROF-VIEW-005: Profile Details name contains 'manager' for the manager role @regression @manager @prod</td>
+        <td>should load login page within acceptable time @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>2.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-TABS-001: Clicking Change Password tab shows the password form @smoke @manager @prod</td>
+        <td>should validate cross-page navigation flow @system @integration</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.8s</td>
+        <td>6.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-TABS-002: Clicking Profile Details tab shows the profile info @regression @manager @prod</td>
+        <td>should maintain consistent UI elements across pages @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>2.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-TABS-003: Only one tab content is active at a time @regression @manager @prod</td>
+        <td>should login with valid credentials @smoke @system @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>17.4s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should login as operator and manager @smoke @system</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>14.9s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should handle session timeout and redirect @system @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>11.2s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should display all activate account page elements @smoke @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>3.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-PWD-001: Change Password tab shows all three password fields @smoke @manager @prod</td>
+        <td>should have correct form attributes @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.3s</td>
+        <td>2.0s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-PWD-002: Change Password tab shows the Update button @smoke @manager @prod</td>
+        <td>should require terms acceptance to enable activate button @system @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.8s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should handle empty form submission @smoke @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.9s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should validate email format @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.2s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should validate phone number format @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.8s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should validate activation code format @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.8s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should toggle password visibility @system</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>2.6s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-PWD-003: Password fields accept text input @regression @manager</td>
+        <td>should validate password requirements @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>3.4s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
-        <td>PROF-PWD-004: Password fields can be cleared @regression @manager</td>
+        <td>should validate first name field @regression</td>
         <td><span class="status-cell passed">PASSED</span></td>
         <td>3.3s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
+        <td>should validate last name field @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.4s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should handle country code selection @system</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.6s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should clear form fields @system</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.6s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should navigate back to login page @system</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.1s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should verify privacy policy link @system</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.3s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>should handle maximum character limits @regression</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.6s</td>
+        <td>—</td>
+      </tr>
+      <tr class="file-header"><td colspan="5"><strong>📄 profile.spec.ts</strong>
+        <span class="file-stats">18P / 0F / 0S / 0⚠ — 50.2s</span></td></tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-NAV-001: Profile page loads at /profile @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>1.5s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-NAV-002: Profile page displays the Profile heading @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>1.5s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-NAV-003: Profile page has Profile Details and Change Password tabs @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>1.7s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-VIEW-001: Profile Details tab is active by default @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.1s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-VIEW-002: Profile Details shows a non-empty Name @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>1.3s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-VIEW-003: Profile Details shows a valid email address @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.8s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-VIEW-004: Profile Details email matches the logged-in manager email @regression @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>1.7s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-VIEW-005: Profile Details name contains 'manager' for the manager role @regression @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>4.2s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-TABS-001: Clicking Change Password tab shows the password form @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.1s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-TABS-002: Clicking Profile Details tab shows the profile info @regression @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.7s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-TABS-003: Only one tab content is active at a time @regression @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.5s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-PWD-001: Change Password tab shows all three password fields @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.4s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-PWD-002: Change Password tab shows the Update button @smoke @manager @prod</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>2.3s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-PWD-003: Password fields accept text input @regression @manager</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>3.9s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
+        <td>PROF-PWD-004: Password fields can be cleared @regression @manager</td>
+        <td><span class="status-cell passed">PASSED</span></td>
+        <td>6.1s</td>
+        <td>—</td>
+      </tr>
+      <tr class="passed">
+        <td>✅</td>
         <td>PROF-PWD-005: Password visibility toggle buttons are present @regression @manager @prod</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.0s</td>
+        <td>2.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>PROF-VAL-001: Submitting empty password form shows error indicators @negative @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>4.6s</td>
+        <td>3.5s</td>
         <td>—</td>
       </tr>
       <tr class="passed">
         <td>✅</td>
         <td>PROF-VAL-002: Mismatched new and confirm passwords shows an error @negative @manager</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>3.0s</td>
+        <td>3.2s</td>
         <td>—</td>
       </tr>
       <tr class="file-header"><td colspan="5"><strong>📄 settings.spec.ts</strong>
-        <span class="file-stats">1P / 0F / 0S / 0⚠ — 12.3s</span></td></tr>
+        <span class="file-stats">1P / 0F / 0S / 0⚠ — 9.3s</span></td></tr>
       <tr class="passed">
         <td>✅</td>
         <td>Performance: Settings load time @performance @settings</td>
         <td><span class="status-cell passed">PASSED</span></td>
-        <td>12.3s</td>
+        <td>9.3s</td>
         <td>—</td>
       </tr></tbody>
   </table>
