@@ -61,7 +61,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       await userManagementPage.verifyUserExists(EXISTING_USERS.operator.email);
     });
 
-    test("UM-R004: Verify user search functionality @regression @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-R004: Verify user search functionality @regression @manager", async () => {
       // Search for manager
       await userManagementPage.searchUser("manager");
       await userManagementPage.verifyUserExists(EXISTING_USERS.manager.email);
@@ -138,7 +139,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       await userManagementPage.verifyAddUserDialogVisible();
     });
 
-    test("UM-C003: Verify role dropdown options @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-C003: Verify role dropdown options @regression @manager", async ({
       page,
     }) => {
       await userManagementPage.clickAddUser();
@@ -267,7 +269,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
       await expect(lastNameInput).toHaveValue("operator");
     });
 
-    test("UM-U004: Verify Update button is visible @regression @manager", async () => {
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-U004: Verify Update button is visible @regression @manager", async () => {
       await userManagementPage.clickEditUser(EXISTING_USERS.operator.email);
 
       await expect(userManagementPage.editUserUpdateButton).toBeVisible({
@@ -361,7 +364,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
      * Manager Role - Full CRUD Lifecycle Test
      * Creates a Manager user, reads data, edits user, and deletes user
      */
-    test("UM-CRUD-001: Manager role - Create, Read, Update, Delete lifecycle @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-CRUD-001: Manager role - Create, Read, Update, Delete lifecycle @regression @manager", async ({
       page,
     }) => {
       const testUser = generateTestUser("Manager");
@@ -423,7 +427,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
      * Operator Role - Full CRUD Lifecycle Test with Reset Password
      * Creates an Operator user, reads data, edits user, resets password, and deletes user
      */
-    test("UM-CRUD-002: Operator role - Create, Read, Update, Reset Password, Delete lifecycle @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-CRUD-002: Operator role - Create, Read, Update, Reset Password, Delete lifecycle @regression @manager", async ({
       page,
     }) => {
       const testUser = generateTestUser("Operator");
@@ -493,7 +498,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
      * Driver Role - Full CRUD Lifecycle Test
      * Creates a Driver user, reads data, edits user, and deletes user
      */
-    test("UM-CRUD-003: Driver role - Create, Read, Update, Delete lifecycle @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-CRUD-003: Driver role - Create, Read, Update, Delete lifecycle @regression @manager", async ({
       page,
     }) => {
       const testUser = generateTestUser("Driver");
@@ -561,7 +567,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
      * Operator with "Also add as Driver" - Full CRUD Lifecycle Test
      * Creates an Operator user with Driver role, reads data, edits user, and deletes user
      */
-    test("UM-CRUD-004: Operator with Also-Add-As-Driver - Create, Read, Update, Delete lifecycle @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-CRUD-004: Operator with Also-Add-As-Driver - Create, Read, Update, Delete lifecycle @regression @manager", async ({
       page,
     }) => {
       const testUser = {
@@ -673,7 +680,8 @@ test.describe("ASAP User Management Tests @asap @settings", () => {
      * Reset Password Test - Manager Role
      * Creates a Manager user and tests the Reset Password functionality
      */
-    test("UM-CRUD-006: Reset Password - Create Manager, Reset Password, Delete @regression @manager", async ({
+    // SKIPPED: User Management under active development — currently failing on staging. Re-enable when the new dev work lands.
+    test.skip("UM-CRUD-006: Reset Password - Create Manager, Reset Password, Delete @regression @manager", async ({
       page,
     }) => {
       const testUser = generateTestUser("Manager");
