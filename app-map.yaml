@@ -1,0 +1,247 @@
+# app-map.yaml
+#
+# Maps TrackMyShuttle features to their URLs, page objects, spec files, and
+# tags, so a change (a diff, a release note, a bug report) can be connected to
+# "which tests cover this" and vice versa.
+#
+# Scaffolded from the *test repo's* existing structure (tests/, pages/,
+# fixtures) — not from the application source, which this agent does not have
+# access to. Every `app_code_path` below is therefore `unknown`. Once the real
+# app repo is available, fill those in (e.g. `modules/settings/views/...`,
+# `public/web/assets/js-v1/settingmap.js`) so Step 1/2 diff-based impact runs
+# can work as designed.
+#
+# Keep this file in sync: every new spec file or page object should get an
+# entry (or extend an existing one) in the same PR.
+
+meta:
+  generated_at: "2026-11-27"
+  test_repo: "Dhanbad94/ai-tms-playwright-e2e-tests"
+  app_repo: "unknown — not provided to this agent"
+  app_stack: "PHP + CodeIgniter 3 (per QA_AGENT_PROMPT.md); not independently verified from this repo"
+  environments:
+    staging:
+      base_url: "https://php-staging.trackmyshuttle.com"
+      credential_prefix: "STAGING_"
+      full_suite: true
+    preproduction:
+      base_url: "https://preproduction.trackmyshuttle.com"
+      credential_prefix: "PREPRODUCTION_"
+      note: "scheduled run uses @prod-tagged tests only (read-only), same set as production"
+    production:
+      base_url: "https://trackmyshuttle.com"
+      credential_prefix: "PROD_"
+      note: "NEVER run the full suite here — @prod-tagged (read-only) tests only"
+  credential_pattern: "<PREFIX>_<ROLE>_EMAIL / <PREFIX>_<ROLE>_PASSWORD, read from .env.local (local) or GitHub Actions secrets (CI); ROLE is MANAGER or OPERATOR"
+  test_org: "Automated OD ASAP (tracking ID: ODASAP) — see tests/ASAPSettings/fixtures/test-data.ts ASAP_ORG_CONFIG"
+  second_test_org: "unknown — no second org configured; cross-org leak checks (QA_AGENT_PROMPT.md Step 5) cannot run yet"
+  auth_pattern: >
+    storageState via tests/auth.setup.ts, saved per-environment to
+    playwright/.auth/<env>.json and reused by the "chromium" project. Session
+    can expire mid-run (~5-15 min) — SettingsBasePage.ensureAuthenticated()
+    detects a redirect to /login and re-authenticates transparently.
+
+# ---------------------------------------------------------------------------
+# Features
+# ---------------------------------------------------------------------------
+features:
+
+  - id: login
+    name: Login
+    urls: ["/login"]
+    app_code_path: unknown
+    page_objects: ["pages/login_page.ts"]
+    spec_files: ["tests/TMSOnboarding/login.spec.ts"]
+    test_id_prefix: "none — descriptive test titles (should display..., should handle...)"
+    tags: ["@smoke", "@system", "@regression", "@prod", "@integration"]
+    notes: >
+      Unauthenticated (test.use storageState: empty). Covers page elements,
+      empty/invalid credential validation, password visibility toggle,
+      remember-me, cross-page navigation, valid login, session timeout.
+
+  - id: activate_account
+    name: Activate Account
+    urls: ["/activate"]
+    app_code_path: unknown
+    page_objects: ["pages/activate_account_page.ts"]
+    spec_files: ["tests/TMSOnboarding/login.spec.ts (describe: 'Activate Account Page Tests')"]
+    test_id_prefix: "none — descriptive titles"
+    tags: ["@smoke", "@system", "@regression"]
+    notes: "Field validation (email/phone/activation code/password), char limits, back-to-login nav."
+
+  - id: forgot_password
+    name: Forgot / Recover Password
+    urls: ["/recover-account", "/reset-link-sent"]
+    app_code_path: unknown
+    page_objects: ["pages/forgot_password_page.ts"]
+    spec_files: ["tests/TMSOnboarding/login.spec.ts (test: 'should display and submit forgot password page')"]
+    test_id_prefix: "none"
+    tags: []
+    known_issues:
+      - "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/20 — intermittent: submit occasionally returns HTML instead of JSON, stays on /recover-account. Not consistently reproducible (4/4 re-runs passed); downgraded to Low/monitor."
+
+  - id: dashboard
+    name: Dashboard (role-based access)
+    urls: ["/dashboard"]
+    app_code_path: unknown
+    page_objects: ["pages/dashboard_page.ts"]
+    spec_files: ["tests/TMSOnboarding/dashboard.spec.ts"]
+    test_id_prefix: "none — descriptive titles"
+    tags: ["@smoke", "@operator", "@manager", "@rbac", "@performance", "@navigation", "@profile"]
+    notes: "Menu visibility per role (Operator vs Manager), menu navigation timing, profile access from dashboard."
+
+  - id: profile
+    name: User Profile
+    urls: ["/profile"]
+    app_code_path: unknown
+    page_objects: ["pages/profile_page.ts"]
+    spec_files: ["tests/TMSOnboarding/profile.spec.ts"]
+    test_id_prefix: "PROF-NAV-, PROF-VIEW-, PROF-TABS-, PROF-PWD-, PROF-VAL-"
+    tags: ["@smoke", "@regression", "@manager", "@prod", "@negative", "@profile"]
+    notes: >
+      Two tabs: Profile Details (#home) and Change Password (#menu1).
+      PROF-VIEW-004/005 assert the logged-in identity and are hardcoded to the
+      staging manager account — will need generalizing before reuse against
+      preprod/prod with different accounts.
+
+  - id: settings_legacy_page
+    name: "Settings (legacy TMSOnboarding page object — distinct from the ASAP settings tabs)"
+    urls: ["/settings (TBD — unconfirmed route, see settings_page.ts)"]
+    app_code_path: unknown
+    page_objects: ["pages/settings_page.ts"]
+    spec_files: ["tests/TMSOnboarding/settings.spec.ts"]
+    test_id_prefix: "none"
+    tags: ["@performance"]
+    notes: >
+      Small, separate from the ASAP settings-tabs feature below. Only one test
+      (settings load time). Confirm with a human whether this page object is
+      still accurate/needed or should be merged into SettingsBasePage.
+
+  - id: settings_navigation
+    name: "Settings — left-panel tab navigation"
+    urls: ["/setting", "/setting#<tab-hash>"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/settings-base.page.ts"]
+    spec_files: ["tests/ASAPSettings/settings-navigation.spec.ts"]
+    test_id_prefix: "SN-, SET-NAV-"
+    tags: ["@asap", "@settings", "@smoke", "@regression", "@performance", "@manager"]
+    tabs:
+      - { name: "Organization", hash: "" }
+      - { name: "User Management", hash: "#members" }
+      - { name: "Operation Settings", hash: "#platformSetting" }
+      - { name: "Operation Hours", hash: "#hours-of-operation" }
+      - { name: "Service Area Schedule", hash: "#settings_service_area_schedule" }
+      - { name: "Rider App", hash: "#guests" }
+      - { name: "Driver App", hash: "#driver-setting" }
+      - { name: "Live display", hash: "#live_display" }
+      - { name: "Alerts", hash: "#alerts" }
+      - { name: "Escalations", hash: "#escaltionSettings" }
+      - { name: "WhatsApp Notification", hash: "#settings_whatsapp" }
+      - { name: "Stop Schedule (hash only — not in SETTINGS_TAB_NAMES, no visible tab yet?)", hash: "#settings_stop_schedule" }
+    notes: >
+      The active tab is NOT indicated by an `active` class — the only
+      reliable signal is the URL hash matching the tab's href. See
+      CONVENTIONS.md "Known gotchas" before touching clickTab/verifyTabIsActive.
+
+  - id: settings_organization
+    name: "Settings — Organization tab (view + edit)"
+    urls: ["/setting (default tab)"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/organization-settings.page.ts", "pages/ASAP/settings-base.page.ts"]
+    spec_files: ["tests/ASAPSettings/organization-settings.spec.ts"]
+    test_id_prefix: "OS-, ORG-EDIT-, ORG-E2E-, NAV-MANAGE-"
+    tags: ["@asap", "@settings", "@smoke", "@regression", "@crud", "@negative", "@e2e", "@manager", "@prod"]
+    known_issues:
+      - "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19 — Edit Organization modal opens but fields never populate (AJAX fires at literal 'javascript:void(0);'). 100% reproducible. ORG-EDIT-001..004 fail and are expected to stay red until fixed."
+    notes: "Map display + zoom/type controls also live here (OS-007/008/009)."
+
+  - id: settings_user_management
+    name: "Settings — User Management tab"
+    urls: ["/setting#members"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/user-management.page.ts", "pages/ASAP/settings-base.page.ts"]
+    spec_files: ["tests/ASAPSettings/user-management.spec.ts"]
+    test_id_prefix: "UM-R (read), UM-C (create), UM-U (update), UM-D (delete), UM-P (password reset), UM-CRUD- (full lifecycle)"
+    tags: ["@asap", "@settings", "@smoke", "@regression", "@crud", "@negative", "@manager"]
+    notes: >
+      Whole suite was skipped (test.describe.skip) as of 2026-09 — "active
+      development, pervasively flaky, different subset fails each run."
+      Re-enable only after confirming the feature has stabilized; do not
+      re-enable test-by-test without re-verifying the whole file.
+      generateTestUser() creates throwaway test.user.<timestamp>@example.com
+      accounts — leftover ones from interrupted runs can hit the org's user
+      limit (see CONVENTIONS.md gotchas).
+
+  - id: settings_rbac
+    name: "Settings — Role-based access (Manager vs Operator)"
+    urls: ["/setting", "/setting#members", "/dashboard"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/settings-base.page.ts", "pages/ASAP/user-management.page.ts"]
+    spec_files: ["tests/ASAPSettings/settings-rbac.spec.ts"]
+    test_id_prefix: "RBAC-"
+    tags: ["@asap", "@settings", "@rbac", "@manager", "@operator", "@negative", "@regression", "@smoke", "@prod"]
+    notes: "Each describe block logs in explicitly (own session) rather than reusing shared storageState."
+
+  - id: settings_whatsapp
+    name: "Settings — WhatsApp Notification tab"
+    urls: ["/setting#settings_whatsapp"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/whatsapp-settings.page.ts", "pages/ASAP/settings-base.page.ts"]
+    spec_files: ["tests/ASAPSettings/whatsapp-settings.spec.ts"]
+    test_id_prefix: "WA-NAV-, WA-READ-, WA-CRUD-"
+    tags: ["@asap", "@settings", "@whatsapp", "@smoke", "@regression", "@crud", "@manager", "@prod"]
+    notes: >
+      Master/riders/drivers are CSS switches with display:none inputs — click
+      the visible .toggle-track sibling, never the input directly.
+      WA-CRUD-004 (success-toast-on-toggle) was skipped: flaky, timing-
+      sensitive against the auto-dismissing toast under CI load.
+
+  - id: settings_driver_app
+    name: "Settings — Driver App tab (UNCOVERED)"
+    urls: ["/setting#driver-setting"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/driver-app-settings.page.ts"]
+    spec_files: []
+    test_id_prefix: "none yet"
+    tags: []
+    coverage_gap: "Page object exists but no spec file references it. Candidate for test authoring (QA_AGENT_PROMPT.md Step 4)."
+
+  - id: settings_escalations
+    name: "Settings — Escalations tab (UNCOVERED)"
+    urls: ["/setting#escaltionSettings"]
+    app_code_path: unknown
+    page_objects: ["pages/ASAP/escalations-settings.page.ts"]
+    spec_files: []
+    test_id_prefix: "none yet"
+    tags: []
+    coverage_gap: "Page object exists but no spec file references it. Candidate for test authoring."
+
+  - id: settings_removed_pages
+    name: "Settings tabs previously automated, since removed from this branch"
+    urls: ["#platformSetting", "#hours-of-operation", "#guests", "#live_display", "#alerts"]
+    app_code_path: unknown
+    page_objects: []
+    spec_files: []
+    notes: >
+      pages/ASAP/index.ts has commented-out exports for OperationSettingsPage,
+      OperationHoursPage, RiderAppSettingsPage, LiveDisplaySettingsPage,
+      AlertsSettingsPage, and DispatchPage — their .page.ts files and specs
+      were deleted on this branch. Also missing entirely: Shuttles, Stops,
+      Replay, Alerts Dashboard, Analytics, Reports (previously documented as
+      automated in an earlier phase, per project memory — not present in the
+      current tree). Re-scaffold these as the corresponding features return.
+
+# ---------------------------------------------------------------------------
+# Page objects with no feature mapping above (sanity list — keep at zero)
+# ---------------------------------------------------------------------------
+unmapped_page_objects: []
+
+# ---------------------------------------------------------------------------
+# Known coverage gaps (mirrors QA_AGENT_PROMPT.md "features_uncovered")
+# ---------------------------------------------------------------------------
+coverage_gaps:
+  - "settings_driver_app: page object exists, zero tests"
+  - "settings_escalations: page object exists, zero tests"
+  - "settings_user_management: entire suite currently skipped (active dev)"
+  - "No app_code_path is populated anywhere — requires APP_REPO access to do diff-based impact analysis (QA_AGENT_PROMPT.md Step 1/2)"
+  - "No second test org configured — cross-org data-leak checks cannot run"
