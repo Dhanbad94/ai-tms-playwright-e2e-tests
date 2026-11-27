@@ -1,0 +1,78 @@
+{
+  "build_version": "unknown (no app-repo/version-endpoint access from this agent)",
+  "commit_range": "unknown (no app-repo access; inferred deploy ~2026-10-26 from asset cache-bust query params on settingmap.js and registration.js)",
+  "trigger": "manual",
+  "environment": "staging",
+  "base_url": "https://php-staging.trackmyshuttle.com",
+  "features_changed": [
+    "Settings > Organization > Edit Details modal (likely, per settingmap.js redeploy)",
+    "Login > Forgot Password (likely, per registration.js redeploy)"
+  ],
+  "features_uncovered": [
+    "app-map.yaml does not exist in this repo — feature-to-test mapping is manual/inferred, not systematic"
+  ],
+  "tests_run": 140,
+  "results": { "passed": 96, "failed": 7, "flaky": 0, "skipped": 37 },
+  "failures": [
+    {
+      "test": "OS-002: Verify organization name display",
+      "class": "LOCATOR_BROKEN",
+      "evidence": "strict-mode violation: getByRole('tabpanel') resolved to 8 elements (page now has stop schedule / service area schedule / hours-of-operation / live display / escalations / QR code tabpanels added over time)",
+      "action": "Fixed: scoped to the visible tabpanel in getOrganizationInfo(). Verified passing on staging. Commit e3dcf39."
+    },
+    {
+      "test": "OS-004: Verify tracking ID display",
+      "class": "LOCATOR_BROKEN",
+      "evidence": "same strict-mode violation as OS-002 (shared getOrganizationInfo() helper)",
+      "action": "Fixed alongside OS-002. Verified passing on staging. Commit e3dcf39."
+    },
+    {
+      "test": "ORG-EDIT-001: Edit opens the Edit Organization modal pre-filled",
+      "class": "APP_BUG",
+      "evidence": "#org_name stays '' after 20s; console: XHR to literal 'javascript:void(0);' blocked by CORS / ERR_FAILED",
+      "action": "Reported: https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19. Test hardened with try/finally (commit e3dcf39) so failure doesn't cascade into the next test. Left correctly failing — will stay red until the app fix ships."
+    },
+    {
+      "test": "ORG-EDIT-002: Edit & update Organization Name succeeds and persists",
+      "class": "APP_BUG",
+      "evidence": "same root cause as ORG-EDIT-001",
+      "action": "Reported under issue #19. Left correctly failing."
+    },
+    {
+      "test": "ORG-EDIT-003: Clearing the required Organization Name does not save",
+      "class": "APP_BUG",
+      "evidence": "same root cause as ORG-EDIT-001",
+      "action": "Reported under issue #19. Left correctly failing."
+    },
+    {
+      "test": "ORG-EDIT-004: Cancel closes the edit modal without saving",
+      "class": "APP_BUG",
+      "evidence": "same root cause as ORG-EDIT-001",
+      "action": "Reported under issue #19. Left correctly failing."
+    },
+    {
+      "test": "should display and submit forgot password page",
+      "class": "APP_BUG (intermittent, downgraded)",
+      "evidence": "one live repro: console SyntaxError — AJAX success handler JSON.parse()'d an HTML error fragment; form stayed on /recover-account instead of redirecting to /reset-link-sent. 4/4 subsequent automated re-runs passed cleanly.",
+      "action": "Reported as https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/20, then corrected via comment after re-testing showed it is not consistently reproducible. Recommended Low/monitor, not blocking. No test change made."
+    }
+  ],
+  "bugs": [
+    { "title": "Edit Organization modal opens but fields never populate (AJAX targets \"javascript:void(0);\")", "severity": "High", "issue_url": "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19" },
+    { "title": "Forgot-password submit does not redirect — server returned HTML instead of JSON", "severity": "Low (downgraded — intermittent, not reproducible on 4/4 re-runs)", "issue_url": "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/20" }
+  ],
+  "suggestions": [
+    { "screen": "Forgot Password (/recover-account)", "suggestion": "When the AJAX response isn't valid JSON, the UI gives the user zero feedback (no error, no spinner resolution) — should show a generic 'something went wrong, try again' message instead of silently staying on the page." }
+  ],
+  "prs": [
+    "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/commit/e3dcf39"
+  ],
+  "needs_human": [
+    "APP_REPO location not provided — this agent has no access to the application source, so Step 1/2 (diff-based impact analysis) could not run. All findings above came from live browser bug-hunting (Step 5) plus the existing Playwright suite, not from a commit diff.",
+    "app-map.yaml and CONVENTIONS.md do not exist in this repo yet — needed for systematic feature-to-test mapping on future runs.",
+    "ISSUE_REPO assumed = this repo (Dhanbad94/ai-tms-playwright-e2e-tests) — confirm if bugs should go elsewhere.",
+    "SLACK_CHANNEL not specified — Slack summary drafted but NOT sent (see chat). Confirm the channel before I post anything externally.",
+    "SECOND_TEST_ORG not specified — cross-org leak checks in Step 5 were not performed.",
+    "build_version could not be confirmed against a /version endpoint — none is documented for this app."
+  ]
+}

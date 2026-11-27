@@ -79,20 +79,27 @@ test.describe("ASAP Organization Settings Tests @asap @settings", () => {
     await orgSettingsPage.verifyMapTypeSelected("Map");
   });
 
-  test("OS-010: Verify edit organization button exists @regression @manager", async ({ page }) => {
-    // Edit button should be visible (icon button)
-    const editButton = page.getByRole("button", { name: "icon" }).first();
-    await expect(editButton).toBeVisible({ timeout: TIMEOUTS.short });
+  test("OS-010: Verify edit organization button exists @regression @manager", async () => {
+    // The edit affordance is the pencil (edit-tooltip) button in the org top-bar.
+    await expect(orgSettingsPage.editButton).toBeVisible({ timeout: TIMEOUTS.short });
   });
 
   // ---------- Organization Edit / Update (Org Name round-trip) ----------
 
   test("ORG-EDIT-001: Edit opens the Edit Organization modal pre-filled @smoke @manager", async () => {
-    await orgSettingsPage.openEditModal();
-    await expect(orgSettingsPage.editModalTitle).toBeVisible();
-    await expect(orgSettingsPage.orgNameInput).not.toHaveValue("");
-    await expect(orgSettingsPage.updateButton).toBeVisible();
-    await orgSettingsPage.cancelEdit();
+    // try/finally so a failed assertion (e.g. the name field not populating)
+    // still closes the modal — otherwise it stays open and blocks the next
+    // test's edit-button click (cascading failure).
+    try {
+      await orgSettingsPage.openEditModal();
+      await expect(orgSettingsPage.editModalTitle).toBeVisible();
+      await expect(orgSettingsPage.orgNameInput).not.toHaveValue("");
+      await expect(orgSettingsPage.updateButton).toBeVisible();
+    } finally {
+      if (await orgSettingsPage.editModal.isVisible().catch(() => false)) {
+        await orgSettingsPage.cancelEdit().catch(() => {});
+      }
+    }
   });
 
   test("ORG-EDIT-002: Edit & update Organization Name succeeds and persists @crud @manager", async () => {
