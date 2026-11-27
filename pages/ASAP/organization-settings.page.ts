@@ -115,8 +115,12 @@ export class OrganizationSettingsPage {
     trackingId: string;
     timezone: string;
   }> {
-    // Get the organization card content
-    const tabPanel = this.page.getByRole("tabpanel");
+    // Get the organization card content. The settings page now has multiple
+    // tabpanels (stop schedule, service area schedule, hours-of-operation,
+    // live display, escalations, QR code, ...) — scope to the one that is
+    // actually visible (the active Organization pane) to avoid a strict-mode
+    // violation / reading from a hidden pane.
+    const tabPanel = this.page.getByRole("tabpanel").locator("visible=true").first();
     const content = await tabPanel.textContent();
 
     // Parse organization name (first text in the card)
