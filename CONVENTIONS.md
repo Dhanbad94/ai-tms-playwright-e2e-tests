@@ -74,6 +74,7 @@ Tags actually in use (grep `tests/**/*.spec.ts` for the current source of truth)
 | `@performance` | has a timing assertion |
 | `@navigation` | pure nav-flow check |
 | `@system`, `@integration` | TMSOnboarding legacy classification |
+| `@quarantine` | flaky test parked by the QA agent — **excluded from every run** (`grepInvert` in `playwright.config.ts`); run on purpose with `RUN_QUARANTINE=1 npx playwright test --grep @quarantine` |
 
 `constants/index.ts` also defines a `TAGS` object with `@critical`, `@flaky`,
 `@slow`, `@admin`, `@api` — these are **reserved/aspirational**, not yet
@@ -204,9 +205,12 @@ fail with no obvious cause.
 
 - `ENV` env var selects `staging | preproduction | production` everywhere
   (config, fixtures, auth). Credentials follow `<PREFIX>_<ROLE>_EMAIL/PASSWORD`.
-- `./run-tests -e <env> -t <tag> --bc` is the CLI wrapper around
-  `npx playwright test`; `package.json` also has `test:smoke`, `test:staging`,
-  etc. for common combinations.
+- Run tests with `ENV=<env> npx playwright test --project=chromium --grep <tag>`.
+  `./run-tests -e <env> -f <filter> --bc` also exists but has **no tag option**,
+  and without `--bc` it adds firefox/webkit projects this config doesn't define.
+  `package.json` has `test:smoke`, `test:staging`, etc. for common combinations.
+- The AI QA agent runs as `.github/workflows/qa-agent.yml` (report-only); its
+  prompt is `docs/QA_AGENT_PROMPT.md`.
 - GitHub Actions: `playwright.yml` (push/PR), `scheduled-staging.yml` (full
   suite), `scheduled-preprod.yml` / `scheduled-production.yml` (**`@prod`
   only — read-only**), `scheduled-full.yml` (weekly, chromium-only). Every

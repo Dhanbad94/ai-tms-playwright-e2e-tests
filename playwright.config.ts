@@ -27,6 +27,14 @@ const isCI = !!process.env.CI;
 export default defineConfig({
   testDir: "./tests",
 
+  // Flaky tests parked with @quarantine are excluded from EVERY run by default
+  // (grepInvert combines with any --grep, so a @quarantine test never runs even
+  // under @smoke/@regression). To run the parked set on purpose:
+  //   RUN_QUARANTINE=1 npx playwright test --grep @quarantine
+  // Spread so grepInvert is ABSENT when RUN_QUARANTINE is set — assigning
+  // `undefined` is rejected by its RegExp | RegExp[] type.
+  ...(process.env.RUN_QUARANTINE ? {} : { grepInvert: /@quarantine/ }),
+
   // Parallelization settings
   // Enable full parallel for independent tests
   fullyParallel: true,

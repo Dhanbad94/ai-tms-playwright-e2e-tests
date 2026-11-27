@@ -17,7 +17,8 @@
 meta:
   generated_at: "2026-11-27"
   test_repo: "Dhanbad94/ai-tms-playwright-e2e-tests"
-  app_repo: "unknown — not provided to this agent"
+  app_repo: "unknown — not reachable with current GitHub access (TrackMyShuttle/TMS is a different Node project). qa-agent.yml reads it from repo variable APP_REPO + secret APP_REPO_READ_TOKEN once available."
+  build_fingerprint: "asset cache-bust stamp on page assets, e.g. settingmap.js?27112026-4 (DDMMYYYY-N); /version is a 404"
   app_stack: "PHP + CodeIgniter 3 (per QA_AGENT_PROMPT.md); not independently verified from this repo"
   environments:
     staging:
