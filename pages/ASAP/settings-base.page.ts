@@ -37,18 +37,18 @@ export class SettingsBasePage {
     // Tab list container
     this.tabList = page.getByRole("tablist");
 
-    // Individual tabs using getByRole with exact name matching
-    this.organizationTab = page.getByRole("tab", { name: "Organization" });
-    this.userManagementTab = page.getByRole("tab", { name: "User Management" });
-    this.operationSettingsTab = page.getByRole("tab", { name: "Operation Settings" });
-    this.operationHoursTab = page.getByRole("tab", { name: "Operation Hours" });
-    this.serviceAreaScheduleTab = page.getByRole("tab", { name: "Service Area Schedule" });
-    this.riderAppTab = page.getByRole("tab", { name: "Rider App" });
-    this.driverAppTab = page.getByRole("tab", { name: "Driver App" });
-    this.liveDisplayTab = page.getByRole("tab", { name: "Live display" });
-    this.alertsTab = page.getByRole("tab", { name: "Alerts" });
-    this.escalationsTab = page.getByRole("tab", { name: "Escalations" });
-    this.whatsappNotificationTab = page.getByRole("tab", { name: "WhatsApp Notification" });
+    // Individual tabs, matched on the WHOLE accessible name (see settingsTab()).
+    this.organizationTab = this.settingsTab("Organization");
+    this.userManagementTab = this.settingsTab("User Management");
+    this.operationSettingsTab = this.settingsTab("Operation Settings");
+    this.operationHoursTab = this.settingsTab("Operation Hours");
+    this.serviceAreaScheduleTab = this.settingsTab("Service Area Schedule");
+    this.riderAppTab = this.settingsTab("Rider App");
+    this.driverAppTab = this.settingsTab("Driver App");
+    this.liveDisplayTab = this.settingsTab("Live display");
+    this.alertsTab = this.settingsTab("Alerts");
+    this.escalationsTab = this.settingsTab("Escalations");
+    this.whatsappNotificationTab = this.settingsTab("WhatsApp Notification");
 
     // Tab panel (content area) - use first() as there may be nested tabpanels
     // The main content panel has class "tab-pane" and is the direct child of the content area
@@ -56,6 +56,18 @@ export class SettingsBasePage {
 
     // Page heading (changes based on active tab)
     this.pageHeading = page.getByRole("heading", { level: 2 }).first();
+  }
+
+  /**
+   * A settings sidebar tab, matched on its whole accessible name, ignoring case.
+   * A plain `{ name }` match is a substring match, and some panes contain
+   * accordion headers that are also role="tab" ("Enable Rider App",
+   * "Rider App Map", …), so "Rider App" resolved to 6 elements. Case-insensitive
+   * because the live label is "Live Display" while callers pass "Live display".
+   */
+  settingsTab(name: string): Locator {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return this.page.getByRole("tab", { name: new RegExp(`^\\s*${escaped}\\s*$`, "i") });
   }
 
   /**
@@ -156,7 +168,7 @@ export class SettingsBasePage {
    * Note: The main settings tabs use aria-expanded="true" when active
    */
   async verifyTabIsActive(tabName: string): Promise<void> {
-    const tab = this.page.getByRole("tab", { name: tabName });
+    const tab = this.settingsTab(tabName);
     const hash = ((await tab.getAttribute("href")) || "").replace(/^#+/, "");
     if (!hash) return;
 

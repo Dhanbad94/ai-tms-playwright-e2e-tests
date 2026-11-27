@@ -222,10 +222,15 @@ export class OrganizationSettingsPage {
     await expect(this.updateButton).toBeEnabled({ timeout: 5000 });
   }
 
-  /** Click Update and wait for the modal to close (the success signal). */
+  /**
+   * Click Update and wait for the modal to close (the success signal).
+   * Update reloads the whole /setting page, and the old page (modal still
+   * open) stays on screen until that heavy reload finishes — more than 10s on
+   * a loaded staging (2026-11-27) — so allow a page-load budget.
+   */
   async clickUpdate(): Promise<void> {
     await this.updateButton.click();
-    await expect(this.editModal).toBeHidden({ timeout: 10000 });
+    await expect(this.editModal).toBeHidden({ timeout: 45000 });
   }
 
   /**
@@ -260,20 +265,27 @@ export class OrganizationSettingsPage {
   }
 
   /**
-   * Zoom in on map.
-   * The Google Maps zoom-in/zoom-out buttons are stacked and a map overlay div
-   * sits on top, so Playwright's pointer-interception check fails. force:true
-   * dispatches the click straight to the button (its handler still fires).
+   * Click a Google Maps control button.
+   * At the CI viewport (1280×720) the zoom buttons sit just below the fold
+   * (top ≈ 728px) on a page that doesn't scroll, so even click({force:true})
+   * fails with "Element is outside of the viewport". A map overlay can also
+   * intercept a pointer click. Try a normal click first, then dispatch the
+   * click event straight to the button, which works wherever it is.
    */
-  async zoomInMap(): Promise<void> {
-    await this.mapZoomIn.click({ force: true });
+  private async clickMapControl(control: Locator): Promise<void> {
+    await control.click({ timeout: 5000 }).catch(async () => {
+      await control.dispatchEvent("click");
+    });
   }
 
-  /**
-   * Zoom out on map (force:true for the same reason as zoomInMap).
-   */
+  /** Zoom in on map. */
+  async zoomInMap(): Promise<void> {
+    await this.clickMapControl(this.mapZoomIn);
+  }
+
+  /** Zoom out on map. */
   async zoomOutMap(): Promise<void> {
-    await this.mapZoomOut.click({ force: true });
+    await this.clickMapControl(this.mapZoomOut);
   }
 
   /**

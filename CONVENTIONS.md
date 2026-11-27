@@ -182,13 +182,18 @@ fail with no obvious cause.
 - **"Manage" CTA / any substring-prone link name:** `getByRole("link", {name:"Manage"})`
   also matches `automated.manager@...` — always pass `exact: true` for short
   link/button names that could be substrings of something else on the page.
-- **Organization edit modal currently has a live app bug**
-  ([#19](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19)):
-  the edit button opens the modal directly (no longer via an intermediate
-  popover link — don't resurrect the old `.popover.in a.manager_edit_org`
-  pattern), but the form fields never populate because an AJAX call is firing
-  at the literal string `javascript:void(0);`. `ORG-EDIT-001..004` are
-  correctly red until this ships a fix.
+- **Organization edit modal:** the edit button opens the modal directly (no
+  longer via an intermediate popover link — don't resurrect the old
+  `.popover.in a.manager_edit_org` pattern). The empty-fields bug
+  ([#19](https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19))
+  no longer reproduces on staging as of 2026-11-28. **Update reloads the whole
+  /setting page**, so the modal only disappears after that heavy reload — wait
+  with a page-load budget, not 10s.
+- **Tests that edit shared org data must restore to a fixed value**, never to
+  "whatever was displayed when the test started". ORG-EDIT-002 used to do
+  that, and each failed restore stacked another " QA" onto the test org's name
+  ("Automated OD ASAP QA QA QA QA"). Restore to `ASAP_ORG_CONFIG.name`, from a
+  freshly loaded page, without letting a restore error hide the test's own.
 - **Same-URL reload can fake persistence:** `page.goto()` to the URL you're
   already on lets Chrome restore form-control state, so a checkbox can look
   saved when nothing reached the server (this happened with the Escalations

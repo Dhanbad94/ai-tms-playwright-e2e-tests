@@ -235,7 +235,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.emailInput.fill(operatorCreds.email);
       await loginPage.passwordInput.fill(operatorCreds.password);
       await loginPage.rememberMeCheckbox.check();
-      await loginPage.loginButton.click();
+      await loginPage.submitLogin();
 
       await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
@@ -295,7 +295,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.emailInput.fill(managerCreds.email);
       await loginPage.passwordInput.fill(managerCreds.password);
       await loginPage.rememberMeCheckbox.check();
-      await loginPage.loginButton.click();
+      await loginPage.submitLogin();
 
       await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
@@ -359,7 +359,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         await expect(loginPage.emailInput).toBeVisible();
         await loginPage.emailInput.fill(operatorCreds.email);
         await loginPage.passwordInput.fill(operatorCreds.password);
-        await loginPage.loginButton.click();
+        await loginPage.submitLogin();
         await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
         // FIXED: Use simple wait instead of page object method
@@ -401,7 +401,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
         await expect(loginPage.emailInput).toBeVisible();
         await loginPage.emailInput.fill(managerCreds.email);
         await loginPage.passwordInput.fill(managerCreds.password);
-        await loginPage.loginButton.click();
+        await loginPage.submitLogin();
         await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
         // FIXED: Use simple wait instead of page object method
@@ -475,7 +475,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
           await loginPage.passwordInput.fill(credentials.password);
 
           const startTime = Date.now();
-          await loginPage.loginButton.click();
+          await loginPage.submitLogin();
           await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
           // Minimal wait for performance test
@@ -542,7 +542,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
 
           await loginPage.emailInput.fill(credentials.email);
           await loginPage.passwordInput.fill(credentials.password);
-          await loginPage.loginButton.click();
+          await loginPage.submitLogin();
 
           // Wait for dashboard
           await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
@@ -624,7 +624,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
 
         await loginPage.emailInput.fill(managerCreds.email);
         await loginPage.passwordInput.fill(managerCreds.password);
-        await loginPage.loginButton.click();
+        await loginPage.submitLogin();
 
         // Wait for dashboard with shorter timeout
         await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
@@ -698,7 +698,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.emailInput.fill(operatorCreds.email);
       await loginPage.passwordInput.fill(operatorCreds.password);
       await loginPage.rememberMeCheckbox.check();
-      await loginPage.loginButton.click();
+      await loginPage.submitLogin();
 
       await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
@@ -745,7 +745,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await loginPage.emailInput.fill(managerCreds.email);
       await loginPage.passwordInput.fill(managerCreds.password);
       await loginPage.rememberMeCheckbox.check();
-      await loginPage.loginButton.click();
+      await loginPage.submitLogin();
 
       await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
@@ -806,7 +806,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await page.goto(`${TEST_DATA.baseUrl}/login`);
       await loginPage.emailInput.fill(operatorCreds.email);
       await loginPage.passwordInput.fill(operatorCreds.password);
-      await loginPage.loginButton.click();
+      await loginPage.submitLogin();
       await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       // Access profile and get data - NOW THIS METHOD EXISTS
@@ -827,7 +827,7 @@ test.describe("Role-Based Dashboard Access Tests", () => {
       await page.goto(`${TEST_DATA.baseUrl}/login`);
       await loginPage.emailInput.fill(managerCreds.email);
       await loginPage.passwordInput.fill(managerCreds.password);
-      await loginPage.loginButton.click();
+      await loginPage.submitLogin();
       await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
       // Access profile and get data - NOW THIS METHOD EXISTS

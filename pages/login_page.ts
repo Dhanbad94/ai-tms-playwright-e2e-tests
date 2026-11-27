@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { getBaseUrl } from "../tests/ASAPSettings/fixtures/test-data";
+import { TIMEOUTS } from "../constants";
 
 export class LoginPage {
   readonly page: Page;
@@ -179,8 +180,17 @@ export class LoginPage {
       await this.rememberMeCheckbox.uncheck();
     }
 
-    // Click login button
-    await this.loginButton.click();
+    await this.submitLogin();
+  }
+
+  /**
+   * Click GO. The click waits for the login navigation it triggers, but only
+   * within its own timeout (actionTimeout, 10s). Staging's login POST took
+   * ~10.5s under load (2026-11-27), so a plain click() timed out while the
+   * login was still in progress. Give it the navigation budget instead.
+   */
+  async submitLogin(): Promise<void> {
+    await this.loginButton.click({ timeout: TIMEOUTS.NAVIGATION });
   }
 
   /**

@@ -103,8 +103,21 @@ test.describe("ASAP Organization Settings Tests @asap @settings", () => {
   });
 
   test("ORG-EDIT-002: Edit & update Organization Name succeeds and persists @crud @manager", async () => {
-    const original = await orgSettingsPage.getDisplayedOrgName();
+    // Five loads of the heavy settings page (reset, edit, verify, restore,
+    // verify) plus a possible mid-test re-login don't fit the default 90s: the
+    // first run with restore-first timed out inside the final restore.
+    test.setTimeout(180_000);
+
+    // Restore to the canonical name, NOT whatever is displayed. Reading the
+    // displayed name as "original" let failed restores stack suffixes: staging
+    // ended up as "Automated OD ASAP QA QA QA QA" (2026-11-27).
+    const original = ASAP_ORG_CONFIG.name;
     const edited = `${original} QA`;
+
+    // Start from the canonical name too, in case an earlier run left it changed.
+    await restoreOrgName(original);
+
+    let testError: unknown;
     try {
       // Edit -> Update -> success (modal closes)
       await orgSettingsPage.openEditModal();
@@ -116,16 +129,41 @@ test.describe("ASAP Organization Settings Tests @asap @settings", () => {
       await settingsPage.navigateToSettings(baseUrl);
       await settingsPage.clickTab("Organization");
       expect(await orgSettingsPage.getDisplayedOrgName()).toBe(edited);
-    } finally {
-      // Always restore the original organization name
-      await orgSettingsPage.openEditModal();
-      await orgSettingsPage.setOrgName(original);
-      await orgSettingsPage.clickUpdate();
-      await settingsPage.navigateToSettings(baseUrl);
-      await settingsPage.clickTab("Organization");
-      expect(await orgSettingsPage.getDisplayedOrgName()).toBe(original);
+    } catch (e) {
+      testError = e;
     }
+
+    // Always restore — and don't let a restore failure hide the test's own error
+    // (a throwing `finally` used to mask it).
+    try {
+      await restoreOrgName(original);
+    } catch (restoreError) {
+      if (!testError) throw restoreError;
+      throw new Error(
+        `${(testError as Error).message}\n\n` +
+          `ALSO: restoring the organization name to "${original}" failed — fix it on staging by hand:\n` +
+          `${(restoreError as Error).message}`
+      );
+    }
+    if (testError) throw testError;
   });
+
+  /**
+   * Make the displayed organization name equal `name`. Reloads Settings first,
+   * which also gets rid of an edit modal left open by a failed step (an open
+   * modal blocks the edit button). No-op when the name already matches.
+   */
+  async function restoreOrgName(name: string): Promise<void> {
+    await settingsPage.navigateToSettings(baseUrl);
+    await settingsPage.clickTab("Organization");
+    if ((await orgSettingsPage.getDisplayedOrgName()) === name) return;
+    await orgSettingsPage.openEditModal();
+    await orgSettingsPage.setOrgName(name);
+    await orgSettingsPage.clickUpdate();
+    await settingsPage.navigateToSettings(baseUrl);
+    await settingsPage.clickTab("Organization");
+    expect(await orgSettingsPage.getDisplayedOrgName()).toBe(name);
+  }
 
   test("ORG-EDIT-003: Clearing the required Organization Name does not save @negative @manager", async () => {
     const original = await orgSettingsPage.getDisplayedOrgName();
