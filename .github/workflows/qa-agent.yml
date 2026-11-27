@@ -1,0 +1,335 @@
+name: QA Agent (report-only)
+
+# v1 of the AI QA Agent described in docs/QA_AGENT_PROMPT.md, run with Claude
+# Code in headless mode. Modelled on the rider-app repo's qa-agent.yml, keeping
+# the fixes from its real runs (pipefail, token whitespace, fail-loudly).
+#
+# REPORT-ONLY: it runs the impacted tests, triages failures, then posts a Slack
+# summary and uploads a JSON result. It cannot change anything:
+#   - the job token is read-only (permissions: contents: read);
+#   - the agent may only read files and run Playwright (Edit/Write/web tools
+#     denied; everything not allowlisted is auto-denied via --permission-mode dontAsk);
+#   - credentials reach the agent only as env vars for its test runs; reading
+#     .env*, auth state and /proc is denied;
+#   - production is never a target (input choice + guard step).
+#
+# Required repo secret (Settings -> Secrets and variables -> Actions):
+#   CLAUDE_CODE_OAUTH_TOKEN  long-lived token from `claude setup-token` (uses the
+#                            team's Claude subscription — no per-token API billing)
+# Already configured: STAGING_* / PREPRODUCTION_* test accounts, SLACK_WEBHOOK_URL.
+# Optional (enables diff-driven impact mapping; without them: NO-DIFF mode):
+#   variable APP_REPO            operator app source repo, e.g. TrackMyShuttle/<repo>
+#   secret   APP_REPO_READ_TOKEN read-only token for that repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test (production is never allowed)'
+        type: choice
+        options: [staging, preproduction]
+        default: staging
+      commit_range:
+        description: 'App commit range, e.g. abc1234..def5678 (blank = last 10 commits). Ignored in no-diff mode.'
+        type: string
+        required: false
+      spec:
+        description: 'Release notes / acceptance criteria for this change (optional)'
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-agent
+  cancel-in-progress: false
+
+jobs:
+  qa-agent:
+    runs-on: ubuntu-latest
+    # Agent budget is 30 min (QA_AGENT_PROMPT.md hard rule 8); the extra time
+    # covers checkout, npm ci and the browser install.
+    timeout-minutes: 45
+    # Explicit `shell: bash` runs steps with `-eo pipefail`. Without it GitHub
+    # uses plain `bash -e`, and `claude ... | tee` reports tee's success even
+    # when the agent fails (seen on the rider-app agent's first run).
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: true
+      ENV: ${{ inputs.environment }}
+    steps:
+      - name: Check secrets
+        id: secrets
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          APP_REPO: ${{ vars.APP_REPO }}
+          APP_REPO_READ_TOKEN: ${{ secrets.APP_REPO_READ_TOKEN }}
+          STAGING_MANAGER_EMAIL: ${{ secrets.STAGING_MANAGER_EMAIL }}
+          STAGING_MANAGER_PASSWORD: ${{ secrets.STAGING_MANAGER_PASSWORD }}
+          PREPRODUCTION_MANAGER_EMAIL: ${{ secrets.PREPRODUCTION_MANAGER_EMAIL }}
+          PREPRODUCTION_MANAGER_PASSWORD: ${{ secrets.PREPRODUCTION_MANAGER_PASSWORD }}
+        run: |
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "::error::Missing required secret CLAUDE_CODE_OAUTH_TOKEN (create it with: claude setup-token). Add it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          case "$CLAUDE_CODE_OAUTH_TOKEN" in
+            *[[:space:]]*) echo "::warning::CLAUDE_CODE_OAUTH_TOKEN contains whitespace or a line break (likely a wrapped copy/paste). It is stripped before use; re-save the secret as a single line to silence this." ;;
+          esac
+
+          # The test accounts for the chosen environment must exist, or every
+          # test fails at login and the run is meaningless.
+          case "$ENV" in
+            staging)       E="$STAGING_MANAGER_EMAIL";       P="$STAGING_MANAGER_PASSWORD";       PFX=STAGING ;;
+            preproduction) E="$PREPRODUCTION_MANAGER_EMAIL"; P="$PREPRODUCTION_MANAGER_PASSWORD"; PFX=PREPRODUCTION ;;
+            *) echo "::error::Refusing environment '$ENV' (only staging/preproduction)"; exit 1 ;;
+          esac
+          if [ -z "$E" ] || [ -z "$P" ]; then
+            echo "::error::Missing ${PFX}_MANAGER_EMAIL or ${PFX}_MANAGER_PASSWORD secret — every test would fail at login."
+            [ "$ENV" = preproduction ] && echo "::error::Note: the preproduction password is currently saved as REPRODUCTION_MANAGER_PASSWORD (missing the leading P). Re-save it as PREPRODUCTION_MANAGER_PASSWORD."
+            exit 1
+          fi
+
+          # Secrets can't be used in step `if:` conditions, so expose a flag instead.
+          if [ -n "$APP_REPO" ] && [ -n "$APP_REPO_READ_TOKEN" ]; then
+            echo "has_app_repo=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_app_repo=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::APP_REPO variable / APP_REPO_READ_TOKEN secret not set: running in NO-DIFF mode (@smoke + triage only, no change-to-feature mapping)."
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Checkout app source (read-only)
+        if: steps.secrets.outputs.has_app_repo == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.APP_REPO }}
+          token: ${{ secrets.APP_REPO_READ_TOKEN }}
+          path: app-src
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        # Retry with backoff; treat the apt font deps as best-effort (core libs
+        # ship in the runner image).
+        run: |
+          retry() {
+            local n=1 max=3 delay=20
+            until "$@"; do
+              if [ "$n" -ge "$max" ]; then return 1; fi
+              echo "::warning::'$*' failed (attempt $n/$max); retrying in ${delay}s"
+              sleep "$delay"; n=$((n+1)); delay=$((delay*2))
+            done
+          }
+          retry npx playwright install chromium
+          retry npx playwright install-deps chromium \
+            || echo "::warning::Playwright system deps could not be installed after retries; continuing"
+
+      - name: Install Claude Code
+        # Pinned so CLI flags stay stable; bump deliberately (same version as the rider-app agent).
+        run: npm install -g @anthropic-ai/claude-code@2.1.332
+
+      - name: Resolve run inputs
+        id: inputs
+        env:
+          INPUT_RANGE: ${{ inputs.commit_range }}
+          HAS_APP_REPO: ${{ steps.secrets.outputs.has_app_repo }}
+        run: |
+          case "$ENV" in
+            staging)       BASE_URL=https://php-staging.trackmyshuttle.com ;;
+            preproduction) BASE_URL=https://preproduction.trackmyshuttle.com ;;
+            *) echo "::error::Refusing environment '$ENV' (only staging/preproduction)"; exit 1 ;;
+          esac
+
+          RANGE="$INPUT_RANGE"
+          if [ "$HAS_APP_REPO" != "true" ]; then
+            [ -n "$RANGE" ] && echo "::warning::commit_range ignored: the app repo isn't available (no APP_REPO / APP_REPO_READ_TOKEN)."
+            RANGE="unavailable"
+          elif [ -z "$RANGE" ]; then
+            RANGE="$(git -C app-src rev-parse HEAD~10)..$(git -C app-src rev-parse HEAD)"
+          elif ! printf '%s' "$RANGE" | grep -qE '^[0-9a-fA-F]{7,40}\.\.[0-9a-fA-F]{7,40}$'; then
+            echo "::error::commit_range must look like <sha>..<sha> (7-40 hex chars each)"; exit 1
+          fi
+
+          # Build fingerprint: the app exposes no commit and /version is a 404.
+          # Its page assets carry a cache-bust stamp (e.g. settingmap.js?27112026-4,
+          # DDMMYYYY-N); take the most common one on the login page.
+          BUILD_ID=$(curl -s --max-time 20 "$BASE_URL/login" | grep -oE '\?[0-9]{8}-[0-9]+' | sort | uniq -c | sort -rn | head -1 | awk '{print $2}' | tr -d '?' || true)
+          [ -z "$BUILD_ID" ] && BUILD_ID="unknown"
+
+          {
+            echo "base_url=$BASE_URL"
+            echo "range=$RANGE"
+            echo "build_id=$BUILD_ID"
+          } >> "$GITHUB_OUTPUT"
+          echo "env=$ENV base_url=$BASE_URL range=$RANGE build_id=$BUILD_ID"
+
+      - name: Run QA agent (report-only)
+        env:
+          # Subscription auth only. ANTHROPIC_API_KEY is deliberately NOT passed:
+          # an API key outranks the OAuth token and would bill per token.
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          BASE_URL: ${{ steps.inputs.outputs.base_url }}
+          RANGE: ${{ steps.inputs.outputs.range }}
+          BUILD_ID: ${{ steps.inputs.outputs.build_id }}
+          SPEC: ${{ inputs.spec }}
+          HAS_APP_REPO: ${{ steps.secrets.outputs.has_app_repo }}
+          # Test accounts for the chosen environment only, as env vars (never
+          # written to .env.local, which the agent could read).
+          STAGING_MANAGER_EMAIL: ${{ inputs.environment == 'staging' && secrets.STAGING_MANAGER_EMAIL || '' }}
+          STAGING_MANAGER_PASSWORD: ${{ inputs.environment == 'staging' && secrets.STAGING_MANAGER_PASSWORD || '' }}
+          STAGING_OPERATOR_EMAIL: ${{ inputs.environment == 'staging' && secrets.STAGING_OPERATOR_EMAIL || '' }}
+          STAGING_OPERATOR_PASSWORD: ${{ inputs.environment == 'staging' && secrets.STAGING_OPERATOR_PASSWORD || '' }}
+          PREPRODUCTION_MANAGER_EMAIL: ${{ inputs.environment == 'preproduction' && secrets.PREPRODUCTION_MANAGER_EMAIL || '' }}
+          PREPRODUCTION_MANAGER_PASSWORD: ${{ inputs.environment == 'preproduction' && secrets.PREPRODUCTION_MANAGER_PASSWORD || '' }}
+          PREPRODUCTION_OPERATOR_EMAIL: ${{ inputs.environment == 'preproduction' && secrets.PREPRODUCTION_OPERATOR_EMAIL || '' }}
+          PREPRODUCTION_OPERATOR_PASSWORD: ${{ inputs.environment == 'preproduction' && secrets.PREPRODUCTION_OPERATOR_PASSWORD || '' }}
+        run: |
+          # Tokens never contain whitespace; strip any that a wrapped copy/paste
+          # added (a line break here made the rider-app agent's first run fail auth).
+          CLAUDE_CODE_OAUTH_TOKEN="$(printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN" | tr -d '[:space:]')"
+          export CLAUDE_CODE_OAUTH_TOKEN
+
+          mkdir -p agent-runs
+          TS=$(date -u +%Y%m%dT%H%M%SZ)
+          echo "TS=$TS" >> "$GITHUB_ENV"
+
+          # The system prompt is the section of docs/QA_AGENT_PROMPT.md between
+          # its two '---' rules, plus the report-only override below.
+          PROMPT=$(awk '/^---$/{n++; next} n==1' docs/QA_AGENT_PROMPT.md)
+
+          if [ "$HAS_APP_REPO" = "true" ]; then
+            DIFF_NOTE='- The operator app source is checked out read-only at ./app-src. Read the change with `git -C app-src log <range>` and `git -C app-src diff <range>`.'
+            RANGE_DESC="$RANGE (operator app, checked out at ./app-src)"
+          else
+            DIFF_NOTE='- NO-DIFF MODE: the app source is not available in this run, so there is no diff and no ./app-src directory. Skip Step 1, run @smoke (Step 2.1), triage every failure, set "features_changed" to [] and state in the Slack summary that the diff was unavailable.'
+            RANGE_DESC="unavailable (no app-repo access this run)"
+          fi
+
+          if [ "$ENV" = "preproduction" ]; then
+            ENV_NOTE='- PREPRODUCTION: add `--grep @prod` to every test run (read-only tests only). Never run @crud, @e2e or @negative tests here.'
+          else
+            ENV_NOTE='- STAGING: run data-changing (@crud) tests serially with `--workers=1`.'
+          fi
+
+          OVERRIDE_HEAD=$(cat <<'EOF'
+          ## RUN MODE OVERRIDE — REPORT-ONLY (v1)
+          This run is REPORT-ONLY. These rules override anything above:
+          - Do NOT edit or create files, open branches or pull requests, or create or comment on issues. Skip Step 4 (test authoring), Step 5 (bug hunting) and the PR/issue parts of Steps 3 and 6.
+          - Still classify every failure (APP_BUG / TEST_OUTDATED / LOCATOR_BROKEN / FLAKY / ENV_ISSUE / NEEDS_HUMAN) and state the action you WOULD take.
+          - build_version was already read from the deployed page by the workflow. Use it as given; fetching pages yourself isn't permitted here, so don't try. Your own transcript file in agent-runs/ is being written as you work; it is not a previous run.
+          - Run tests only with `npx playwright test --project=chromium ...`. The environment is fixed by the workflow (ENV and BASE_URL are already set); never override them. Login is handled by the setup project.
+          EOF
+          )
+          OVERRIDE_TAIL=$(cat <<'EOF'
+          - Never print environment variables, credentials or auth state.
+          - End your reply with exactly these two marked blocks, which the workflow extracts:
+          ===SLACK===
+          <the Step 6 Slack summary, plain text, phone-readable>
+          ===END SLACK===
+          ===JSON===
+          <the Step 6 JSON result object, valid JSON only>
+          ===END JSON===
+          EOF
+          )
+
+          OVERRIDE="$OVERRIDE_HEAD
+          $DIFF_NOTE
+          $ENV_NOTE
+          $OVERRIDE_TAIL"
+
+          # CI runners keep no history between runs, so there is no previous build stamp.
+          RUN_BLOCK=$(printf 'trigger: manual\nenvironment: %s\nbase_url: %s\ncommit_range: %s\nbuild_version: %s (asset cache-bust stamp, read from the deployed login page by this workflow)\nprevious_build_version: none (CI runs keep no history)\nspec: %s\njobs: [impact_run, triage]\n' \
+            "$ENV" "$BASE_URL" "$RANGE_DESC" "$BUILD_ID" "${SPEC:-none}")
+
+          # Model pinned so cost and behaviour don't drift with the CLI default.
+          claude -p "$RUN_BLOCK" \
+            --model claude-opus-5-5 \
+            --append-system-prompt "$PROMPT
+
+          $OVERRIDE" \
+            --permission-mode dontAsk \
+            --output-format text \
+            --allowedTools "Read" "Grep" "Glob" \
+              "Bash(npx playwright test:*)" \
+              "Bash(git -C app-src log:*)" "Bash(git -C app-src diff:*)" "Bash(git -C app-src show:*)" \
+            --disallowedTools "Edit" "Write" "NotebookEdit" "WebFetch" "WebSearch" \
+              "Read(./.env*)" "Read(./playwright/.auth/**)" "Read(//proc/**)" \
+            < /dev/null | tee "agent-runs/$TS.md"
+          # (< /dev/null: no stdin in CI; otherwise the CLI waits 3s for piped input.)
+
+      - name: Extract Slack summary + JSON result
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          ts = os.environ.get("TS", "run")
+          md = pathlib.Path(f"agent-runs/{ts}.md")
+          # errors="replace": stray non-UTF-8 bytes in agent/test output must not
+          # crash extraction (that would also lose the Slack summary).
+          text = md.read_text(encoding="utf-8", errors="replace") if md.exists() else ""
+
+          def block(name):
+              m = re.search(rf"==={name}===\s*(.*?)\s*===END {name}===", text, re.S)
+              return m.group(1).strip() if m else ""
+
+          raw = block("JSON")
+          try:
+              data = json.loads(raw)
+          except Exception:
+              data = {"error": "agent did not return a valid JSON block"}
+          pathlib.Path("agent-runs").mkdir(exist_ok=True)
+          pathlib.Path(f"agent-runs/{ts}.json").write_text(json.dumps(data, indent=2))
+          pathlib.Path("agent-runs/slack.txt").write_text(block("SLACK"))
+          print("json keys:", list(data)[:12])
+          PY
+
+      - name: Post Slack summary
+        if: always()
+        continue-on-error: true
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then echo "No Slack webhook configured; skipping"; exit 0; fi
+          MSG=$(cat agent-runs/slack.txt 2>/dev/null || true)
+          [ -z "$MSG" ] && MSG="QA Agent (report-only) | $ENV | run ended without a summary block — see the run log."
+          payload=$(python3 -c 'import json,sys; print(json.dumps({"text": sys.argv[1] + "\n\n_Operator web app · report-only dry run_ · " + sys.argv[2]}))' "$MSG" "$RUN_URL")
+          curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL" >/dev/null
+
+      - name: Upload agent run
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-agent-${{ inputs.environment }}-${{ github.run_id }}
+          path: |
+            agent-runs/
+            playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      # Last, so the Slack post and artifact upload above still happen: a run in
+      # which the agent produced no result must show red, not green.
+      - name: Fail if the agent produced no result
+        if: always()
+        run: |
+          f="agent-runs/${TS:-missing}.json"
+          if [ ! -f "$f" ] || python3 -c 'import json,sys; sys.exit(0 if "error" in json.load(open(sys.argv[1])) else 1)' "$f"; then
+            echo "::error::The agent did not produce a result. First lines of its output:"
+            head -5 "agent-runs/${TS:-missing}.md" 2>/dev/null || echo "(no transcript)"
+            exit 1
+          fi
+          echo "Agent produced a result."

@@ -50,3 +50,8 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
+
+# QA agent run outputs — keep the dir (README/.gitkeep), ignore per-run files
+/agent-runs/*.json
+/agent-runs/*.md
+!/agent-runs/README.md

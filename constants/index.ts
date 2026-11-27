@@ -88,6 +88,8 @@ export const TAGS = {
   ADMIN: '@admin',
   /** API-related tests */
   API: '@api',
+  /** Flaky/parked by the QA agent — EXCLUDED from every run via grepInvert in playwright.config.ts */
+  QUARANTINE: '@quarantine',
 } as const;
 
 // ============================================================================

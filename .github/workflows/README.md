@@ -12,6 +12,7 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
 | [scheduled-production.yml](#scheduled-productionyml) | Scheduled, Manual | Production health checks (read-only @prod only) | Daily 5 AM UTC (overnight ET) |
 | [scheduled-preprod.yml](#scheduled-prepprepd.ymlyml) | Scheduled, Manual | Pre-production validation | Nightly Mon–Fri 7 AM UTC (overnight ET) |
 | [update-version.yml](#update-versionyml) | Manual dispatch | Automates version bumping in package files | On demand |
+| [qa-agent.yml](#qa-agentyml) | Manual dispatch | AI QA agent (report-only): runs impacted tests, triages failures, posts to Slack | On demand |
 
 ---
 
@@ -102,6 +103,16 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
   - `major`: Increments major version (e.g., 1.0.0 → 2.0.0)
   - `minor`: Increments minor version (e.g., 1.0.0 → 1.1.0)
   - `patch`: Increments patch version (e.g., 1.0.0 → 1.0.1)
+
+---
+
+### qa-agent.yml
+**Purpose**: Runs the AI QA agent from `docs/QA_AGENT_PROMPT.md` with Claude Code in headless mode
+- **Trigger**: Manual dispatch only — choose `staging` or `preproduction` (production is refused)
+- **Report-only**: read-only job token; the agent can only read files and run `npx playwright test`. It opens no PRs or issues and edits nothing.
+- **What it does**: runs `@smoke` (plus impacted tags when a diff is available; `@prod` only on preproduction), classifies every failure, posts a Slack summary, and uploads `agent-runs/<timestamp>.json` + the transcript as an artifact. The run goes red if the agent returns no result.
+- **Required secret**: `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`; uses the Claude subscription, no API billing)
+- **Optional**: repo variable `APP_REPO` + secret `APP_REPO_READ_TOKEN` for diff-driven impact mapping; without them the run is in no-diff mode
 
 ---
 
