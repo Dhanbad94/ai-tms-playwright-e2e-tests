@@ -47,7 +47,7 @@ concurrency:
 
 jobs:
   qa-agent:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Agent budget is 30 min (QA_AGENT_PROMPT.md hard rule 8); the extra time
     # covers checkout, npm ci and the browser install.
     timeout-minutes: 45
