@@ -38,7 +38,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write        # push the dashboard to the gh-pages branch
       checks: write
@@ -217,7 +217,7 @@ jobs:
   # the "View Report Results" CTA opens this run's rendered per-run dashboard.
   notify:
     name: Send Slack Notification
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [test]
     if: always()
     steps:
