@@ -1,207 +1,155 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { SettingsBasePage } from "./settings-base.page";
 
 /**
- * Escalations Settings Page Object
- * Settings Tab: Escalations
- * URL Hash: #escaltionSettings
+ * Escalations settings tab (#escaltionSettings).
+ *
+ * Two independent sections, each scoped under a `.escalation__card`:
+ *   0) "Ride Request Not Addressed" — toggle id #escalationSettingsOperator
+ *   1) "Trip Not Started"           — toggle id #escalationSettingsDriver
+ *
+ * Behaviour confirmed on staging:
+ * - The toggles are CSS switches: `<input class="switch-toggle-input" id="X">`
+ *   (display:none) + `<label for="X" class="switch-toggle-label">` as the
+ *   visible, clickable track — a different sibling pattern from the WhatsApp
+ *   tab's `+ .toggle-track` (here it's a `<label for=...>`, not a sibling
+ *   span), so don't copy that selector across tabs without checking.
+ * - Flipping a toggle on its own does NOT save anything — unlike WhatsApp
+ *   Notification, which auto-saves each toggle. Verified on staging: no
+ *   HTTP request or WebSocket frame is sent on toggle, and the value is gone
+ *   after navigating away and back, or in a fresh browser context.
+ *   ⚠️ Reloading the *same* URL with page.goto() made it look persisted —
+ *   that was Chrome restoring form-control state, not a server save. The
+ *   real save presumably needs a complete rule (threshold + recipient via
+ *   Select2, then the hidden `.saveEscalationModel` "Yes" confirm), which is
+ *   deliberately not automated: a complete rule enables live escalations
+ *   that can call/SMS real phone numbers.
+ * - "See Example" is a CSS **`:hover`**-reveal, not a click target — the
+ *   `.escalation__tooltip--info` example sentence has `opacity:0;
+ *   visibility:hidden` by default and only becomes visible on `:hover`
+ *   (confirmed via computed style, not just `offsetParent`, which misses
+ *   opacity/visibility-hidden elements). A `.click()` does nothing.
+ * - "Select Action" is a static `<span class="text escalation_via">Call/SMS/Email</span>`,
+ *   not a real dropdown, despite the column header implying a choice.
+ * - "+ Add More" renders as `.escalation__addMore.disabled` by default; it did
+ *   NOT become enabled after turning the section's toggle on in manual
+ *   testing — the unlock condition is unconfirmed. Treat as a known
+ *   coverage gap (see app-map.yaml) rather than assuming a specific trigger.
+ * - The "To" field is a Select2 widget (`select.escalationUser`, hidden,
+ *   `select2-hidden-accessible`) backed by a free-text combobox
+ *   ("Driver/Operator/Manager") — not asserted here beyond presence; driving
+ *   Select2 reliably needs its own helper if a future test needs to pick a user.
  */
-export class EscalationsSettingsPage {
-  readonly page: Page;
+export class EscalationsSettingsPage extends SettingsBasePage {
+  readonly heading: Locator;
+  readonly description: Locator;
 
-  // Page Heading
-  readonly pageHeading: Locator;
-  readonly pageDescription: Locator;
+  // Section containers (0 = Ride Request Not Addressed, 1 = Trip Not Started)
+  readonly rideRequestCard: Locator;
+  readonly tripNotStartedCard: Locator;
 
-  // Ride Request Not Addressed Section
-  readonly rideRequestNotAddressedCheckbox: Locator;
-  readonly rideRequestNotAddressedLabel: Locator;
-  readonly rideRequestSeeExampleLink: Locator;
+  // Toggles
+  readonly rideRequestToggleInput: Locator;
+  readonly rideRequestToggleLabel: Locator;
+  readonly tripNotStartedToggleInput: Locator;
+  readonly tripNotStartedToggleLabel: Locator;
 
-  // Trip Not Started Section
-  readonly tripNotStartedCheckbox: Locator;
-  readonly tripNotStartedLabel: Locator;
-  readonly tripNotStartedSeeExampleLink: Locator;
-
-  // Escalation Configuration Elements
-  readonly addMoreButtons: Locator;
-  readonly afterMinutesInputs: Locator;
-  readonly selectActionDropdowns: Locator;
-  readonly toUserDropdowns: Locator;
+  // Per-section static content
+  readonly rideRequestText: Locator;
+  readonly tripNotStartedText: Locator;
+  readonly rideRequestSeeExample: Locator;
+  readonly tripNotStartedSeeExample: Locator;
+  readonly rideRequestExampleText: Locator;
+  readonly tripNotStartedExampleText: Locator;
+  readonly rideRequestAddMore: Locator;
+  readonly tripNotStartedAddMore: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
+    this.heading = page.getByRole("heading", { name: "Escalation Settings", level: 2 });
+    this.description = page.getByText(
+      "Set up sequence of notifications when ride requests remain open beyond acceptable wait time."
+    );
 
-    // Page Heading
-    this.pageHeading = page.getByRole("heading", { name: "Escalation Settings", level: 2 });
-    this.pageDescription = page.getByText("Set up sequence of notifications when ride requests remain open beyond acceptable wait time.");
+    const panel = page.locator("#escaltionSettings");
+    const cards = panel.locator(".escalation__card");
+    this.rideRequestCard = cards.nth(0);
+    this.tripNotStartedCard = cards.nth(1);
 
-    // Ride Request Not Addressed Section - paragraph text next to checkbox
-    this.rideRequestNotAddressedLabel = page.getByText("Notify when Ride Request is not addressed by Driver on time");
-    // The checkbox is a sibling to the paragraph, both in the same container
-    this.rideRequestNotAddressedCheckbox = page.locator("p:has-text('Notify when Ride Request is not addressed')").locator("..").getByRole("checkbox");
-    this.rideRequestSeeExampleLink = page.getByText("See Example").first();
+    this.rideRequestToggleInput = page.locator("#escalationSettingsOperator");
+    this.rideRequestToggleLabel = page.locator('label[for="escalationSettingsOperator"]');
+    this.tripNotStartedToggleInput = page.locator("#escalationSettingsDriver");
+    this.tripNotStartedToggleLabel = page.locator('label[for="escalationSettingsDriver"]');
 
-    // Trip Not Started Section
-    this.tripNotStartedLabel = page.getByText("Notify when Trip not started by Driver");
-    this.tripNotStartedCheckbox = page.locator("p:has-text('Notify when Trip not started')").locator("..").getByRole("checkbox");
-    this.tripNotStartedSeeExampleLink = page.getByText("See Example").nth(1);
+    this.rideRequestText = this.rideRequestCard.getByText("Notify when Ride Request is not addressed by Driver on time");
+    this.tripNotStartedText = this.tripNotStartedCard.getByText("Notify when Trip not started by Driver");
 
-    // Escalation Configuration Elements
-    this.addMoreButtons = page.getByText("+ Add More");
-    this.afterMinutesInputs = page.getByRole("textbox").filter({ has: page.locator("..").filter({ hasText: "mins" }) });
-    this.selectActionDropdowns = page.locator("text=Call/SMS/Email");
-    this.toUserDropdowns = page.getByRole("listbox");
+    this.rideRequestSeeExample = this.rideRequestCard.getByText("See Example");
+    this.tripNotStartedSeeExample = this.tripNotStartedCard.getByText("See Example");
+    this.rideRequestExampleText = this.rideRequestCard.locator(".escalation__tooltip--info");
+    this.tripNotStartedExampleText = this.tripNotStartedCard.locator(".escalation__tooltip--info");
+
+    this.rideRequestAddMore = this.rideRequestCard.locator(".escalation__addMore");
+    this.tripNotStartedAddMore = this.tripNotStartedCard.locator(".escalation__addMore");
   }
 
-  /**
-   * Verify escalations settings page is loaded
-   */
+  /** Navigate to Settings and open the Escalations tab. */
+  async open(baseUrl: string): Promise<void> {
+    await this.navigateToSettings(baseUrl);
+    await this.clickTab("Escalations");
+    await this.heading.waitFor({ state: "visible", timeout: 10000 });
+    await this.rideRequestToggleInput.waitFor({ state: "attached", timeout: 10000 });
+  }
+
   async verifyPageLoaded(): Promise<void> {
-    await expect(this.pageHeading).toBeVisible({ timeout: 10000 });
-    await expect(this.pageDescription).toBeVisible({ timeout: 5000 });
+    await expect(this.heading).toBeVisible({ timeout: 10000 });
+    await expect(this.description).toBeVisible({ timeout: 5000 });
   }
 
-  /**
-   * Verify page content is visible
-   */
-  async verifyPageContent(): Promise<void> {
-    await expect(this.rideRequestNotAddressedLabel).toBeVisible({ timeout: 5000 });
-    await expect(this.tripNotStartedLabel).toBeVisible({ timeout: 5000 });
+  async isRideRequestEnabled(): Promise<boolean> {
+    return this.rideRequestToggleInput.isChecked();
   }
-
-  // ========== Ride Request Not Addressed Methods ==========
-
-  /**
-   * Check if ride request not addressed notification is enabled
-   */
-  async isRideRequestNotAddressedEnabled(): Promise<boolean> {
-    const section = this.page.locator("text=Notify when Ride Request is not addressed by Driver on time").locator("..");
-    const checkbox = section.getByRole("checkbox");
-    return await checkbox.isChecked();
-  }
-
-  /**
-   * Toggle ride request not addressed notification
-   */
-  async toggleRideRequestNotAddressed(): Promise<void> {
-    const section = this.page.locator("text=Notify when Ride Request is not addressed by Driver on time").locator("..");
-    const checkbox = section.getByRole("checkbox");
-    await checkbox.click();
-  }
-
-  /**
-   * Click see example for ride request escalation
-   */
-  async clickRideRequestSeeExample(): Promise<void> {
-    await this.rideRequestSeeExampleLink.click();
-    // Wait for element update
-  }
-
-  // ========== Trip Not Started Methods ==========
-
-  /**
-   * Check if trip not started notification is enabled
-   */
   async isTripNotStartedEnabled(): Promise<boolean> {
-    const section = this.page.locator("text=Notify when Trip not started by Driver").locator("..");
-    const checkbox = section.getByRole("checkbox");
-    return await checkbox.isChecked();
+    return this.tripNotStartedToggleInput.isChecked();
   }
 
   /**
-   * Toggle trip not started notification
+   * Flip a styled toggle to the desired state via its visible `<label for=...>`
+   * (the `<input>` itself is display:none). No-op when already in that state.
    */
-  async toggleTripNotStarted(): Promise<void> {
-    const section = this.page.locator("text=Notify when Trip not started by Driver").locator("..");
-    const checkbox = section.getByRole("checkbox");
-    await checkbox.click();
-    // Animation wait removed - element changes are observable
+  private async setToggle(input: Locator, label: Locator, on: boolean): Promise<void> {
+    if ((await input.isChecked()) === on) return;
+    await label.click();
+    // Client-side state only — the toggle alone sends no save (see class doc).
+    await expect(input).toBeChecked({ checked: on, timeout: 5000 });
+  }
+
+  async setRideRequestEnabled(on: boolean): Promise<void> {
+    await this.setToggle(this.rideRequestToggleInput, this.rideRequestToggleLabel, on);
+  }
+  async setTripNotStartedEnabled(on: boolean): Promise<void> {
+    await this.setToggle(this.tripNotStartedToggleInput, this.tripNotStartedToggleLabel, on);
   }
 
   /**
-   * Click see example for trip not started escalation
+   * Restore both toggles to OFF (the default state observed on staging).
+   * Currently a client-side no-op in effect (toggles don't save on their
+   * own), kept so cleanup stays correct if the app starts auto-saving.
    */
-  async clickTripNotStartedSeeExample(): Promise<void> {
-    await this.tripNotStartedSeeExampleLink.click();
-    // Wait for element update
-  }
-
-  // ========== Escalation Configuration Methods ==========
-
-  /**
-   * Get escalation rule configuration
-   * @param ruleIndex - Index of the rule (0-based)
-   * @param sectionType - Type of escalation section
-   */
-  async getEscalationRuleConfig(
-    ruleIndex: number,
-    sectionType: "rideRequest" | "tripNotStarted"
-  ): Promise<{ minutes: string; action: string; toUser: string }> {
-    const sectionText = sectionType === "rideRequest"
-      ? "Notify when Ride Request is not addressed by Driver on time"
-      : "Notify when Trip not started by Driver";
-
-    const section = this.page.locator(`text="${sectionText}"`).locator("..").locator("..");
-    const ruleRow = section.locator("text=After").nth(ruleIndex).locator("..");
-
-    const minutesInput = ruleRow.getByRole("textbox");
-    const minutes = await minutesInput.inputValue();
-
-    // These would need more specific selectors based on actual DOM structure
-    return {
-      minutes,
-      action: "Call/SMS/Email", // Default action
-      toUser: "",
-    };
+  async restoreToOff(): Promise<void> {
+    await this.setRideRequestEnabled(false);
+    await this.setTripNotStartedEnabled(false);
   }
 
   /**
-   * Click Add More button for escalation section
-   * @param sectionType - Type of escalation section
+   * Hover "See Example" to CSS-reveal the example sentence — it is not a
+   * click target (see class doc). Hovering the text also satisfies the
+   * ancestor `.escalation__tooltip:hover` rule that controls visibility.
    */
-  async clickAddMoreRule(sectionType: "rideRequest" | "tripNotStarted"): Promise<void> {
-    const sectionText = sectionType === "rideRequest"
-      ? "Notify when Ride Request is not addressed by Driver on time"
-      : "Notify when Trip not started by Driver";
-
-    const section = this.page.locator(`text="${sectionText}"`).locator("..").locator("..").locator("..");
-    const addMoreButton = section.getByText("+ Add More");
-    await addMoreButton.click();
-    // Animation wait removed - element changes are observable
+  async hoverRideRequestSeeExample(): Promise<void> {
+    await this.rideRequestSeeExample.hover();
   }
-
-  /**
-   * Get available users in dropdown
-   */
-  async getAvailableUsers(): Promise<string[]> {
-    const options = await this.page.getByRole("option").all();
-    const users: string[] = [];
-    for (const option of options) {
-      const text = await option.textContent();
-      if (text) {
-        users.push(text.trim());
-      }
-    }
-    return users;
-  }
-
-  /**
-   * Verify escalation configuration UI elements are visible
-   * The escalation config has columns: After, Select Action, To
-   * Scoped to #escaltionSettings (the active Escalations tab panel) to avoid
-   * matching identical-text elements inside hidden panels of other Settings tabs.
-   */
-  async verifyEscalationConfigVisible(): Promise<void> {
-    // Scope all locators to the Escalations tab panel so hidden panels don't match first
-    const panel = this.page.locator("#escaltionSettings");
-
-    const afterLabel = panel.locator("div").filter({ hasText: /^After$/ }).first();
-    await expect(afterLabel).toBeVisible({ timeout: 5000 });
-
-    const selectActionLabel = panel.locator("div").filter({ hasText: /^Select Action$/ }).first();
-    await expect(selectActionLabel).toBeVisible({ timeout: 5000 });
-
-    const toLabel = panel.locator("div").filter({ hasText: /^To$/ }).first();
-    await expect(toLabel).toBeVisible({ timeout: 5000 });
+  async hoverTripNotStartedSeeExample(): Promise<void> {
+    await this.tripNotStartedSeeExample.hover();
   }
 }

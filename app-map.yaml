@@ -207,14 +207,26 @@ features:
     coverage_gap: "Page object exists but no spec file references it. Candidate for test authoring (QA_AGENT_PROMPT.md Step 4)."
 
   - id: settings_escalations
-    name: "Settings — Escalations tab (UNCOVERED)"
+    name: "Settings — Escalations tab"
     urls: ["/setting#escaltionSettings"]
     app_code_path: unknown
     page_objects: ["pages/ASAP/escalations-settings.page.ts"]
-    spec_files: []
-    test_id_prefix: "none yet"
-    tags: []
-    coverage_gap: "Page object exists but no spec file references it. Candidate for test authoring."
+    spec_files: ["tests/ASAPSettings/escalations-settings.spec.ts"]
+    test_id_prefix: "ESC-NAV-, ESC-READ-, ESC-CRUD-"
+    tags: ["@asap", "@settings", "@smoke", "@regression", "@manager", "@prod"]
+    scope: >
+      Agreed with the owner (2026-11-27): escalations fire in real time, so only
+      the enable/disable controls are automated, not saving a full rule
+      (threshold + recipient + confirm). Same scope applies to WhatsApp.
+    notes: >
+      Flipping a toggle on its own sends no request and is lost after leaving
+      the page (WhatsApp toggles, by contrast, auto-save). "+ Add More" stays
+      disabled by default. "See Example" is a CSS :hover reveal. "Select Action"
+      is a static label (Call/SMS/Email).
+    ux_suggestions:
+      - "Toggles look like instant settings but save nothing on their own, with no hint that more steps are needed."
+      - "'Select Action' column header implies a choice, but the value is a fixed label."
+      - "The 'To' recipient list is cluttered with ~45 leftover automation test users (Test User…/Updated…)."
 
   - id: settings_removed_pages
     name: "Settings tabs previously automated, since removed from this branch"
@@ -241,7 +253,6 @@ unmapped_page_objects: []
 # ---------------------------------------------------------------------------
 coverage_gaps:
   - "settings_driver_app: page object exists, zero tests"
-  - "settings_escalations: page object exists, zero tests"
   - "settings_user_management: entire suite currently skipped (active dev)"
   - "No app_code_path is populated anywhere — requires APP_REPO access to do diff-based impact analysis (QA_AGENT_PROMPT.md Step 1/2)"
   - "No second test org configured — cross-org data-leak checks cannot run"

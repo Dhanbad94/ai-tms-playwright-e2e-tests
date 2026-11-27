@@ -188,6 +188,17 @@ fail with no obvious cause.
   pattern), but the form fields never populate because an AJAX call is firing
   at the literal string `javascript:void(0);`. `ORG-EDIT-001..004` are
   correctly red until this ships a fix.
+- **Same-URL reload can fake persistence:** `page.goto()` to the URL you're
+  already on lets Chrome restore form-control state, so a checkbox can look
+  saved when nothing reached the server (this happened with the Escalations
+  toggles). To prove a setting persisted, visit another page first or read
+  it in a fresh browser context.
+- **Escalations vs. WhatsApp toggles differ:** WhatsApp toggles auto-save and
+  use a `+ .toggle-track` sibling; Escalations toggles save nothing on their
+  own and use a `<label for="...">`. Both hide the `<input>` (display:none).
+- **Real-time notification settings (Escalations, WhatsApp):** scope is
+  limited to the enable/disable controls (agreed with the owner). Don't
+  automate saving complete rules; they can call/SMS real people.
 
 ## CI / environments
 
@@ -210,7 +221,7 @@ fail with no obvious cause.
 
 - Work on a feature/fix branch, never commit straight to `main`.
 - Commit messages: imperative summary line, body explaining *why*, ending with
-  `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>` when AI-assisted.
+  a `Co-Authored-By: Claude …` trailer when AI-assisted.
 - Before pushing: `npx tsc --noEmit` must be clean, and any test you
   touched/added should be run against staging (not just type-checked) with
   evidence pasted into the PR description.
@@ -222,5 +233,5 @@ fail with no obvious cause.
   run until this exists.
 - No second test organization exists — cross-org data-leak checks aren't
   automatable yet.
-- `settings_driver_app` and `settings_escalations` have page objects but zero
-  test coverage — good first targets for new test authoring.
+- `settings_driver_app` has a page object but zero test coverage — a good
+  first target for new test authoring.
