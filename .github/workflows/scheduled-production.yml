@@ -55,7 +55,7 @@ jobs:
   # Check if secrets are configured
   check-secrets:
     name: Verify Production Secrets
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       secrets_configured: ${{ steps.check.outputs.configured }}
       slack_configured: ${{ steps.check.outputs.slack }}
@@ -80,7 +80,7 @@ jobs:
   # Safety check for manual runs
   safety-check:
     name: Production Safety Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: check-secrets
     if: needs.check-secrets.outputs.secrets_configured == 'true'
     outputs:
@@ -102,7 +102,7 @@ jobs:
 
   production-tests:
     name: Production ${{ github.event.inputs.test_type || 'Scheduled' }} Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [check-secrets, safety-check]
     if: |
       needs.check-secrets.outputs.secrets_configured == 'true' &&
@@ -279,7 +279,7 @@ jobs:
   # Unified notification job for production
   notify:
     name: Send Notification
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [check-secrets, safety-check, production-tests]
     if: always() && needs.check-secrets.outputs.secrets_configured == 'true' && needs.safety-check.outputs.proceed == 'true' && needs.check-secrets.outputs.slack_configured == 'true'
     steps:
@@ -403,7 +403,7 @@ jobs:
   # Skip notification when secrets not configured
   notify-skipped:
     name: Notify Skipped
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: check-secrets
     if: needs.check-secrets.outputs.secrets_configured == 'false'
     steps:

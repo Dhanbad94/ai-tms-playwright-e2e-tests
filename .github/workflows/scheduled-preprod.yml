@@ -45,7 +45,7 @@ jobs:
   # Check if secrets are configured
   check-secrets:
     name: Verify Preproduction Secrets
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       secrets_configured: ${{ steps.check.outputs.configured }}
       slack_configured: ${{ steps.check.outputs.slack }}
@@ -69,7 +69,7 @@ jobs:
 
   preprod-tests:
     name: Preproduction ${{ github.event.inputs.test_type || 'Full Suite' }} Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: check-secrets
     if: needs.check-secrets.outputs.secrets_configured == 'true'
     timeout-minutes: 90
@@ -242,7 +242,7 @@ jobs:
   # Unified notification job
   notify:
     name: Send Notification
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [check-secrets, preprod-tests]
     if: always() && needs.check-secrets.outputs.secrets_configured == 'true' && needs.check-secrets.outputs.slack_configured == 'true'
     steps:
@@ -366,7 +366,7 @@ jobs:
   # Skip notification
   notify-skipped:
     name: Notify Skipped
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: check-secrets
     if: needs.check-secrets.outputs.secrets_configured == 'false'
     steps:
