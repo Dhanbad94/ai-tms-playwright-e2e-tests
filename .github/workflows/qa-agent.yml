@@ -12,6 +12,10 @@ name: QA Agent (report-only)
 #   - credentials reach the agent only as env vars for its test runs; reading
 #     .env*, auth state and /proc is denied;
 #   - production is never a target (input choice + guard step).
+#   - the full transcript (every tool call, its output, refused calls) is kept,
+#     but only after .github/scripts/qa_agent_transcript.py redacts every
+#     *_PASSWORD value and the Claude token; the raw stream never reaches an
+#     artifact or the job log.
 #
 # Runs on a schedule (Mon/Wed/Fri) and on demand. Each run reads the previous
 # successful run's saved result to compare build stamps; when the app source is
@@ -366,6 +370,15 @@ jobs:
           RUN_BLOCK=$(printf 'trigger: %s\nenvironment: %s\nbase_url: %s\ncommit_range: %s\nbuild_version: %s (asset cache-bust stamp, read from the deployed login page by this workflow)\nprevious_build_version: %s (from the last successful agent run; "none" if unavailable)\nspec: %s\njobs: [impact_run, triage]\n' \
             "$TRIGGER" "$ENV" "$BASE_URL" "$RANGE_DESC" "$BUILD_ID" "${PREV_BUILD:-none}" "${SPEC:-none}")
 
+          # Full transcript: stream-json records every tool call the agent makes and
+          # its output, plus any call the permission rules refused. The RAW stream
+          # goes to a file OUTSIDE agent-runs/ (so it can never be uploaded) and
+          # never to the job log: it holds whatever files the agent read, and
+          # failure snapshots record typed passwords. qa_agent_transcript.py then
+          # writes the redacted .jsonl / .md / .tools.md — even if the agent failed.
+          RAW="$RUNNER_TEMP/qa-agent-raw.jsonl"
+          rc=0
+
           # Model pinned so cost and behaviour don't drift with the CLI default.
           claude -p "$RUN_BLOCK" \
             --model claude-opus-5-5 \
@@ -373,14 +386,19 @@ jobs:
 
           $OVERRIDE" \
             --permission-mode dontAsk \
-            --output-format text \
+            --output-format stream-json --verbose \
             --allowedTools "Read" "Grep" "Glob" \
               "Bash(npx playwright test:*)" \
               "Bash(git -C app-src log:*)" "Bash(git -C app-src diff:*)" "Bash(git -C app-src show:*)" \
             --disallowedTools "Edit" "Write" "NotebookEdit" "WebFetch" "WebSearch" \
               "Read(./.env*)" "Read(./playwright/.auth/**)" "Read(//proc/**)" \
-            < /dev/null | tee "agent-runs/$TS.md"
+            < /dev/null > "$RAW" || rc=$?
           # (< /dev/null: no stdin in CI; otherwise the CLI waits 3s for piped input.)
+
+          # Redact, render the transcript files, print the redacted timeline here.
+          python3 .github/scripts/qa_agent_transcript.py "$RAW" "agent-runs/$TS" || rc=1
+          rm -f "$RAW"
+          exit "$rc"
 
       - name: Extract Slack summary + JSON result
         if: always()
