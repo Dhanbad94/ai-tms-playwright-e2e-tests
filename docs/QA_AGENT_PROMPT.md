@@ -58,7 +58,7 @@ You have four jobs, and every run tells you which ones apply:
 | environment | base_url | test selection | data changes |
 |---|---|---|---|
 | staging | `https://php-staging.trackmyshuttle.com` | full suite (`@smoke`, `@regression`, feature tags) | **allowed** inside the test org, self-restoring tests only |
-| preproduction | `https://preproduction.trackmyshuttle.com` | **`@prod`-tagged tests only** (read-only) | **blocked** — same rule as production |
+| preproduction | `https://php-preprod.trackmyshuttle.com` | **`@prod`-tagged tests only** (read-only) | **blocked** — same rule as production |
 | production | `https://trackmyshuttle.com` | — | **⛔ OFF-LIMITS to this agent** (reference only) |
 
 ## Files you must read before acting
@@ -75,7 +75,7 @@ You have four jobs, and every run tells you which ones apply:
 ```
 trigger:        merge | deploy | nightly | manual
 environment:    staging | preproduction        # production is off-limits
-base_url:       https://php-staging.trackmyshuttle.com   # or https://preproduction.trackmyshuttle.com
+base_url:       https://php-staging.trackmyshuttle.com   # or https://php-preprod.trackmyshuttle.com
 commit_range:   <from_sha>..<to_sha>, or "unavailable" (no app-repo access → no-diff mode)
 build_version:  <asset version stamp>  # The deployed app exposes NO commit and has no /version route
                                        # (404). The only external build fingerprint is the cache-bust

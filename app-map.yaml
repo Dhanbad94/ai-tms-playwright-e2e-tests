@@ -26,7 +26,7 @@ meta:
       credential_prefix: "STAGING_"
       full_suite: true
     preproduction:
-      base_url: "https://preproduction.trackmyshuttle.com"
+      base_url: "https://php-preprod.trackmyshuttle.com"
       credential_prefix: "PREPRODUCTION_"
       note: "scheduled run uses @prod-tagged tests only (read-only), same set as production"
     production:

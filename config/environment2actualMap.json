@@ -1,5 +1,5 @@
 {
   "staging": "php-staging.trackmyshuttle.com",
-  "preproduction": "preproduction.trackmyshuttle.com",
+  "preproduction": "php-preprod.trackmyshuttle.com",
   "prod": "trackmyshuttle.com"
 }

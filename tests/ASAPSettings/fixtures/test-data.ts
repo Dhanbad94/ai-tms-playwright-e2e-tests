@@ -29,7 +29,7 @@ export function getCredentials(role: "MANAGER" | "OPERATOR") {
  */
 export const BASE_URLS = {
   staging: "https://php-staging.trackmyshuttle.com",
-  preproduction: "https://preproduction.trackmyshuttle.com",
+  preproduction: "https://php-preprod.trackmyshuttle.com",
   production: "https://trackmyshuttle.com",
   prod: "https://trackmyshuttle.com",
 } as const;

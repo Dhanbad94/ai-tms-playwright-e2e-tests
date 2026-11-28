@@ -12,7 +12,7 @@ export default function setBaseURL(env: string, domain: string | null, masterPro
       baseURL = 'https://php-staging.trackmyshuttle.com/';
       break;
     case 'preproduction':
-      baseURL = 'https://preproduction.trackmyshuttle.com/';
+      baseURL = 'https://php-preprod.trackmyshuttle.com/';
       break;
     case 'prod':
       baseURL = 'https://trackmyshuttle.com/';

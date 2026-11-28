@@ -187,7 +187,7 @@ You can manually trigger any workflow from GitHub Actions:
 | Environment | URL |
 |-------------|-----|
 | Staging | https://php-staging.trackmyshuttle.com |
-| Preproduction | https://preproduction.trackmyshuttle.com |
+| Preproduction | https://php-preprod.trackmyshuttle.com |
 | Production | https://trackmyshuttle.com |
 
 ## 9. Security Checklist
