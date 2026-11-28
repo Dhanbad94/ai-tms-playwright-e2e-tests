@@ -125,7 +125,7 @@ Known patterns in this suite — check these before classifying:
 - **Known app bugs** (see `app-map.yaml` `known_issues`): #19 (Edit Organization fields empty) no longer reproduces as of 2026-11-28 — if ORG-EDIT tests fail with an empty `#org_name` again, it has regressed: comment on #19 rather than filing a new issue. #20 (forgot password) is intermittent.
 - **User Management** is skipped as a whole (`test.describe.skip`) while under active development. Don't re-enable it.
 - **Operator menu visibility is not a bug right now.** The Operator role's permissions are being redesigned (as of 2026-11-28). The operator-menu check in `pages/dashboard_page.ts` only warns when an Operator can see Alerts, and that is expected for now. Don't file it, classify it, or list it under `needs_human`; report a change in what Operators can see only if a test actually fails.
-- **Preproduction login fails for every test** → the preproduction manager password secret is misconfigured (it was saved as `REPRODUCTION_MANAGER_PASSWORD`, without the leading "P"). That is an `ENV_ISSUE`.
+- **Preproduction login fails for every test** with "Incorrect Email or Password" → the password stored in the `PREPRODUCTION_MANAGER_PASSWORD` secret doesn't match the account. That is an `ENV_ISSUE`; say the secret's value needs re-saving. (The secret's old misnaming was fixed on 2026-11-28, so don't blame the name.) If the login page can't be reached at all (`net::ERR_NAME_NOT_RESOLVED`), check that `base_url` is `php-preprod.trackmyshuttle.com`.
 
 ### Step 4: Author tests for uncovered changes
 1. Explore the feature in the browser as the manager (or operator) of the test org (`ODASAP`).
@@ -228,12 +228,12 @@ Needs you: <items marked NEEDS_HUMAN>
 
 ## What's needed from you
 
-The agent can run report-only impact runs (`@smoke` / `@regression`) and triage **as soon as `CLAUDE_CODE_OAUTH_TOKEN` is added**. Everything else below improves it but doesn't block it.
+The agent runs report-only impact runs (`@smoke` / `@regression`) and triage: staging runs have passed since 2026-11-28. Everything below improves it but doesn't block staging runs.
 
 **🔴 NEEDS YOU**
-1. **`CLAUDE_CODE_OAUTH_TOKEN` secret** — run `claude setup-token` and save the token (single line) under Settings → Secrets and variables → Actions. Required.
-2. **Operator app source repo** — not reachable with the current GitHub access (`TrackMyShuttle/TMS` is a different Node project; no org repo contains `settingmap.js`). When you have it: set repo **variable** `APP_REPO` (e.g. `TrackMyShuttle/<repo>`) and **secret** `APP_REPO_READ_TOKEN` (read-only). Until then every run is no-diff.
-3. **Preproduction password secret** — the secret is saved as `REPRODUCTION_MANAGER_PASSWORD` (missing the leading "P"); every workflow reads `PREPRODUCTION_MANAGER_PASSWORD`. Re-save it under the right name, or preproduction runs fail at login.
+1. **Operator app source repo** — not reachable with the current GitHub access (`TrackMyShuttle/TMS` is a different Node project; no org repo contains `settingmap.js`). When you have it: set repo **variable** `APP_REPO` (e.g. `TrackMyShuttle/<repo>`) and **secret** `APP_REPO_READ_TOKEN` (read-only). Until then every run is no-diff.
+2. **Preproduction password value** — the secret now has the right name (`PREPRODUCTION_MANAGER_PASSWORD`, renamed 2026-11-28), but its value is rejected at login (QA agent run 46159602523: "Incorrect Email or Password"). Re-save it with the password that works, or preproduction runs fail at login.
+3. **Change the staging test-account password** — the staging manager/operator password (they share one) was exposed in Playwright reports on the public Pages site. The reports were removed and CI no longer publishes them (#26), but old copies remain in the `gh-pages` git history. Change it on staging, then update `STAGING_MANAGER_PASSWORD`, `STAGING_OPERATOR_PASSWORD` and `.env.local`.
 4. **Second test org** — needed for cross-org leak checks (Step 5). None exists.
 
 **🟡 Confirm or override my defaults (safe as-is)**
@@ -247,4 +247,4 @@ The agent can run report-only impact runs (`@smoke` / `@regression`) and triage 
 - ✅ `agent-runs/` (per-run JSON git-ignored; schema in `agent-runs/README.md`)
 - ❌ `db_readonly` — intentionally not used; verify through the UI/API only.
 
-**Credentials already in place:** `SLACK_WEBHOOK_URL`, `STAGING_MANAGER_*`, `STAGING_OPERATOR_*`, `PREPRODUCTION_MANAGER_EMAIL`, `PREPRODUCTION_OPERATOR_*`.
+**Credentials already in place:** `CLAUDE_CODE_OAUTH_TOKEN`, `SLACK_WEBHOOK_URL`, `STAGING_MANAGER_*`, `STAGING_OPERATOR_*` (password to be changed, see 3), `PREPRODUCTION_MANAGER_EMAIL`, `PREPRODUCTION_MANAGER_PASSWORD` (value wrong, see 2), `PREPRODUCTION_OPERATOR_*`.
