@@ -228,7 +228,6 @@ jobs:
             mkdir -p public
             cp dashboard-report.html public/index.html
             cp dashboard-report.html public/dashboard-report.html
-            [ -d playwright-report ] && cp -r playwright-report public/playwright-report || true
             echo "staged=true" >> "$GITHUB_OUTPUT"
           else
             echo "staged=false" >> "$GITHUB_OUTPUT"
@@ -257,24 +256,18 @@ jobs:
             echo "url=$RUN_URL" >> "$GITHUB_OUTPUT"
           fi
 
+      # Raw Playwright reports, traces and failure snapshots are NOT published or uploaded:
+      # they capture typed form values, so they exposed the test accounts' passwords on the
+      # public Pages site (2026-11-28). Only the custom dashboard and summaries are kept.
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: production-report-${{ steps.test-config.outputs.test_type }}-${{ github.run_number }}
           path: |
-            playwright-report/
             dashboard-report.html
             report-summary.json
           retention-days: 30
-
-      - name: Upload failure artifacts
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: production-failures-${{ github.run_number }}
-          path: test-results/
-          retention-days: 14
 
   # Unified notification job for production
   notify:

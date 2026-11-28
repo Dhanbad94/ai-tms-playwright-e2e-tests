@@ -317,7 +317,6 @@ jobs:
           name: qa-agent-${{ inputs.environment }}-${{ github.run_id }}
           path: |
             agent-runs/
-            playwright-report/
           retention-days: 14
           if-no-files-found: ignore
 
