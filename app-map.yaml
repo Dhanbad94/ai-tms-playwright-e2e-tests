@@ -153,7 +153,7 @@ features:
     test_id_prefix: "OS-, ORG-EDIT-, ORG-E2E-, NAV-MANAGE-"
     tags: ["@asap", "@settings", "@smoke", "@regression", "@crud", "@negative", "@e2e", "@manager", "@prod"]
     known_issues:
-      - "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19 — Edit Organization modal opens but fields never populate (AJAX fires at literal 'javascript:void(0);'). 100% reproducible. ORG-EDIT-001..004 fail and are expected to stay red until fixed."
+      - "https://github.com/Dhanbad94/ai-tms-playwright-e2e-tests/issues/19 — Edit Organization modal fields never populated. No longer reproduces on staging as of 2026-11-28 (ORG-EDIT-001..004 pass 3/3); if ORG-EDIT tests fail with an empty #org_name again, it has regressed."
     notes: "Map display + zoom/type controls also live here (OS-007/008/009)."
 
   - id: settings_user_management

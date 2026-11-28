@@ -122,7 +122,7 @@ Decide using evidence: the diff, the spec, the trace, the screenshot, console lo
 Known patterns in this suite — check these before classifying:
 - **Staging intermittently stops responding**: scattered `Login form not found` or `page.goto: Timeout 45000ms` failures across unrelated specs, which pass on re-run. That is an `ENV_ISSUE`, not a test regression.
 - **Every test "skipped", 0 ran** is almost always a setup problem (browser install, or the auth `setup` project failing on missing credentials), not a regression. Check the setup project first.
-- **Known open app bugs** (see `app-map.yaml` `known_issues`): `ORG-EDIT-001..004` fail because of #19 — classify as `APP_BUG` *existing*, comment on #19 only if the evidence changed. #20 (forgot password) is intermittent.
+- **Known app bugs** (see `app-map.yaml` `known_issues`): #19 (Edit Organization fields empty) no longer reproduces as of 2026-11-28 — if ORG-EDIT tests fail with an empty `#org_name` again, it has regressed: comment on #19 rather than filing a new issue. #20 (forgot password) is intermittent.
 - **User Management** is skipped as a whole (`test.describe.skip`) while under active development. Don't re-enable it.
 - **Preproduction login fails for every test** → the preproduction manager password secret is misconfigured (it was saved as `REPRODUCTION_MANAGER_PASSWORD`, without the leading "P"). That is an `ENV_ISSUE`.
 

@@ -9,6 +9,8 @@ import {
   EXISTING_USERS,
   TIMEOUTS,
 } from "./fixtures/test-data";
+// Global (UPPERCASE) timeouts — not the fixtures TIMEOUTS above; see CONVENTIONS.md.
+import { TIMEOUTS as GLOBAL_TIMEOUTS } from "../../constants";
 
 test.describe("ASAP Settings RBAC Tests @asap @settings @rbac", () => {
   const baseUrl = getBaseUrl();
@@ -34,7 +36,7 @@ test.describe("ASAP Settings RBAC Tests @asap @settings @rbac", () => {
       // Login as Manager
       await page.goto(`${baseUrl}/login`);
       await loginPage.login(managerCreds.email, managerCreds.password);
-      await page.waitForURL("**/dashboard", { timeout: TIMEOUTS.navigation });
+      await page.waitForURL("**/dashboard", { timeout: GLOBAL_TIMEOUTS.NAVIGATION });
     });
 
     test.afterEach(async ({ page }) => {
@@ -104,7 +106,7 @@ test.describe("ASAP Settings RBAC Tests @asap @settings @rbac", () => {
       // Login as Operator
       await page.goto(`${baseUrl}/login`);
       await loginPage.login(operatorCreds.email, operatorCreds.password);
-      await page.waitForURL("**/dashboard", { timeout: TIMEOUTS.navigation });
+      await page.waitForURL("**/dashboard", { timeout: GLOBAL_TIMEOUTS.NAVIGATION });
     });
 
     test.afterEach(async ({ page }) => {

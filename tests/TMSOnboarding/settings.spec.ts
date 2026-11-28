@@ -3,6 +3,7 @@ import { LoginPage } from "../../pages/login_page";
 import { DashboardPage } from "../../pages/dashboard_page";
 import { SettingsPage } from "../../pages/settings_page";
 import { TEST_DATA } from "../../utils/test-data";
+import { TIMEOUTS } from "../../constants";
 import { autoDismissCookieBanner } from "../../helpers/dismissCookieBanner";
 
 // Helper function to get credentials
@@ -51,8 +52,8 @@ test.describe("Settings Page Tests", () => {
     await page.goto(`${TEST_DATA.baseUrl}/login`);
     await loginPage.emailInput.fill(managerCreds.email);
     await loginPage.passwordInput.fill(managerCreds.password);
-    await loginPage.loginButton.click();
-    await page.waitForURL("**/dashboard", { timeout: 10000 });
+    await loginPage.submitLogin();
+    await page.waitForURL("**/dashboard", { timeout: TIMEOUTS.NAVIGATION });
 
     // Measure performance
     const startTime = Date.now();
