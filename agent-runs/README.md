@@ -9,7 +9,8 @@ committed.
 Per-run `*.json` files are **git-ignored** (they're run artifacts, not source);
 this `README.md` and `.gitkeep` keep the directory in the repo. To keep a run's
 output in git, add it explicitly with `git add -f`
-(`20261127T161104Z.json` is the first, manual run, kept that way).
+(the first, manual run from 2026-11-27 lives in `docs/qa-agent-runs/` instead, so it
+isn't uploaded with every run or mistaken for a previous result).
 
 ## Schema
 

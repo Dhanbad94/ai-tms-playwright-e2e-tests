@@ -214,8 +214,10 @@ fail with no obvious cause.
   `./run-tests -e <env> -f <filter> --bc` also exists but has **no tag option**,
   and without `--bc` it adds firefox/webkit projects this config doesn't define.
   `package.json` has `test:smoke`, `test:staging`, etc. for common combinations.
-- The AI QA agent runs as `.github/workflows/qa-agent.yml` (report-only); its
-  prompt is `docs/QA_AGENT_PROMPT.md`.
+- The AI QA agent runs as `.github/workflows/qa-agent.yml` (report-only,
+  Mon/Wed/Fri + on demand); its prompt is `docs/QA_AGENT_PROMPT.md`.
+- `typecheck.yml` runs `npm run typecheck` (`tsc --noEmit`) on every PR: keep it
+  at zero errors. `prune-gh-pages.yml` keeps the newest 60 dashboards on Pages.
 - GitHub Actions: `playwright.yml` (push/PR), `scheduled-staging.yml` (full
   suite), `scheduled-preprod.yml` / `scheduled-production.yml` (**`@prod`
   only — read-only**), `scheduled-full.yml` (weekly, chromium-only). Every
