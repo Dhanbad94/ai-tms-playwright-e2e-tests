@@ -23,6 +23,11 @@ const ENV = (process.env.ENV || 'staging').toLowerCase();
 const authFile = `playwright/.auth/${ENV}.json`;
 
 setup('authenticate', async ({ page }) => {
+  // Login runs once for the whole suite, so give it room for a slow staging:
+  // server response, form render, login POST and dashboard can each take tens
+  // of seconds there (2026-11-28), which overran the default 90s test budget.
+  setup.setTimeout(180_000);
+
   // Ensure the auth directory exists
   const authDir = path.dirname(authFile);
   if (!fs.existsSync(authDir)) {
@@ -42,11 +47,14 @@ setup('authenticate', async ({ page }) => {
 
   console.log(`🔐 Authenticating as: ${TEST_DATA.loginEmail}`);
 
-  // Navigate to login page
-  await page.goto(`${TEST_DATA.baseUrl}${PATHS.LOGIN}`);
-
-  // Wait for the login form to be ready
-  await page.waitForLoadState('domcontentloaded');
+  // Navigate to the login page, but don't wait for the page's load events.
+  // On a slow staging both `load` and `domcontentloaded` wait for the page's
+  // blocking scripts and ran past 45s, while the form itself was already on
+  // screen. Measured 2026-11-28: server responds at 18-24s, form visible at
+  // 25-44s, domcontentloaded at 29-76s. So start once the server responds and
+  // treat the visible form as the readiness signal.
+  await page.goto(`${TEST_DATA.baseUrl}${PATHS.LOGIN}`, { waitUntil: 'commit' });
+  await page.locator('#login_email').waitFor({ state: 'visible', timeout: TIMEOUTS.NAVIGATION });
 
   // Fill in credentials
   await page.locator('#login_email').fill(TEST_DATA.loginEmail);
@@ -63,11 +71,13 @@ setup('authenticate', async ({ page }) => {
     await page.locator('#remember_me').check({ force: true }).catch(() => {});
   }
 
-  // Click login button
-  await page.getByRole('button', { name: 'GO' }).click();
+  // Click login button. The click waits for the login navigation it starts, but
+  // only within its own timeout (10s by default); staging's login POST alone
+  // took ~10.5s, so give it the navigation budget.
+  await page.getByRole('button', { name: 'GO' }).click({ timeout: TIMEOUTS.NAVIGATION });
 
   // Wait for successful login - should redirect to dashboard
-  await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.PAGE_LOAD });
+  await expect(page).toHaveURL(/dashboard/, { timeout: TIMEOUTS.NAVIGATION });
 
   console.log('✅ Authentication successful');
 
