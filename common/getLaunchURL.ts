@@ -7,7 +7,7 @@ export default function setLaunchURL(env: string, customer: string): string {
       launchURL = 'https://php-staging.trackmyshuttle.com/';
       break;
     case 'preproduction':
-      launchURL = 'https://preproduction.trackmyshuttle.com/';
+      launchURL = 'https://php-preprod.trackmyshuttle.com/';
       break;
     case 'prod':
       launchURL = 'https://trackmyshuttle.com/';

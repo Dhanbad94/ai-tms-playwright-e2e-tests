@@ -92,7 +92,7 @@ jobs:
             BASE_URL="https://php-staging.trackmyshuttle.com"
             CAN_RUN="${{ needs.check-secrets.outputs.staging_configured }}"
           else
-            BASE_URL="https://preproduction.trackmyshuttle.com"
+            BASE_URL="https://php-preprod.trackmyshuttle.com"
             CAN_RUN="${{ needs.check-secrets.outputs.preprod_configured }}"
           fi
 

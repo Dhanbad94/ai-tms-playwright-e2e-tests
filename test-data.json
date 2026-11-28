@@ -5,7 +5,7 @@
     "password": "staging_pass"
   },
   "preproduction": {
-    "baseURL": "https://preproduction.trackmyshuttle.com/",
+    "baseURL": "https://php-preprod.trackmyshuttle.com/",
     "user": "preprod_user@example.com",
     "password": "preprod_pass"
   },

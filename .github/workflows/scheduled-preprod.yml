@@ -39,7 +39,7 @@ concurrency:
 
 env:
   ENV: preproduction
-  BASE_URL: https://preproduction.trackmyshuttle.com
+  BASE_URL: https://php-preprod.trackmyshuttle.com
 
 jobs:
   # Check if secrets are configured
@@ -161,7 +161,7 @@ jobs:
         env:
           CI: true
           ENV: preproduction
-          BASE_URL: https://preproduction.trackmyshuttle.com
+          BASE_URL: https://php-preprod.trackmyshuttle.com
 
       - name: Generate dashboard report
         if: always()

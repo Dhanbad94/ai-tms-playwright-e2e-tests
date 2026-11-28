@@ -5,7 +5,7 @@ export const environments = {
     loginPassword: process.env.STAGING_MANAGER_PASSWORD || 'your-staging-password',
   },
   preproduction: {
-    baseUrl: 'https://preproduction.trackmyshuttle.com',
+    baseUrl: 'https://php-preprod.trackmyshuttle.com',
     loginEmail: process.env.PREPRODUCTION_MANAGER_EMAIL || 'your-preprod-email@example.com',
     loginPassword: process.env.PREPRODUCTION_MANAGER_PASSWORD || 'your-preprod-password',
   },

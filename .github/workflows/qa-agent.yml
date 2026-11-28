@@ -150,7 +150,7 @@ jobs:
         run: |
           case "$ENV" in
             staging)       BASE_URL=https://php-staging.trackmyshuttle.com ;;
-            preproduction) BASE_URL=https://preproduction.trackmyshuttle.com ;;
+            preproduction) BASE_URL=https://php-preprod.trackmyshuttle.com ;;
             *) echo "::error::Refusing environment '$ENV' (only staging/preproduction)"; exit 1 ;;
           esac
 
