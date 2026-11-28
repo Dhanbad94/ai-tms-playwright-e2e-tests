@@ -17,7 +17,7 @@
 > uploads `agent-runs/<timestamp>.json` + the transcript as a run artifact.
 > Needs repo secret `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`; uses the Claude
 > subscription, no API billing). The app source repo is optional: without it the run is in
-> **no-diff mode** (@smoke + triage only, no change-to-feature mapping).
+> **no-diff mode** (baseline tests + triage only: @smoke on staging, all @prod on preproduction; no change-to-feature mapping).
 
 ---
 
@@ -99,10 +99,10 @@ jobs:           [impact_run, test_authoring, triage, bug_hunting]
 In **no-diff mode** (`commit_range: unavailable`) skip this step, set `features_changed` to `[]`, and say in the Slack summary that the diff was unavailable.
 
 ### Step 2: Impact run
-1. Always run `@smoke`: `npx playwright test --project=chromium --grep @smoke`.
+1. Always run the baseline. On **staging** that is `@smoke`: `npx playwright test --project=chromium --grep @smoke`. On **preproduction** it is every `@prod` test, `--grep @prod`, which includes the preprod smoke tests.
 2. Run every test tagged with a changed or affected feature (`@settings`, `@whatsapp`, `@rbac`, `@profile`, `@navigation`, …), using `app-map.yaml` to find them.
 3. If a shared component changed (auth, CSRF, layout, org switching, timezone helpers, the settings page scripts), run full `@regression`.
-4. On **preproduction**, add `--grep @prod` to every run (only read-only tests). Never run `@crud`, `@e2e` or `@negative` tests there.
+4. On **preproduction**, every run must include `--grep @prod` (read-only tests only). Never run `@crud`, `@e2e` or `@negative` tests there.
 5. Run data-changing (`@crud`) tests serially with `--workers=1`.
 6. Use `build_version` as given and report it; don't fetch it yourself. If it is `unknown`, or `previous_build_version` is supplied and equal to it although a new deploy was expected, note that as an environment issue. If `previous_build_version` is `none`, just record the value. You **cannot** assert the build corresponds to `commit_range`.
 

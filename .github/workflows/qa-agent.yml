@@ -215,12 +215,12 @@ jobs:
             DIFF_NOTE='- The operator app source is checked out read-only at ./app-src. Read the change with `git -C app-src log <range>` and `git -C app-src diff <range>`.'
             RANGE_DESC="$RANGE (operator app, checked out at ./app-src)"
           else
-            DIFF_NOTE='- NO-DIFF MODE: the app source is not available in this run, so there is no diff and no ./app-src directory. Skip Step 1, run @smoke (Step 2.1), triage every failure, set "features_changed" to [] and state in the Slack summary that the diff was unavailable.'
+            DIFF_NOTE='- NO-DIFF MODE: the app source is not available in this run, so there is no diff and no ./app-src directory. Skip Step 1, run the baseline tests (Step 2.1: @smoke on staging, all of @prod on preproduction), triage every failure, set "features_changed" to [] and state in the Slack summary that the diff was unavailable.'
             RANGE_DESC="unavailable (no app-repo access this run)"
           fi
 
           if [ "$ENV" = "preproduction" ]; then
-            ENV_NOTE='- PREPRODUCTION: add `--grep @prod` to every test run (read-only tests only). Never run @crud, @e2e or @negative tests here.'
+            ENV_NOTE='- PREPRODUCTION: run EVERY @prod test, not just @smoke: `npx playwright test --project=chromium --grep @prod`. That is the baseline here and replaces the @smoke run in Step 2.1. Only read-only tests: never run @crud, @e2e or @negative tests here.'
           else
             ENV_NOTE='- STAGING: run data-changing (@crud) tests serially with `--workers=1`.'
           fi
