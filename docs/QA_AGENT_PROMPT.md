@@ -124,6 +124,7 @@ Known patterns in this suite — check these before classifying:
 - **Every test "skipped", 0 ran** is almost always a setup problem (browser install, or the auth `setup` project failing on missing credentials), not a regression. Check the setup project first.
 - **Known app bugs** (see `app-map.yaml` `known_issues`): #19 (Edit Organization fields empty) no longer reproduces as of 2026-11-28 — if ORG-EDIT tests fail with an empty `#org_name` again, it has regressed: comment on #19 rather than filing a new issue. #20 (forgot password) is intermittent.
 - **User Management** is skipped as a whole (`test.describe.skip`) while under active development. Don't re-enable it.
+- **Operator menu visibility is not a bug right now.** The Operator role's permissions are being redesigned (as of 2026-11-28). The operator-menu check in `pages/dashboard_page.ts` only warns when an Operator can see Alerts, and that is expected for now. Don't file it, classify it, or list it under `needs_human`; report a change in what Operators can see only if a test actually fails.
 - **Preproduction login fails for every test** → the preproduction manager password secret is misconfigured (it was saved as `REPRODUCTION_MANAGER_PASSWORD`, without the leading "P"). That is an `ENV_ISSUE`.
 
 ### Step 4: Author tests for uncovered changes
