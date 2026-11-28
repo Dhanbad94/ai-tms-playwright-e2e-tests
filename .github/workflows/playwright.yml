@@ -145,7 +145,6 @@ jobs:
             mkdir -p public
             cp dashboard-report.html public/index.html
             cp dashboard-report.html public/dashboard-report.html
-            [ -d playwright-report ] && cp -r playwright-report public/playwright-report || true
             echo "staged=true" >> "$GITHUB_OUTPUT"
           else
             echo "No dashboard-report.html to publish"
@@ -177,6 +176,9 @@ jobs:
             echo "url=$RUN_URL" >> "$GITHUB_OUTPUT"
           fi
 
+      # Raw Playwright reports, traces and failure snapshots are NOT published or uploaded:
+      # they capture typed form values, so they exposed the test accounts' passwords on the
+      # public Pages site (2026-11-28). Only the custom dashboard and summaries are kept.
       - name: Upload dashboard report
         uses: actions/upload-artifact@v4
         if: always()
@@ -187,14 +189,6 @@ jobs:
             report-summary.json
           retention-days: 30
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report-${{ steps.env.outputs.environment }}
-          path: playwright-report/
-          retention-days: 30
-      
       - name: Upload test results JSON
         uses: actions/upload-artifact@v4
         if: always()

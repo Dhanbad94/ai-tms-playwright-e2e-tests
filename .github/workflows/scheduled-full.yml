@@ -172,14 +172,6 @@ jobs:
           ENV: ${{ needs.setup.outputs.environment }}
           BASE_URL: ${{ needs.setup.outputs.base_url }}
 
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: full-suite-${{ matrix.browser }}-${{ github.run_number }}
-          path: playwright-report/
-          retention-days: 30
-
       # Build the custom dashboard (dashboard-report.html + report-summary.json)
       # that the Slack "View Report Results" CTA links to.
       - name: Generate dashboard report
@@ -189,6 +181,9 @@ jobs:
           ENV: ${{ needs.setup.outputs.environment }}
           REPORT_TITLE: TMS Rider
 
+      # Raw Playwright reports, traces and failure snapshots are NOT published or uploaded:
+      # they capture typed form values, so they exposed the test accounts' passwords on the
+      # public Pages site (2026-11-28). Only the custom dashboard and summaries are kept.
       - name: Upload dashboard report
         uses: actions/upload-artifact@v4
         if: always()
@@ -198,14 +193,6 @@ jobs:
             dashboard-report.html
             report-summary.json
           retention-days: 30
-
-      - name: Upload failure artifacts
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: failures-${{ matrix.browser }}-${{ github.run_number }}
-          path: test-results/
-          retention-days: 7
 
   # Summary job
   test-summary:
