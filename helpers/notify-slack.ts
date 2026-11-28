@@ -15,7 +15,7 @@
  *                      button. Falls back to RUN_URL when not set.
  *   RUN_URL            CI run URL (used for a secondary "CI Run" button, and as
  *                      the CTA target when REPORT_URL is absent).
- *   REPORT_TITLE       Branding for the header (default "TMS Rider").
+ *   REPORT_TITLE       Branding for the header (default "TMS Operator").
  *
  * Usage:
  *   SLACK_WEBHOOK_URL=... REPORT_URL=... npx tsx helpers/notify-slack.ts
@@ -50,7 +50,7 @@ if (!fs.existsSync(summaryPath)) {
 
 const s: Summary = JSON.parse(fs.readFileSync(summaryPath, "utf-8"));
 
-const title = process.env.REPORT_TITLE || "TMS Rider";
+const title = process.env.REPORT_TITLE || "TMS Operator";
 const reportUrl = process.env.REPORT_URL || "";
 const runUrl = process.env.RUN_URL || "";
 // The CTA needs a real http(s) URL; prefer the published report, fall back to CI.
