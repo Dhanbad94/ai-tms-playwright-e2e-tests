@@ -11,8 +11,9 @@
 > **How to use:** everything between the two horizontal rules is the agent's system prompt; the
 > per-run block under "Inputs you receive" is the user message.
 >
-> **In this repo it runs as `.github/workflows/qa-agent.yml`** (v1, report-only): Actions → "QA Agent
-> (report-only)" → Run workflow (staging or preproduction). The workflow extracts the section between
+> **In this repo it runs as `.github/workflows/qa-agent.yml`** (v1, report-only): on a schedule
+> (Mon/Wed/Fri 09:30 UTC, staging) and on demand via Actions → "QA Agent (report-only)" → Run
+> workflow (staging or preproduction). The workflow extracts the section between
 > the two rules, adds a report-only override (no PRs/issues/edits), posts the Slack summary and
 > uploads `agent-runs/<timestamp>.json` + the transcript as a run artifact.
 > Needs repo secret `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`; uses the Claude
@@ -73,7 +74,7 @@ You have four jobs, and every run tells you which ones apply:
 ## Inputs you receive per run
 
 ```
-trigger:        merge | deploy | nightly | manual
+trigger:        merge | deploy | nightly | scheduled | manual
 environment:    staging | preproduction        # production is off-limits
 base_url:       https://php-staging.trackmyshuttle.com   # or https://php-preprod.trackmyshuttle.com
 commit_range:   <from_sha>..<to_sha>, or "unavailable" (no app-repo access → no-diff mode)
@@ -84,7 +85,7 @@ build_version:  <asset version stamp>  # The deployed app exposes NO commit and 
                                        # detects "the deploy changed", but it CANNOT be mapped to a
                                        # commit. Whoever starts the run reads it and passes it here:
                                        # use it as given, don't fetch it yourself. "unknown" = unread.
-previous_build_version: <stamp recorded by the last run, or "none" if no history is available>
+previous_build_version: <stamp from the last successful agent run's saved result, or "none" if there is none>
 spec:           <release notes / user stories / acceptance criteria, or "none">
 jobs:           [impact_run, test_authoring, triage, bug_hunting]
 ```
@@ -104,7 +105,7 @@ In **no-diff mode** (`commit_range: unavailable`) skip this step, set `features_
 3. If a shared component changed (auth, CSRF, layout, org switching, timezone helpers, the settings page scripts), run full `@regression`.
 4. On **preproduction**, every run must include `--grep @prod` (read-only tests only). Never run `@crud`, `@e2e` or `@negative` tests there.
 5. Run data-changing (`@crud`) tests serially with `--workers=1`.
-6. Use `build_version` as given and report it; don't fetch it yourself. If it is `unknown`, or `previous_build_version` is supplied and equal to it although a new deploy was expected, note that as an environment issue. If `previous_build_version` is `none`, just record the value. You **cannot** assert the build corresponds to `commit_range`.
+6. Use `build_version` as given and report it; don't fetch it yourself. If it is `unknown`, or `previous_build_version` is supplied and equal to it although a new deploy was expected, note that as an environment issue. If `previous_build_version` is `none`, just record the value. You **cannot** assert the build corresponds to `commit_range`. If both are real stamps and they differ, say in the Slack summary that a new build was deployed since the last run.
 
 ### Step 3: Triage every failure
 Classify each failure as exactly one of:
@@ -231,7 +232,7 @@ Needs you: <items marked NEEDS_HUMAN>
 The agent runs report-only impact runs (`@smoke` / `@regression`) and triage: staging runs have passed since 2026-11-28. Everything below improves it but doesn't block staging runs.
 
 **🔴 NEEDS YOU**
-1. **Operator app source repo** — not reachable with the current GitHub access (`TrackMyShuttle/TMS` is a different Node project; no org repo contains `settingmap.js`). When you have it: set repo **variable** `APP_REPO` (e.g. `TrackMyShuttle/<repo>`) and **secret** `APP_REPO_READ_TOKEN` (read-only). Until then every run is no-diff.
+1. **Operator app source repo** — not reachable with the current GitHub access (`TrackMyShuttle/TMS` is a different Node project; no org repo contains `settingmap.js`). When you have it: set repo **variable** `APP_REPO` (e.g. `TrackMyShuttle/<repo>`) plus a read-only credential: **secret** `APP_REPO_DEPLOY_KEY` (a read-only deploy key, preferred) or `APP_REPO_READ_TOKEN` (fine-grained token, Contents: read). Runs then diff the deployed branch (`staging-ecs` / `preprod-ecs`) since the last successful agent run. Until then every run is no-diff.
 2. **Preproduction password value** — the secret now has the right name (`PREPRODUCTION_MANAGER_PASSWORD`, renamed 2026-11-28), but its value is rejected at login (QA agent run 46159602523: "Incorrect Email or Password"). Re-save it with the password that works, or preproduction runs fail at login.
 3. **Change the staging test-account password** — the staging manager/operator password (they share one) was exposed in Playwright reports on the public Pages site. The reports were removed and CI no longer publishes them (#26), but old copies remain in the `gh-pages` git history. Change it on staging, then update `STAGING_MANAGER_PASSWORD`, `STAGING_OPERATOR_PASSWORD` and `.env.local`.
 4. **Second test org** — needed for cross-org leak checks (Step 5). None exists.

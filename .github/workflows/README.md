@@ -12,7 +12,9 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
 | [scheduled-production.yml](#scheduled-productionyml) | Scheduled, Manual | Production health checks (read-only @prod only) | Daily 5 AM UTC (overnight ET) |
 | [scheduled-preprod.yml](#scheduled-prepprepd.ymlyml) | Scheduled, Manual | Pre-production validation | Nightly Mon–Fri 7 AM UTC (overnight ET) |
 | [update-version.yml](#update-versionyml) | Manual dispatch | Automates version bumping in package files | On demand |
-| [qa-agent.yml](#qa-agentyml) | Manual dispatch | AI QA agent (report-only): runs impacted tests, triages failures, posts to Slack | On demand |
+| [qa-agent.yml](#qa-agentyml) | Scheduled, Manual | AI QA agent (report-only): runs impacted tests, triages failures, posts to Slack | Mon/Wed/Fri 09:30 UTC (staging) |
+| [typecheck.yml](#typecheckyml) | PR, push to main, Manual | `tsc --noEmit` gate (Playwright's esbuild doesn't type-check) | On every PR |
+| [prune-gh-pages.yml](#prune-gh-pagesyml) | Scheduled, Manual | Keeps only the newest N per-run dashboards on gh-pages (default 60) | Sunday 03:00 UTC |
 
 ---
 
@@ -108,11 +110,25 @@ This directory contains all automated CI/CD workflows for the AI TMS Playwright 
 
 ### qa-agent.yml
 **Purpose**: Runs the AI QA agent from `docs/QA_AGENT_PROMPT.md` with Claude Code in headless mode
-- **Trigger**: Manual dispatch only — choose `staging` or `preproduction` (production is refused)
+- **Trigger**: Mon/Wed/Fri 09:30 UTC (staging), or manual dispatch — choose `staging` or `preproduction` (production is refused)
+- **Across runs**: reads the previous successful run's saved result to compare build stamps, and (with the app source) diffs the deployed branch since that run
 - **Report-only**: read-only job token; the agent can only read files and run `npx playwright test`. It opens no PRs or issues and edits nothing.
 - **What it does**: runs `@smoke` (plus impacted tags when a diff is available; `@prod` only on preproduction), classifies every failure, posts a Slack summary, and uploads `agent-runs/<timestamp>.json` + the transcript as an artifact. The run goes red if the agent returns no result.
 - **Required secret**: `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`; uses the Claude subscription, no API billing)
-- **Optional**: repo variable `APP_REPO` + secret `APP_REPO_READ_TOKEN` for diff-driven impact mapping; without them the run is in no-diff mode
+- **Optional**: repo variable `APP_REPO` + secret `APP_REPO_DEPLOY_KEY` (preferred) or `APP_REPO_READ_TOKEN` for diff-driven impact mapping; without them, or if checkout fails, the run is in no-diff mode
+
+---
+
+### typecheck.yml
+**Purpose**: Fast TypeScript gate — `npm run typecheck` (`tsc --noEmit`). Playwright runs tests through esbuild, which strips types without checking them.
+- **Trigger**: every pull request, pushes to `main`, manual
+
+---
+
+### prune-gh-pages.yml
+**Purpose**: Keeps the gh-pages branch from growing forever (the test workflows publish one dashboard folder per run with `keep_files: true`).
+- **Trigger**: Sundays 03:00 UTC, or manual with a `keep` count (default 60)
+- **What it does**: deletes all but the newest N numeric run folders and pushes the result
 
 ---
 
