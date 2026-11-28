@@ -179,7 +179,7 @@ jobs:
         run: npx tsx helpers/generate-report.ts || true
         env:
           ENV: ${{ needs.setup.outputs.environment }}
-          REPORT_TITLE: TMS Rider
+          REPORT_TITLE: TMS Operator
 
       # Raw Playwright reports, traces and failure snapshots are NOT published or uploaded:
       # they capture typed form values, so they exposed the test accounts' passwords on the
@@ -299,7 +299,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           REPORT_URL: ${{ steps.report-url.outputs.url }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          REPORT_TITLE: TMS Rider
+          REPORT_TITLE: TMS Operator
           ENV: ${{ needs.setup.outputs.environment }}
         run: |
           if [ -z "$SLACK_WEBHOOK_URL" ]; then

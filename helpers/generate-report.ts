@@ -184,8 +184,8 @@ function generateHTML(s: Summary, rows: TestRow[]): string {
 
   const rateColor = s.passRate >= 90 ? "#0d9e0d" : s.passRate >= 70 ? "#f9a825" : "#d93025";
   // Brand shared with the Slack notifier (REPORT_TITLE); default matches the
-  // "TMS Rider — Test Dashboard" sample.
-  const brand = process.env.REPORT_TITLE || "TMS Rider";
+  // "TMS Operator — Test Dashboard" sample.
+  const brand = process.env.REPORT_TITLE || "TMS Operator";
 
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
