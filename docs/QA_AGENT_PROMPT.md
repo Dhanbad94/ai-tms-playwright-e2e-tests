@@ -15,7 +15,7 @@
 > (Mon/Wed/Fri 09:30 UTC, staging) and on demand via Actions → "QA Agent (report-only)" → Run
 > workflow (staging or preproduction). The workflow extracts the section between
 > the two rules, adds a report-only override (no PRs/issues/edits), posts the Slack summary and
-> uploads `agent-runs/<timestamp>.json` + the transcript as a run artifact.
+> uploads the result JSON plus a redacted full transcript and tool-call timeline as a run artifact.
 > Needs repo secret `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`; uses the Claude
 > subscription, no API billing). The app source repo is optional: without it the run is in
 > **no-diff mode** (baseline tests + triage only: @smoke on staging, all @prod on preproduction; no change-to-feature mapping).

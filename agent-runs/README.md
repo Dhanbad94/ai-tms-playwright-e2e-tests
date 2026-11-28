@@ -1,10 +1,21 @@
 # agent-runs/
 
-Machine-readable output from the AI QA Agent (see `docs/QA_AGENT_PROMPT.md`,
-Step 6). Each run produces one `agent-runs/<timestamp>.json`. When the agent
-runs in CI (`.github/workflows/qa-agent.yml`), these files — plus the raw
-transcript `<timestamp>.md` — are uploaded as that run's artifact rather than
-committed.
+Output from the AI QA Agent (see `docs/QA_AGENT_PROMPT.md`, Step 6). In CI
+(`.github/workflows/qa-agent.yml`) each run uploads these as its artifact
+rather than committing them:
+
+| File | What it is |
+|---|---|
+| `<timestamp>.json` | the machine-readable result (schema below) |
+| `<timestamp>.md` | the agent's final answer, incl. the Slack summary |
+| `<timestamp>.tools.md` | readable timeline: every tool call, whether it errored, and calls the permission rules refused |
+| `<timestamp>.jsonl` | the full event stream (every tool call and its output) |
+| `slack.txt` | the Slack summary as posted |
+
+All of them pass through `.github/scripts/qa_agent_transcript.py`, which
+replaces every `*_PASSWORD` value and the Claude token with `[REDACTED]`:
+the agent reads failure snapshots, which record typed passwords, and this repo
+is public.
 
 Per-run `*.json` files are **git-ignored** (they're run artifacts, not source);
 this `README.md` and `.gitkeep` keep the directory in the repo. To keep a run's

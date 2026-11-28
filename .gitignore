@@ -54,4 +54,5 @@ yarn-error.log*
 # QA agent run outputs — keep the dir (README/.gitkeep), ignore per-run files
 /agent-runs/*.json
 /agent-runs/*.md
+/agent-runs/*.jsonl
 !/agent-runs/README.md
